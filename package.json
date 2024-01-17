@@ -22,6 +22,7 @@
 		"@types/node": "^18.18.7"
 	},
 	"dependencies": {
-		"@rsc-utils/type-utils": "github:rpg-sage-creative/type-utils"
+		"@rsc-utils/type-utils": "github:rpg-sage-creative/type-utils",
+		"@rsc-utils/random-utils": "github:rpg-sage-creative/random-utils"
 	}
 }
