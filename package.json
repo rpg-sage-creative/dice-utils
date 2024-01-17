@@ -1,0 +1,27 @@
+{
+	"name": "@rsc-utils/x-utils",
+	"version": "0.0.0",
+	"license": "ISC",
+	"main": "build/index.js",
+	"type": "module",
+	"scripts": {
+		"prebuild": "npm run clean",
+		"clean": "rm -rf ./build",
+		"postclean": "npm run indexes",
+		"indexes": "node ./node_modules/@rsc-utils/npm-utils indexTs -r",
+		"build": "tsc --build",
+		"postbuild": "npm run types",
+		"types": "tsc --build tsconfig.d.json",
+		"posttypes": "echo 'build done'",
+		"test": "node --es-module-specifier-resolution=node ./test/index.mjs",
+		"posttest": "echo 'test done'",
+		"release": "bash ./node_modules/@rsc-utils/npm-utils/scripts/release.sh"
+	},
+	"devDependencies": {
+		"@rsc-utils/npm-utils": "github:rpg-sage-creative/npm-utils",
+		"@types/node": "^18.18.7"
+	},
+	"dependencies": {
+		"@rsc-utils/type-utils": "github:rpg-sage-creative/type-utils"
+	}
+}
