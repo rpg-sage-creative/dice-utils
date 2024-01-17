@@ -1,5 +1,5 @@
 
 async function main() {
-	console.log(`create x-utils tests.`);
+	console.log(`create dice-utils tests.`);
 }
 main();
