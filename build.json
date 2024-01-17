@@ -1,0 +1,12 @@
+{
+"name":"@rsc-utils/dice-utils",
+"version":"0.0.1",
+"branch":"main",
+"commit":"2ca57853991b0e9ac5f8e6b842e47a18671027e6",
+"commitSubject":"initial build",
+"commitTs":1705469794000,
+"commitDate":"2024-01-16-2136",
+"buildTs":1705469845000,
+"buildDate":"2024-01-16-2137",
+"author":"Randal T Meyer"
+}
