@@ -23,6 +23,8 @@
 	},
 	"dependencies": {
 		"@rsc-utils/type-utils": "github:rpg-sage-creative/type-utils",
+		"@rsc-utils/array-utils": "github:rpg-sage-creative/array-utils",
+		"@rsc-utils/string-utils": "github:rpg-sage-creative/string-utils",
 		"@rsc-utils/random-utils": "github:rpg-sage-creative/random-utils"
 	}
 }
