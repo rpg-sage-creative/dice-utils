@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/dice-utils",
-"version":"0.0.3",
+"version":"0.0.4",
 "branch":"main",
-"commit":"023f15ddef87efe46a8245595a5ec9062502d33e",
-"commitSubject":"add explodeDice",
-"commitTs":1705517138000,
-"commitDate":"2024-01-17-1045",
-"buildTs":1705517162000,
-"buildDate":"2024-01-17-1046",
+"commit":"4db5d9e8be89878d71797100972b6afd333dd498",
+"commitSubject":"include updated logic/style from v2",
+"commitTs":1705605258000,
+"commitDate":"2024-01-18-1114",
+"buildTs":1705605283000,
+"buildDate":"2024-01-18-1114",
 "author":"Randal T Meyer"
 }
