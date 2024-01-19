@@ -5,26 +5,18 @@
 	"main": "build/index.js",
 	"type": "module",
 	"scripts": {
-		"prebuild": "npm run clean",
-		"clean": "rm -rf ./build",
-		"postclean": "npm run indexes",
-		"indexes": "node ./node_modules/@rsc-utils/npm-utils indexTs -r",
-		"build": "tsc --build",
-		"postbuild": "npm run types",
-		"types": "tsc --build tsconfig.d.json",
-		"posttypes": "echo 'build done'",
-		"test": "node --es-module-specifier-resolution=node ./test/index.mjs",
-		"posttest": "echo 'test done'",
-		"release": "bash ./node_modules/@rsc-utils/npm-utils/scripts/release.sh"
+		"build": "bash ./node_modules/@rsc-utils/npm-utils/scripts/build.sh",
+		"release": "bash ./node_modules/@rsc-utils/npm-utils/scripts/release.sh",
+		"test": "bash ./node_modules/@rsc-utils/npm-utils/scripts/test.sh"
 	},
 	"devDependencies": {
 		"@rsc-utils/npm-utils": "github:rpg-sage-creative/npm-utils",
 		"@types/node": "^18.18.7"
 	},
 	"dependencies": {
-		"@rsc-utils/type-utils": "github:rpg-sage-creative/type-utils",
 		"@rsc-utils/array-utils": "github:rpg-sage-creative/array-utils",
+		"@rsc-utils/random-utils": "github:rpg-sage-creative/random-utils",
 		"@rsc-utils/string-utils": "github:rpg-sage-creative/string-utils",
-		"@rsc-utils/random-utils": "github:rpg-sage-creative/random-utils"
+		"@rsc-utils/type-utils": "github:rpg-sage-creative/type-utils"
 	}
 }
