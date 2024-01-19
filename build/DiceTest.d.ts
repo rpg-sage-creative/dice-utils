@@ -20,8 +20,8 @@ export type DiceTestData = {
     value: number;
 };
 export declare class DiceTest {
-    protected core?: DiceTestData | undefined;
-    constructor(core?: DiceTestData | undefined);
+    protected data?: DiceTestData | undefined;
+    constructor(data?: DiceTestData | undefined);
     get alias(): string;
     get isEmpty(): boolean;
     get type(): DiceTestType;

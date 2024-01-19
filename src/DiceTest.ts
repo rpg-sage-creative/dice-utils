@@ -51,12 +51,12 @@ function parseDiceTestTargetValue(rawValue: string): { value:number; hidden:bool
 }
 
 export class DiceTest {
-	public constructor(protected core?: DiceTestData) { }
+	public constructor(protected data?: DiceTestData) { }
 
-	public get alias(): string { return this.core?.alias ?? ""; }
-	public get isEmpty(): boolean { return !this.core?.type || isNaN(this.core.value); }
-	public get type(): DiceTestType { return this.core?.type ?? DiceTestType.None; }
-	public get value(): number { return this.core?.value ?? 0; }
+	public get alias(): string { return this.data?.alias ?? ""; }
+	public get isEmpty(): boolean { return !this.data?.type || isNaN(this.data.value); }
+	public get type(): DiceTestType { return this.data?.type ?? DiceTestType.None; }
+	public get value(): number { return this.data?.value ?? 0; }
 
 	/** Tests the value for pass/fail. If isEmpty, undefined is returned instead. */
 	public test(total: number): boolean | undefined {
@@ -80,7 +80,7 @@ export class DiceTest {
 	}
 
 	public toJSON() {
-		return this.core;
+		return this.data;
 	}
 
 	/** The token key/regex used to generate DiceTestData */

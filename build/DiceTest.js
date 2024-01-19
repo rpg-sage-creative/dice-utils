@@ -32,14 +32,14 @@ function parseDiceTestTargetValue(rawValue) {
     return { value, hidden };
 }
 export class DiceTest {
-    core;
-    constructor(core) {
-        this.core = core;
+    data;
+    constructor(data) {
+        this.data = data;
     }
-    get alias() { return this.core?.alias ?? ""; }
-    get isEmpty() { return !this.core?.type || isNaN(this.core.value); }
-    get type() { return this.core?.type ?? DiceTestType.None; }
-    get value() { return this.core?.value ?? 0; }
+    get alias() { return this.data?.alias ?? ""; }
+    get isEmpty() { return !this.data?.type || isNaN(this.data.value); }
+    get type() { return this.data?.type ?? DiceTestType.None; }
+    get value() { return this.data?.value ?? 0; }
     test(total) {
         if (!this.isEmpty) {
             switch (this.type) {
@@ -60,7 +60,7 @@ export class DiceTest {
         return undefined;
     }
     toJSON() {
-        return this.core;
+        return this.data;
     }
     static getParsers() {
         return { test: /(gteq|gte|gt|lteq|lte|lt|eq|=+|>=|>|<=|<)\s*(\d+|\|\|\d+\|\|)/i };
