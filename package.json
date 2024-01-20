@@ -10,6 +10,7 @@
 		"test": "bash ./node_modules/@rsc-utils/npm-utils/scripts/test.sh"
 	},
 	"devDependencies": {
+		"@rsc-utils/console-utils": "github:rpg-sage-creative/console-utils",
 		"@rsc-utils/npm-utils": "github:rpg-sage-creative/npm-utils",
 		"@types/node": "^18.18.7"
 	},

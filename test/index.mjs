@@ -1,8 +1,10 @@
+import { enableLogLevels, warn } from "@rsc-utils/console-utils";
 import { testDiceRollString } from "./rollDiceString.mjs";
 
 async function main() {
-	console.log(`create rollDice tests`);
+	warn(`create rollDice tests`);
 	testDiceRollString();
-	console.log(`create rollDie tests`);
+	warn(`create rollDie tests`);
 }
+enableLogLevels("development");
 main();

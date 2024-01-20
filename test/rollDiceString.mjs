@@ -1,3 +1,4 @@
+import { assert } from "@rsc-utils/console-utils";
 import { rollDiceString } from "../build/rollDiceString.js";
 
 export function testDiceRollString() {
@@ -14,18 +15,18 @@ export function testDiceRollString() {
 			else map.set(randomValue, map.get(randomValue) + 1);
 		}
 		for (let val = min; val <= max; val++) {
-			console.assert(map.has(val), `Result ${val} missing from ${testIterations} of ${call}`);
+			assert(map.has(val), `Result ${val} missing from ${testIterations} of ${call}`);
 		}
 		const keys = Array.from(map.keys());
 		const unwantedKeys = keys.filter(key => typeof(+key) !== "number" || key < min || key > max);
-		console.assert(unwantedKeys.length === 0, `Unexpected results from ${call}: ${unwantedKeys}`);
+		assert(unwantedKeys.length === 0, `Unexpected results from ${call}: ${unwantedKeys}`);
 		const minResult = Math.min(...keys);
-		console.assert(minResult === min, `Min result of ${call} is ${minResult} instead of ${min}`);
+		assert(minResult === min, `Min result of ${call} is ${minResult} instead of ${min}`);
 		const maxResult = Math.max(...keys);
-		console.assert(maxResult === max, `Max result of ${call} is ${maxResult} instead of ${max}`);
+		assert(maxResult === max, `Max result of ${call} is ${maxResult} instead of ${max}`);
 	});
 	const invalidValues = [["0d1"], ["1d0"]];
 	invalidValues.forEach(([diceString]) => {
-		console.assert(rollDiceString(diceString) === null, `Expected a null result: ${diceString}`);
+		assert(rollDiceString(diceString) === null, `Expected a null result: ${diceString}`);
 	});
 }
