@@ -11,7 +11,6 @@
 	},
 	"devDependencies": {
 		"@rsc-utils/console-utils": "github:rpg-sage-creative/console-utils",
-		"@rsc-utils/npm-utils": "github:rpg-sage-creative/npm-utils",
 		"@types/node": "^18.18.7"
 	},
 	"dependencies": {
@@ -19,5 +18,8 @@
 		"@rsc-utils/random-utils": "github:rpg-sage-creative/random-utils",
 		"@rsc-utils/string-utils": "github:rpg-sage-creative/string-utils",
 		"@rsc-utils/type-utils": "github:rpg-sage-creative/type-utils"
+	},
+	"peerDependencies": {
+		"@rsc-utils/npm-utils": "github:rpg-sage-creative/npm-utils"
 	}
 }
