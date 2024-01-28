@@ -10,6 +10,7 @@
 		"test": "bash ./node_modules/@rsc-utils/npm-utils/scripts/test.sh"
 	},
 	"devDependencies": {
+		"@rsc-utils/npm-utils": "github:rpg-sage-creative/npm-utils",
 		"@rsc-utils/console-utils": "github:rpg-sage-creative/console-utils",
 		"@types/node": "^18.18.7"
 	},
@@ -18,8 +19,5 @@
 		"@rsc-utils/random-utils": "github:rpg-sage-creative/random-utils",
 		"@rsc-utils/string-utils": "github:rpg-sage-creative/string-utils",
 		"@rsc-utils/type-utils": "github:rpg-sage-creative/type-utils"
-	},
-	"peerDependencies": {
-		"@rsc-utils/npm-utils": "github:rpg-sage-creative/npm-utils"
 	}
 }
