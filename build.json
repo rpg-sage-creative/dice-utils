@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/dice-utils",
-"version":"0.0.4",
+"version":"0.0.5",
 "branch":"main",
-"commit":"4db5d9e8be89878d71797100972b6afd333dd498",
-"commitSubject":"include updated logic/style from v2",
-"commitTs":1705605258000,
-"commitDate":"2024-01-18-1114",
-"buildTs":1705605283000,
-"buildDate":"2024-01-18-1114",
+"commit":"87b574bf76675e20b4591d16b45ee35a9d91238e",
+"commitSubject":"fix subDir index export",
+"commitTs":1706399759000,
+"commitDate":"2024-01-27-1555",
+"buildTs":1706400173000,
+"buildDate":"2024-01-27-1602",
 "author":"Randal T Meyer"
 }
