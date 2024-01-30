@@ -5,12 +5,11 @@
 	"main": "build/index.js",
 	"type": "module",
 	"scripts": {
-		"build": "bash ./node_modules/@rsc-utils/npm-utils/scripts/build.sh",
-		"release": "bash ./node_modules/@rsc-utils/npm-utils/scripts/release.sh",
-		"test": "bash ./node_modules/@rsc-utils/npm-utils/scripts/test.sh"
+		"build": "bash ./node_modules/@rsc-utils/console-utils/scripts/sh/build.sh",
+		"release": "bash ./node_modules/@rsc-utils/console-utils/scripts/sh/release.sh",
+		"test": "bash ./node_modules/@rsc-utils/console-utils/scripts/sh/test.sh"
 	},
 	"devDependencies": {
-		"@rsc-utils/npm-utils": "github:rpg-sage-creative/npm-utils",
 		"@rsc-utils/console-utils": "github:rpg-sage-creative/console-utils",
 		"@types/node": "^18.18.7"
 	},
