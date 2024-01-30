@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/dice-utils",
-"version":"0.0.5",
+"version":"0.0.6",
 "branch":"main",
-"commit":"87b574bf76675e20b4591d16b45ee35a9d91238e",
-"commitSubject":"fix subDir index export",
-"commitTs":1706399759000,
-"commitDate":"2024-01-27-1555",
-"buildTs":1706400173000,
-"buildDate":"2024-01-27-1602",
+"commit":"79b56cfec3813f60c314cc5d732dd91a022f057c",
+"commitSubject":"removing npm-utils",
+"commitTs":1706651520000,
+"commitDate":"2024-01-30-1352",
+"buildTs":1706651559000,
+"buildDate":"2024-01-30-1352",
 "author":"Randal T Meyer"
 }
