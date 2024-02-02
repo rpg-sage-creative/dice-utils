@@ -19,6 +19,8 @@ export type DiceTestData = {
     /** the value to test against */
     value: number;
 };
+/** Finds the DiceTestType for the given matched value from the RegExp */
+export declare function parseDiceTestType(matchValue: string): DiceTestType;
 export declare class DiceTest {
     protected data?: DiceTestData | undefined;
     constructor(data?: DiceTestData | undefined);

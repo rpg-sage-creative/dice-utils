@@ -7,7 +7,7 @@ export var DiceTestType;
     DiceTestType[DiceTestType["LessThan"] = 4] = "LessThan";
     DiceTestType[DiceTestType["LessThanOrEqual"] = 5] = "LessThanOrEqual";
 })(DiceTestType || (DiceTestType = {}));
-function parseDiceTestType(matchValue) {
+export function parseDiceTestType(matchValue) {
     const testType = matchValue.replace(/=+/g, "=").toLowerCase();
     if (["eq", "="].includes(testType)) {
         return DiceTestType.Equal;

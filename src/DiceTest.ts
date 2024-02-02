@@ -24,7 +24,7 @@ export type DiceTestData = {
 };
 
 /** Finds the DiceTestType for the given matched value from the RegExp */
-function parseDiceTestType(matchValue: string): DiceTestType {
+export function parseDiceTestType(matchValue: string): DiceTestType {
 	const testType = matchValue.replace(/=+/g, "=").toLowerCase();
 	if (["eq", "="].includes(testType)) {
 		return DiceTestType.Equal;
