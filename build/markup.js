@@ -1,9 +1,12 @@
-export function bold(value) {
+export function markAsMax(value) {
     return `<b>${value}</b>`;
 }
-export function italics(value) {
+export function markAsMin(value) {
     return `<i>${value}</i>`;
 }
-export function strike(value) {
+export function markAsDropped(value) {
     return `<s>${value}</s>`;
+}
+export function markAsFixed(value) {
+    return `${value}f`;
 }

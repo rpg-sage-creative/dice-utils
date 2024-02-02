@@ -1,14 +1,7 @@
-import { strike } from "./markup.js";
+import { numberSorter } from "./internal/numberSorter.js";
+import { rollDataSorter } from "./internal/rollDataSorter.js";
+import { markAsDropped } from "./markup.js";
 import { sum } from "./sum.js";
-function sortNumbers(a, b) {
-    if (a < b) {
-        return -1;
-    }
-    else if (a > b) {
-        return 1;
-    }
-    return 0;
-}
 export var DiceDropKeepType;
 (function (DiceDropKeepType) {
     DiceDropKeepType[DiceDropKeepType["None"] = 0] = "None";
@@ -17,7 +10,7 @@ export var DiceDropKeepType;
     DiceDropKeepType[DiceDropKeepType["KeepLowest"] = 3] = "KeepLowest";
     DiceDropKeepType[DiceDropKeepType["KeepHighest"] = 4] = "KeepHighest";
 })(DiceDropKeepType || (DiceDropKeepType = {}));
-function isDropped(_roll, index, rolls) {
+function shouldBeDropped(_roll, index, rolls) {
     switch (this.type) {
         case DiceDropKeepType.DropHighest:
             return index >= (rolls.length - this.value);
@@ -52,16 +45,19 @@ export class DiceDropKeep {
         }
         return count;
     }
-    strikeDropped(rolls) {
+    markDropped(rolls) {
         if (!this.isEmpty) {
-            DiceDropKeep.sort(rolls)
-                .filter(isDropped, this.data)
-                .forEach(roll => roll.output = strike(roll.output));
+            const sorted = rolls.slice();
+            sorted.sort(rollDataSorter);
+            sorted.filter(shouldBeDropped, this.data).forEach(roll => {
+                roll.isDropped = true;
+                roll.output = markAsDropped(roll.output);
+            });
         }
     }
     adjustSum(values) {
         if (!this.isEmpty) {
-            const sorted = values.slice().sort(sortNumbers);
+            const sorted = values.slice().sort(numberSorter);
             switch (this.type) {
                 case DiceDropKeepType.DropHighest:
                     return sum(sorted.slice(0, -this.value));
@@ -99,16 +95,5 @@ export class DiceDropKeep {
             return { alias, type, value };
         }
         return undefined;
-    }
-    static sort(rolls) {
-        const sorted = rolls.slice();
-        sorted.sort((a, b) => {
-            const byRoll = sortNumbers(a.roll, b.roll);
-            if (byRoll !== 0) {
-                return byRoll;
-            }
-            return sortNumbers(a.index, b.index);
-        });
-        return sorted;
     }
 }

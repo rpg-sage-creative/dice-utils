@@ -1,5 +1,5 @@
+import { RollData } from "./types/RollData.js";
 import type { TokenData, TokenParsers } from "./types/index.js";
-import { RollIndexOutput } from "./types/RollIndexOutput.js";
 export declare enum DiceDropKeepType {
     None = 0,
     DropLowest = 1,
@@ -25,8 +25,8 @@ export declare class DiceDropKeep {
     get value(): number;
     /** Adjusts the count by removing any dice that were dropped. */
     adjustCount(count: number): number;
-    /** Modifies all dropped rolls' outputs to be ~striked~ (struck). */
-    strikeDropped(rolls: RollIndexOutput[]): void;
+    /** Marks all rolls to be dropped as such. */
+    markDropped(rolls: RollData[]): void;
     /** Adjusts the sum by removing any dice that were dropped. */
     adjustSum(values: number[]): number;
     toJSON(): DiceDropKeepData | undefined;
@@ -36,6 +36,4 @@ export declare class DiceDropKeep {
     static getParsers(): TokenParsers;
     /** Parses the given TokenData into DropKeepData */
     static parse(token?: TokenData | null): DiceDropKeepData | undefined;
-    /** Sorts the rolls so that the correct values can be ~striked~ (struck?). */
-    static sort(rolls: RollIndexOutput[]): RollIndexOutput[];
 }
