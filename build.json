@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/dice-utils",
-"version":"0.0.7",
+"version":"0.0.8",
 "branch":"main",
-"commit":"b5362759939b5f1c7123d9bd9f356ddcc65bf03b",
-"commitSubject":"update dropkeep logic; add testing",
-"commitTs":1706902029000,
-"commitDate":"2024-02-02-1127",
-"buildTs":1706902049000,
-"buildDate":"2024-02-02-1127",
+"commit":"11306fa074b6b1fe152f4531a8e01d75277ebceb",
+"commitSubject":"export parseDiceTestType",
+"commitTs":1706904701000,
+"commitDate":"2024-02-02-1211",
+"buildTs":1706904718000,
+"buildDate":"2024-02-02-1211",
 "author":"Randal T Meyer"
 }
