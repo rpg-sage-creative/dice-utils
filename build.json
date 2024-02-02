@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/dice-utils",
-"version":"0.0.10",
+"version":"0.0.11",
 "branch":"main",
-"commit":"a88365f1b1077352466259a8673ea3a4edb8e36a",
-"commitSubject":"implement createSortedRollData",
-"commitTs":1706910385000,
-"commitDate":"2024-02-02-1346",
-"buildTs":1706910400000,
-"buildDate":"2024-02-02-1346",
+"commit":"36fcb2e611a82d0a83ce95c55b3bc004cc15d646",
+"commitSubject":"type fix; add mark drop option to createSortedRollData",
+"commitTs":1706911353000,
+"commitDate":"2024-02-02-1402",
+"buildTs":1706911368000,
+"buildDate":"2024-02-02-1402",
 "author":"Randal T Meyer"
 }
