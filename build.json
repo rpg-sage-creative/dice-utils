@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/dice-utils",
-"version":"0.0.9",
+"version":"0.0.10",
 "branch":"main",
-"commit":"61fc5fa65e9de17ffc314c34a1d4ae78f98a4a11",
-"commitSubject":"export parseDiceTestTargetValue",
-"commitTs":1706904792000,
-"commitDate":"2024-02-02-1213",
-"buildTs":1706904813000,
-"buildDate":"2024-02-02-1213",
+"commit":"a88365f1b1077352466259a8673ea3a4edb8e36a",
+"commitSubject":"implement createSortedRollData",
+"commitTs":1706910385000,
+"commitDate":"2024-02-02-1346",
+"buildTs":1706910400000,
+"buildDate":"2024-02-02-1346",
 "author":"Randal T Meyer"
 }
