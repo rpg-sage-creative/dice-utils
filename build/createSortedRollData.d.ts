@@ -10,5 +10,5 @@ type SortedRollData = {
     length: number;
 };
 /** Creates the SortedRollData used to generate formatted dice output. */
-export declare function createSortedRollData({ dice, rolls }: DicePartRoll): SortedRollData;
+export declare function createSortedRollData(dicePartRoll: DicePartRoll, markDropped?: boolean): SortedRollData;
 export {};

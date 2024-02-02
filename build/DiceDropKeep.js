@@ -50,8 +50,10 @@ export class DiceDropKeep {
             const sorted = rolls.slice();
             sorted.sort(rollDataSorter);
             sorted.filter(shouldBeDropped, this.data).forEach(roll => {
-                roll.isDropped = true;
-                roll.output = markAsDropped(roll.output);
+                if (!roll.isDropped) {
+                    roll.isDropped = true;
+                    roll.output = markAsDropped(roll.output);
+                }
             });
         }
     }
