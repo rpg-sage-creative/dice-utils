@@ -26,7 +26,7 @@ export function parseDiceTestType(matchValue) {
     }
     return DiceTestType.None;
 }
-function parseDiceTestTargetValue(rawValue) {
+export function parseDiceTestTargetValue(rawValue) {
     const hidden = rawValue.length > 4 && rawValue.startsWith("||") && rawValue.endsWith("||");
     const value = +(hidden ? rawValue.slice(2, -2) : rawValue) || 0;
     return { value, hidden };

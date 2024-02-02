@@ -44,7 +44,7 @@ export function parseDiceTestType(matchValue: string): DiceTestType {
 	return DiceTestType.None;
 }
 
-function parseDiceTestTargetValue(rawValue: string): { value:number; hidden:boolean; } {
+export function parseDiceTestTargetValue(rawValue: string): { value:number; hidden:boolean; } {
 	const hidden = rawValue.length > 4 && rawValue.startsWith("||") && rawValue.endsWith("||");
 	const value = +(hidden ? rawValue.slice(2, -2) : rawValue) || 0;
 	return { value, hidden };

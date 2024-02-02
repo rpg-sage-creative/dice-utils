@@ -21,6 +21,10 @@ export type DiceTestData = {
 };
 /** Finds the DiceTestType for the given matched value from the RegExp */
 export declare function parseDiceTestType(matchValue: string): DiceTestType;
+export declare function parseDiceTestTargetValue(rawValue: string): {
+    value: number;
+    hidden: boolean;
+};
 export declare class DiceTest {
     protected data?: DiceTestData | undefined;
     constructor(data?: DiceTestData | undefined);
