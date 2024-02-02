@@ -1,5 +1,5 @@
-import type { TokenData, TokenParsers } from "@rsc-utils/string-utils";
-import { DiceTestType } from "./DiceTest";
+import type { TokenData, TokenParsers } from "./types/index.js";
+import { DiceTestType } from "./DiceTest.js";
 export type ExplodeDiceData = {
     alias: string;
     /** the fundamental action */

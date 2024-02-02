@@ -1,4 +1,4 @@
-import { DiceTest } from "./DiceTest";
+import { DiceTest } from "./DiceTest.js";
 export var DieRollGrade;
 (function (DieRollGrade) {
     DieRollGrade[DieRollGrade["Unknown"] = 0] = "Unknown";
@@ -8,6 +8,9 @@ export var DieRollGrade;
     DieRollGrade[DieRollGrade["CriticalSuccess"] = 4] = "CriticalSuccess";
 })(DieRollGrade || (DieRollGrade = {}));
 const DieRollGradeEmojis = [undefined, "[critical-failure]", "[failure]", "[success]", "[critical-success]"];
+function isValid(grade) {
+    return [1, 2, 3, 4].includes(grade);
+}
 export function isGradeSuccess(grade) {
     return grade === DieRollGrade.Success || grade === DieRollGrade.CriticalSuccess;
 }
@@ -15,16 +18,16 @@ export function isGradeFailure(grade) {
     return grade === DieRollGrade.Failure || grade === DieRollGrade.CriticalFailure;
 }
 export function increaseGrade(grade) {
-    return ensureGrade(grade + 1, grade);
+    return isValid(grade) ? ensureGrade(grade + 1, grade) : DieRollGrade.Unknown;
 }
 export function decreaseGrade(grade) {
-    return ensureGrade(grade - 1, grade);
+    return isValid(grade) ? ensureGrade(grade - 1, grade) : DieRollGrade.Unknown;
 }
-function ensureGrade(grade, defaultGrade) {
-    return grade && DieRollGrade[grade] ? grade : defaultGrade;
+function ensureGrade(modifiedGrade, originalGrade) {
+    return isValid(modifiedGrade) ? modifiedGrade : originalGrade;
 }
 export function gradeToEmoji(grade) {
-    return grade ? DieRollGradeEmojis[grade] : undefined;
+    return isValid(grade) ? DieRollGradeEmojis[grade] : undefined;
 }
 function booleanToGrade(value) {
     switch (value) {

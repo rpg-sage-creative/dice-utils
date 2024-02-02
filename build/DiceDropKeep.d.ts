@@ -1,5 +1,5 @@
-import type { TokenData, TokenParsers } from "@rsc-utils/string-utils";
-import { RollIndexOutput } from "./types/RollIndexOutput";
+import type { TokenData, TokenParsers } from "./types/index.js";
+import { RollIndexOutput } from "./types/RollIndexOutput.js";
 export declare enum DiceDropKeepType {
     None = 0,
     DropLowest = 1,
@@ -35,7 +35,7 @@ export declare class DiceDropKeep {
     /** The token key/regex used to generate DropKeepData */
     static getParsers(): TokenParsers;
     /** Parses the given TokenData into DropKeepData */
-    static parse(token: TokenData): DiceDropKeepData | undefined;
-    /** Sorts the rolls so that the correct values can be ~striked~ (struck). */
+    static parse(token?: TokenData | null): DiceDropKeepData | undefined;
+    /** Sorts the rolls so that the correct values can be ~striked~ (struck?). */
     static sort(rolls: RollIndexOutput[]): RollIndexOutput[];
 }

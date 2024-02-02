@@ -1,7 +1,7 @@
-import { assert } from "@rsc-utils/console-utils";
+import { assert, runTests } from "@rsc-utils/test-utils";
 import { rollDiceString } from "../build/rollDiceString.js";
 
-export function testDiceRollString() {
+runTests(function testDiceRollString() {
 	const testIterations = 10000;
 
 	const validValues = [["-1d6", -6, -1], ["-2d6-2", -14, -4], ["1d6", 1, 6], ["+1d6", 1, 6], ["1d8+1", 2, 9], ["1d20-3", -2, 17], ["3d6", 3, 18], ["5d4+1", 6, 21], ["2d20-3", -1, 37]];
@@ -29,4 +29,4 @@ export function testDiceRollString() {
 	invalidValues.forEach(([diceString]) => {
 		assert(rollDiceString(diceString) === null, `Expected a null result: ${diceString}`);
 	});
-}
+}, true);

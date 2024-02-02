@@ -1,6 +1,14 @@
-import { sortPrimitive } from "@rsc-utils/array-utils";
-import { strike } from "./markup";
-import { sum } from "./sum";
+import { strike } from "./markup.js";
+import { sum } from "./sum.js";
+function sortNumbers(a, b) {
+    if (a < b) {
+        return -1;
+    }
+    else if (a > b) {
+        return 1;
+    }
+    return 0;
+}
 export var DiceDropKeepType;
 (function (DiceDropKeepType) {
     DiceDropKeepType[DiceDropKeepType["None"] = 0] = "None";
@@ -53,7 +61,7 @@ export class DiceDropKeep {
     }
     adjustSum(values) {
         if (!this.isEmpty) {
-            const sorted = values.slice().sort(sortPrimitive);
+            const sorted = values.slice().sort(sortNumbers);
             switch (this.type) {
                 case DiceDropKeepType.DropHighest:
                     return sum(sorted.slice(0, -this.value));
@@ -71,7 +79,7 @@ export class DiceDropKeep {
     toJSON() {
         return this.data;
     }
-    toString(leftPad, rightPad) {
+    toString(leftPad = "", rightPad = "") {
         if (this.isEmpty) {
             return ``;
         }
@@ -84,7 +92,7 @@ export class DiceDropKeep {
         return { dropKeep: /(dl|dh|kl|kh)\s*(\d+)?/i };
     }
     static parse(token) {
-        if (token.key === "dropKeep") {
+        if (token?.key === "dropKeep") {
             const alias = token.matches[0].toLowerCase().slice(0, 2);
             const type = [null, "dl", "dh", "kl", "kh"].indexOf(alias);
             const value = +token.matches[1] || 1;
@@ -95,11 +103,11 @@ export class DiceDropKeep {
     static sort(rolls) {
         const sorted = rolls.slice();
         sorted.sort((a, b) => {
-            const byRoll = sortPrimitive(a.roll, b.roll);
+            const byRoll = sortNumbers(a.roll, b.roll);
             if (byRoll !== 0) {
                 return byRoll;
             }
-            return sortPrimitive(a.index, b.index);
+            return sortNumbers(a.index, b.index);
         });
         return sorted;
     }

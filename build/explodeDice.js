@@ -1,4 +1,4 @@
-import { DiceTestType } from "./DiceTest";
+import { DiceTestType } from "./DiceTest.js";
 import { rollDie } from "./rollDie.js";
 export class ExplodeDice {
     data;
