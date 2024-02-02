@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/dice-utils",
-"version":"0.0.6",
+"version":"0.0.7",
 "branch":"main",
-"commit":"79b56cfec3813f60c314cc5d732dd91a022f057c",
-"commitSubject":"removing npm-utils",
-"commitTs":1706651520000,
-"commitDate":"2024-01-30-1352",
-"buildTs":1706651559000,
-"buildDate":"2024-01-30-1352",
+"commit":"b5362759939b5f1c7123d9bd9f356ddcc65bf03b",
+"commitSubject":"update dropkeep logic; add testing",
+"commitTs":1706902029000,
+"commitDate":"2024-02-02-1127",
+"buildTs":1706902049000,
+"buildDate":"2024-02-02-1127",
 "author":"Randal T Meyer"
 }
