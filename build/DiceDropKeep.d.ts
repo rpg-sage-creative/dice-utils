@@ -35,5 +35,6 @@ export declare class DiceDropKeep {
     /** The token key/regex used to generate DropKeepData */
     static getParsers(): TokenParsers;
     /** Parses the given TokenData into DropKeepData */
-    static parse(token?: TokenData | null): DiceDropKeepData | undefined;
+    static parseData(token?: TokenData | null): DiceDropKeepData | undefined;
+    static from(token?: TokenData | null): DiceDropKeep;
 }

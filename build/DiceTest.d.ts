@@ -37,9 +37,11 @@ export declare class DiceTest {
     toJSON(): DiceTestData | undefined;
     /** The token key/regex used to generate DiceTestData */
     static getParsers(): TokenParsers;
+    static createData(type: DiceTestType, value: number, hidden: boolean, alias?: string): DiceTestData;
     /** Parses the given TokenData into DiceTestData */
-    static parse(token: TokenData): DiceTestData | undefined;
-    static create(type: DiceTestType, value: number, hidden: boolean, alias?: string): DiceTestData;
+    static parseData(token: TokenData): DiceTestData | undefined;
+    /** Parses the given TokenData into DiceTestData */
+    static from(token: TokenData): DiceTest;
     /** Tests the roll for pass/fail. If isEmpty, undefined is returned instead. */
     static test(roll: DiceRoll): boolean | undefined;
 }

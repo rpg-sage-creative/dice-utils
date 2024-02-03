@@ -89,7 +89,7 @@ export class DiceDropKeep {
     static getParsers() {
         return { dropKeep: /(dl|dh|kl|kh)\s*(\d+)?/i };
     }
-    static parse(token) {
+    static parseData(token) {
         if (token?.key === "dropKeep") {
             const alias = token.matches[0].toLowerCase().slice(0, 2);
             const type = [null, "dl", "dh", "kl", "kh"].indexOf(alias);
@@ -97,5 +97,8 @@ export class DiceDropKeep {
             return { alias, type, value };
         }
         return undefined;
+    }
+    static from(token) {
+        return new DiceDropKeep(DiceDropKeep.parseData(token));
     }
 }

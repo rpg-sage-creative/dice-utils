@@ -30,7 +30,7 @@ runTests(async function testDiceDropKeep() {
 	const sortedRollData = createSortedRollData({ dice:{ fixedRolls:[], sides:6 }, rolls:[4, 1, 6, 3, 1] });
 	const rolls = sortedRollData.byIndex;
 
-	const ddkData = DiceDropKeep.parse();
+	const ddkData = DiceDropKeep.parseData();
 	const ddk = new DiceDropKeep(ddkData);
 	assert(5, adjustCount, ddk, rolls);
 	assert(15, adjustSum, ddk, rolls);
@@ -38,7 +38,7 @@ runTests(async function testDiceDropKeep() {
 	assert(ddkData, () => ddk.toJSON());
 	assert("", () => ddk.toString());
 
-	const ddkDataDL1 = DiceDropKeep.parse({ key:"dropKeep", matches:["dl", 1] });
+	const ddkDataDL1 = DiceDropKeep.parseData({ key:"dropKeep", matches:["dl", 1] });
 	ddkDataDL1.alias = "luck";
 	const ddkDL1 = new DiceDropKeep(ddkDataDL1);
 	assert(4, adjustCount, ddkDL1, rolls);
@@ -47,19 +47,19 @@ runTests(async function testDiceDropKeep() {
 	assert(ddkDataDL1, () => ddkDL1.toJSON());
 	assert("(luck)", () => ddkDL1.toString());
 
-	const ddkDH1 = new DiceDropKeep(DiceDropKeep.parse({ key:"dropKeep", matches:["dh", 1] }));
+	const ddkDH1 = DiceDropKeep.from({ key:"dropKeep", matches:["dh", 1] });
 	assert(4, adjustCount, ddkDH1, rolls);
 	assert(9, adjustSum, ddkDH1, rolls);
 	assert(dropIndex(rolls, 2), markDropped, ddkDH1, rolls);
 	assert("dh 1", () => ddkDH1.toString());
 
-	const ddkKL1 = new DiceDropKeep(DiceDropKeep.parse({ key:"dropKeep", matches:["kl", 1] }));
+	const ddkKL1 = DiceDropKeep.from({ key:"dropKeep", matches:["kl", 1] });
 	assert(1, adjustCount, ddkKL1, rolls);
 	assert(1, adjustSum, ddkKL1, rolls);
 	assert(dropIndex(rolls, 0, 2, 3, 4), markDropped, ddkKL1, rolls);
 	assert("kl 1", () => ddkKL1.toString());
 
-	const ddkKH1 = new DiceDropKeep(DiceDropKeep.parse({ key:"dropKeep", matches:["kh", 1] }));
+	const ddkKH1 = DiceDropKeep.from({ key:"dropKeep", matches:["kh", 1] });
 	assert(1, adjustCount, ddkKH1, rolls);
 	assert(6, adjustSum, ddkKH1, rolls);
 	assert(dropIndex(rolls, 0, 1, 3, 4), markDropped, ddkKH1, rolls);

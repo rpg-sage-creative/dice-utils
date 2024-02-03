@@ -65,19 +65,22 @@ export class DiceTest {
     static getParsers() {
         return { test: /(gteq|gte|gt|lteq|lte|lt|eq|=+|>=|>|<=|<)\s*(\d+|\|\|\d+\|\|)/i };
     }
-    static parse(token) {
-        if (token.key === "test") {
-            const type = parseDiceTestType(token.matches[0]);
-            const { value, hidden } = parseDiceTestTargetValue(token.matches[1]);
-            return this.create(type, value, hidden);
-        }
-        return undefined;
-    }
-    static create(type, value, hidden, alias) {
+    static createData(type, value, hidden, alias) {
         if (!alias) {
             alias = [undefined, "=", ">", ">=", "<", "<="][type];
         }
         return { type, value, hidden, alias };
+    }
+    static parseData(token) {
+        if (token.key === "test") {
+            const type = parseDiceTestType(token.matches[0]);
+            const { value, hidden } = parseDiceTestTargetValue(token.matches[1]);
+            return DiceTest.createData(type, value, hidden);
+        }
+        return undefined;
+    }
+    static from(token) {
+        return new DiceTest(DiceTest.parseData(token));
     }
     static test(roll) {
         return new DiceTest(roll.dice.test).test(roll.total);

@@ -1,6 +1,6 @@
 import { DiceTestType } from "./DiceTest.js";
 import { rollDie } from "./rollDie.js";
-export class ExplodeDice {
+export class DiceExplode {
     data;
     constructor(data) {
         this.data = data;
@@ -42,7 +42,7 @@ export class ExplodeDice {
             return ``;
         }
         if (this.alias === "x") {
-            const test = ["", "<", "<=", "", ">=", ">"][this.type];
+            const test = ["", "", ">", ">=", "<", "<="][this.type];
             const output = ["x", test, this.value].filter(value => value).join(" ");
             return `${leftPad}${output}${rightPad}`;
         }
@@ -51,17 +51,20 @@ export class ExplodeDice {
     static getParsers() {
         return { explode: /((x)\s*(<=|<|>=|>|=)?\s*(\d+)?)/i };
     }
-    static parse(token) {
+    static parseData(token) {
         if (token.key === "explode") {
             const alias = token.matches[0].toLowerCase();
-            const type = ["", "<", "<=", "=", ">=", ">"].indexOf(token.matches[1] ?? "=");
+            const type = ["", "=", ">", ">=", "<", "<="].indexOf(token.matches[1] ?? "=");
             const value = +token.matches[2] || 0;
             return { alias, type, value };
         }
         return undefined;
     }
+    static from(token) {
+        return new DiceExplode(DiceExplode.parseData(token));
+    }
     static explode(dieSize, dieValues) {
-        const exploder = new ExplodeDice({ alias: "x", type: DiceTestType.Equal, value: dieSize });
+        const exploder = new DiceExplode({ alias: "x", type: DiceTestType.Equal, value: dieSize });
         return exploder.explode(dieSize, dieValues);
     }
 }
