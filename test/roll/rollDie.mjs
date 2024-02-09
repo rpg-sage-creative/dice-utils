@@ -1,5 +1,5 @@
 import { assert, runTests, startAsserting } from "@rsc-utils/test-utils";
-import { rollDie } from "../build/index.js";
+import { rollDie } from "../../build/index.js";
 
 runTests(async function testRollDie() {
 	const dice = [2, 3, 4, 6, 8, 10, 12, 20, 30];

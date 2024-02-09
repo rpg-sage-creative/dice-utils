@@ -1,7 +1,7 @@
 import { HasIdCore } from "@rsc-utils/class-utils";
 import { randomSnowflake } from "@rsc-utils/snowflake-utils";
 import { cleanWhitespace, dequote } from "@rsc-utils/string-utils";
-import { detick } from "../detick.js";
+import { detick } from "../internal/detick.js";
 import { gradeRoll, gradeToEmoji } from "../grade.js";
 import { mapDicePartRollToString } from "../mapDicePartRollToString.js";
 import { removeDesc } from "../removeDesc.js";

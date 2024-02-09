@@ -1,6 +1,6 @@
 import { debug, info, warn, error } from "@rsc-utils/console-utils";
 import { assert, runTests, startAsserting, stopAsserting } from "@rsc-utils/test-utils";
-import { DiceThreshold } from "../build/index.js";
+import { DiceThreshold } from "../../build/index.js";
 
 runTests(async function testDiceThreshold() {
 

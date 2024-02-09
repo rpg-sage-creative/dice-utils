@@ -1,6 +1,6 @@
 import { debug } from "@rsc-utils/console-utils";
 import { assert, runTests } from "@rsc-utils/test-utils";
-import { DiceExplode } from "../build/index.js";
+import { DiceExplode } from "../../build/index.js";
 
 runTests(async function testDiceExplode() {
 

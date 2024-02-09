@@ -1,5 +1,5 @@
 import { DiceTestType } from "../DiceTest.js";
-import { rollDie } from "../rollDie.js";
+import { rollDie } from "../roll/rollDie.js";
 export class DiceExplode {
     data;
     constructor(data) {

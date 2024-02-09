@@ -1,7 +1,7 @@
 import { markAsFixed, markAsMax, markAsMin } from "../markup.js";
 import type { RollData } from "../types/RollData.js";
 
-/** Creates the RollData used to markup die roll output. */
+/** @internal Creates the RollData used to markup die roll output. */
 export function rollDataMapper(roll: number, index: number, sides: number, isFixed: boolean): RollData {
 	let output = String(roll);
 

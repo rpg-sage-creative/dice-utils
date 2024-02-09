@@ -1,6 +1,6 @@
 import { randomSnowflake } from "@rsc-utils/snowflake-utils";
 import { DiceRollManipulator } from "../manipulate/DiceManipulator.js";
-import { rollDice } from "../rollDice.js";
+import { rollDice } from "../roll/rollDice.js";
 import type { DiceOperator } from "../types/DiceOperator.js";
 import { DicePart, type DicePartCore, type TDicePart } from "./DicePart.js";
 

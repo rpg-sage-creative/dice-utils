@@ -1,5 +1,5 @@
 import { DiceTestType } from "../DiceTest.js";
-import { rollDie } from "../rollDie.js";
+import { rollDie } from "../roll/rollDie.js";
 import type { TokenData, TokenParsers } from "../types/index.js";
 
 export type DiceExplodeData = {

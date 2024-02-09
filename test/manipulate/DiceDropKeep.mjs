@@ -1,5 +1,5 @@
 import { assert, runTests } from "@rsc-utils/test-utils";
-import { DiceDropKeep, createSortedRollData, markAsDropped } from "../build/index.js";
+import { DiceDropKeep, createSortedRollData, markAsDropped } from "../../build/index.js";
 
 
 /** Adjusts the count baed on the ddk values. */
