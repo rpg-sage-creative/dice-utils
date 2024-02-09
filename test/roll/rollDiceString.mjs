@@ -1,5 +1,5 @@
 import { assert, runTests } from "@rsc-utils/test-utils";
-import { rollDiceString } from "../build/rollDiceString.js";
+import { rollDiceString } from "../../build/roll/rollDiceString.js";
 
 runTests(function testDiceRollString() {
 	const testIterations = 10000;

@@ -1,5 +1,6 @@
+import { debug } from "@rsc-utils/console-utils";
 import { assert, runTests, startAsserting } from "@rsc-utils/test-utils";
-import { DiceRoll, DieRollGrade, isGradeSuccess, isGradeFailure, increaseGrade, decreaseGrade, gradeToEmoji, gradeRoll, DiceTestType } from "../build/index.js";
+import { Dice, DiceRoll, DieRollGrade, isGradeSuccess, isGradeFailure, increaseGrade, decreaseGrade, gradeToEmoji, gradeRoll, DiceTestType } from "../build/index.js";
 
 runTests(async function testGrade() {
 	const cf = DieRollGrade.CriticalFailure;
@@ -44,7 +45,13 @@ runTests(async function testGrade() {
 	assert(undefined, gradeToEmoji, u);
 
 	startAsserting("gradeRoll");
-	const makeGradeRollDiceRoll = (value, type) => new DiceRoll({ dice:{ diceParts:[{count:1,sides:20}], test:{type, value:10} }, rolls:[value] });
+	const makeGradeRollDiceRoll = (testType, roll, dicePart = {count:1,sides:20,modifier:0,test:{type:testType,value:10}}) => new DiceRoll({
+		objectType:"DiceRoll",
+		gameType:0,
+		id:"1205381305760485376",
+		dice:{diceParts:[dicePart]},
+		rolls:[{objectType:"DicePartRoll",gameType:0,id:"1205381305764679681",dice:dicePart,rolls:[roll]}]
+	});
 
 	assert(f, gradeRoll, makeGradeRollDiceRoll(DiceTestType.Equal, 1));
 	assert(s, gradeRoll, makeGradeRollDiceRoll(DiceTestType.Equal, 10));
@@ -63,5 +70,5 @@ runTests(async function testGrade() {
 	assert(s, gradeRoll, makeGradeRollDiceRoll(DiceTestType.LessThanOrEqual, 10));
 	assert(f, gradeRoll, makeGradeRollDiceRoll(DiceTestType.LessThanOrEqual, 20));
 
-	assert(u, gradeRoll, new DiceRoll({ dice:{ diceParts:[{count:1,sides:20}] }, rolls:[11] }));
+	assert(u, gradeRoll, makeGradeRollDiceRoll(0, 11));
 }, true);
