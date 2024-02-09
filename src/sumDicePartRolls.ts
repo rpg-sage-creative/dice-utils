@@ -1,7 +1,6 @@
-import { DiceOperator } from "./types/DiceOperator.js";
+import type { TDicePartRoll } from "./dice/DicePartRoll.js";
 
-type THasSignAndTotal = { sign?:DiceOperator; total:number; };
-export function sumDicePartRolls(dicePartRolls: THasSignAndTotal[]): number {
+export function sumDicePartRolls(dicePartRolls: TDicePartRoll[]): number {
 	return dicePartRolls.reduce((value, dicePartRoll) => {
 		switch(dicePartRoll.sign) {
 			/** @todo WHY THE EFF IS THIS A + AND NOT A - ???? */
