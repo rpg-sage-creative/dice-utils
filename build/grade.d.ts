@@ -1,4 +1,4 @@
-import type { DiceRoll } from "./types/DiceRoll.js";
+import type { TDiceRoll } from "./dice/DiceRoll.js";
 export declare enum DieRollGrade {
     Unknown = 0,
     CriticalFailure = 1,
@@ -18,5 +18,5 @@ export declare function decreaseGrade(grade: DieRollGrade): DieRollGrade;
 /** Returns the bracket name Sage uses for dice results emoji based on the grade. Ex: [success] or [failure] */
 export declare function gradeToEmoji(grade: DieRollGrade): TDieRollGradeEmoji;
 /** Grades the given dice roll to simple success/failure/unknown. No critical logic. */
-export declare function gradeRoll(roll: DiceRoll): DieRollGrade;
+export declare function gradeRoll(roll: TDiceRoll): DieRollGrade;
 export {};

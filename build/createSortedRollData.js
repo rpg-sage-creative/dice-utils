@@ -7,7 +7,7 @@ export function createSortedRollData(dicePartRoll, markDropped) {
     const byIndex = rolls.map((roll, index) => rollDataMapper(roll, index, sides, index < fixedRollsLength));
     const byRoll = byIndex.slice().sort(rollDataSorter);
     if (markDropped) {
-        dicePartRoll.dice.dropKeep.markDropped(byIndex);
+        dicePartRoll.dice.manipulation.dropKeep.markDropped(byIndex);
     }
     return { byIndex: byIndex, byRoll: byRoll, length: rolls.length };
 }

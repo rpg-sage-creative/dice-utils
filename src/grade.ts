@@ -1,5 +1,5 @@
 import { DiceTest } from "./DiceTest.js";
-import type { DiceRoll } from "./types/DiceRoll.js";
+import type { TDiceRoll } from "./dice/DiceRoll.js";
 
 export enum DieRollGrade { Unknown = 0, CriticalFailure = 1, Failure = 2, Success = 3, CriticalSuccess = 4 }
 
@@ -52,6 +52,6 @@ function booleanToGrade(value?: boolean | null): DieRollGrade {
 }
 
 /** Grades the given dice roll to simple success/failure/unknown. No critical logic. */
-export function gradeRoll(roll: DiceRoll): DieRollGrade {
+export function gradeRoll(roll: TDiceRoll): DieRollGrade {
 	return booleanToGrade(DiceTest.test(roll));
 }

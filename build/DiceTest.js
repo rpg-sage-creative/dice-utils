@@ -31,12 +31,21 @@ export function parseDiceTestTargetValue(rawValue) {
     const value = +(hidden ? rawValue.slice(2, -2) : rawValue) || 0;
     return { value, hidden };
 }
+export function appendTestToCore(core, token, _index, _tokens) {
+    const diceTest = DiceTest.from(token);
+    if (!diceTest.isEmpty) {
+        core.test = diceTest.toJSON();
+        return true;
+    }
+    return false;
+}
 export class DiceTest {
     data;
     constructor(data) {
         this.data = data;
     }
     get alias() { return this.data?.alias ?? ""; }
+    get isHidden() { return this.data?.hidden ?? false; }
     get isEmpty() { return !this.data?.type || isNaN(this.data.value); }
     get type() { return this.data?.type ?? DiceTestType.None; }
     get value() { return this.data?.value ?? 0; }
@@ -62,6 +71,13 @@ export class DiceTest {
     toJSON() {
         return this.data;
     }
+    toString(leftPad = "", rightPad = "") {
+        if (this.isEmpty) {
+            return ``;
+        }
+        const value = this.isHidden ? "??" : this.value;
+        return `${leftPad}${this.alias} ${value}${rightPad}`;
+    }
     static getParsers() {
         return { test: /(gteq|gte|gt|lteq|lte|lt|eq|=+|>=|>|<=|<)\s*(\d+|\|\|\d+\|\|)/i };
     }
@@ -83,6 +99,7 @@ export class DiceTest {
         return new DiceTest(DiceTest.parseData(token));
     }
     static test(roll) {
-        return new DiceTest(roll.dice.test).test(roll.total);
+        return roll.dice.test.test(roll.total);
     }
+    static EmptyTest = new DiceTest();
 }

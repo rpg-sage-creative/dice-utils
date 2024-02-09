@@ -10,3 +10,9 @@ export function markAsDropped(value) {
 export function markAsFixed(value) {
     return `${value}f`;
 }
+export function markExploded(value) {
+    return `${value}ₓ`;
+}
+export function markAsExplosion(value) {
+    return `${value}⁺`;
+}

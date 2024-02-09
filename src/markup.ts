@@ -17,3 +17,13 @@ export function markAsDropped(value: number | string): string {
 export function markAsFixed(value: number | string): string {
 	return `${value}f`;
 }
+
+/** Simple function to ensure everywhere we mark a value as causing an explosion, we do it the same. */
+export function markExploded(value: number | string): string {
+	return `${value}ₓ`;
+}
+
+/** Simple function to ensure everywhere we mark a value as the result of an explosion, we do it the same. */
+export function markAsExplosion(value: number | string): string {
+	return `${value}⁺`;
+}

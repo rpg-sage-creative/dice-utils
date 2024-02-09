@@ -1,5 +1,5 @@
+import type { TDiceRoll } from "./dice/DiceRoll.js";
 import type { TokenData, TokenParsers } from "./types/index.js";
-import type { DiceRoll } from "./types/DiceRoll.js";
 export declare enum DiceTestType {
     None = 0,
     Equal = 1,
@@ -19,22 +19,35 @@ export type DiceTestData = {
     /** the value to test against */
     value: number;
 };
+type DiceTestTargetValue = {
+    /** is the value hidden from players? */
+    hidden: boolean;
+    /** the actual value */
+    value: number;
+};
 /** Finds the DiceTestType for the given matched value from the RegExp */
 export declare function parseDiceTestType(matchValue: string): DiceTestType;
-export declare function parseDiceTestTargetValue(rawValue: string): {
-    value: number;
-    hidden: boolean;
+export declare function parseDiceTestTargetValue(rawValue: string): DiceTestTargetValue;
+export type HasDiceTestData = {
+    test?: DiceTestData;
 };
+export type HasDiceTest = {
+    test?: DiceTest;
+    hasTest: boolean;
+};
+export declare function appendTestToCore(core: HasDiceTestData, token: TokenData, _index: number, _tokens: TokenData[]): boolean;
 export declare class DiceTest {
     protected data?: DiceTestData | undefined;
     constructor(data?: DiceTestData | undefined);
     get alias(): string;
+    get isHidden(): boolean;
     get isEmpty(): boolean;
     get type(): DiceTestType;
     get value(): number;
     /** Tests the value for pass/fail. If isEmpty, undefined is returned instead. */
     test(total: number): boolean | undefined;
     toJSON(): DiceTestData | undefined;
+    toString(leftPad?: string, rightPad?: string): string;
     /** The token key/regex used to generate DiceTestData */
     static getParsers(): TokenParsers;
     static createData(type: DiceTestType, value: number, hidden: boolean, alias?: string): DiceTestData;
@@ -43,5 +56,7 @@ export declare class DiceTest {
     /** Parses the given TokenData into DiceTestData */
     static from(token: TokenData): DiceTest;
     /** Tests the roll for pass/fail. If isEmpty, undefined is returned instead. */
-    static test(roll: DiceRoll): boolean | undefined;
+    static test(roll: TDiceRoll): boolean | undefined;
+    static readonly EmptyTest: DiceTest;
 }
+export {};
