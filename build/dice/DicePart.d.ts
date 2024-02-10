@@ -1,20 +1,21 @@
-import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
-import { type Snowflake } from "@rsc-utils/snowflake-utils";
 import { DiceTest, type DiceTestData } from "../DiceTest.js";
 import { DiceManipulator, type DiceManipulationData } from "../manipulate/DiceManipulator.js";
 import type { DiceOperator } from "../types/DiceOperator.js";
 import { DiceOutputType } from "../types/DiceOutputType.js";
-import { type TokenData } from "../types/TokenData.js";
-import type { DicePartRoll, TDicePartRoll } from "./DicePartRoll.js";
-interface DicePartCoreBase {
+import { DiceBase, type DiceBaseCore } from "./DiceBase.js";
+type DicePartCoreBase = {
     /** number of dice */
     count: number;
     /** description of dice or modifier */
     description: string;
-    /** do we have: dropKeep, explode, threshold ? ? ? */
-    manipulation?: DiceManipulationData[];
     /** values to use instead of rolling */
     fixedRolls?: number[];
+    /** the initially rolled values (before manipulation) */
+    initialRolls?: number[];
+    /** the final rolled values (after manipulation) */
+    manipulatedRolls?: number[];
+    /** do we have: dropKeep, explode, threshold ? ? ? */
+    manipulation?: DiceManipulationData[];
     /** roll modifier */
     modifier: number;
     /** number of sides on the dice */
@@ -23,43 +24,50 @@ interface DicePartCoreBase {
     sign?: DiceOperator;
     /** target test information */
     test?: DiceTestData;
-}
+};
 export type DicePartCoreArgs = Partial<DicePartCoreBase>;
-export interface DicePartCore<GameType extends number = number> extends DicePartCoreBase, IdCore<"DicePart", Snowflake> {
-    gameType: GameType;
-}
-export type TDicePart = DicePart<DicePartCore, TDicePartRoll>;
-export declare class DicePart<Core extends DicePartCore<GameType>, Roll extends TDicePartRoll = TDicePartRoll, GameType extends number = number> extends HasIdCore<Core> {
-    get gameType(): GameType;
+export type DicePartCore<GameType extends number = number> = DicePartCoreBase & DiceBaseCore<never, "DicePart", GameType>;
+export type TDicePart = DicePart<DicePartCore>;
+export declare class DicePart<CoreType extends DicePartCore<GameType>, GameType extends number = number> extends DiceBase<CoreType, never, "DicePart", GameType> {
     get count(): number;
     get description(): string;
-    get hasDescription(): boolean;
     get fixedRolls(): number[];
+    get initialRolls(): number[];
+    get manipulatedRolls(): number[];
     private _manipulation?;
     get manipulation(): DiceManipulator;
-    get hasManipulation(): boolean;
     get modifier(): number;
-    get noSort(): boolean;
     get sides(): number;
     get sign(): DiceOperator | undefined;
     private _test?;
     get test(): DiceTest;
-    get hasTest(): boolean;
     get adjustedCount(): number;
+    /** The biggest possible result. Simply totals max roll + modifier. */
     private get biggest();
-    private get smallest();
+    /** The maximum possible result. Accounts for negative numbers, thus -1d6 has max of -1 and min of -6. */
     get max(): number;
+    /** How many dice rolled max (value equal to .dice.sides). */
+    get maxCount(): number;
+    /** The minimum possible result. Accounts for negative numbers, thus -1d6 has max of -1 and min of -6. */
     get min(): number;
+    /** How many dice rolled 1. */
+    get minCount(): number;
+    /** The smallest possible result. Simply totals min roll + modifier. */
+    private get smallest();
+    get total(): number;
+    get hasDescription(): boolean;
     get hasDie(): boolean;
-    get isEmpty(): boolean;
-    /** Returns null if this.isEmpty is true, otherwise it returns the results */
-    quickRoll(): number | null;
+    get hasManipulation(): boolean;
+    get hasRolls(): boolean;
     get hasSecret(): boolean;
-    roll(): Roll;
-    toString(index?: number, outputType?: DiceOutputType): string;
+    get hasTest(): boolean;
+    get isEmpty(): boolean;
+    get isMax(): boolean;
+    get isMin(): boolean;
+    roll(): void;
+    toDiceString(outputType?: DiceOutputType, index?: number): string;
+    toRollString(): string;
     static create(args?: DicePartCoreArgs): TDicePart;
-    static fromCore(core: DicePartCore): TDicePart;
-    static fromTokens(tokens: TokenData[]): TDicePart;
-    static Roll: typeof DicePartRoll;
+    static fromCore<CoreType, DiceType>(core: CoreType): DiceType;
 }
 export {};

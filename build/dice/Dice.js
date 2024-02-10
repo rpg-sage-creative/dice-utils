@@ -1,65 +1,94 @@
-import { HasIdCore } from "@rsc-utils/class-utils";
 import { randomSnowflake } from "@rsc-utils/snowflake-utils";
-import { cleanWhitespace } from "@rsc-utils/string-utils";
+import { cleanWhitespace, dequote } from "@rsc-utils/string-utils";
 import { DiceTest } from "../DiceTest.js";
+import { gradeRoll, gradeToEmoji } from "../grade.js";
 import { sum } from "../sum.js";
+import { sumDicePartRolls } from "../sumDicePartRolls.js";
 import { DiceOutputType } from "../types/DiceOutputType.js";
+import { DiceBase } from "./DiceBase.js";
 import { DicePart } from "./DicePart.js";
-export class Dice extends HasIdCore {
-    _diceParts;
-    get diceParts() {
-        if (!this._diceParts) {
-            const fromCore = this.constructor.Part.fromCore;
-            this._diceParts = this.core.diceParts.map(fromCore);
-        }
-        return this._diceParts;
-    }
-    get baseDicePart() { return this.diceParts.find(dicePart => dicePart.hasDie); }
-    get max() { return sum(this.diceParts.map(dicePart => dicePart.max)); }
-    get min() { return sum(this.diceParts.map(dicePart => dicePart.min)); }
-    get test() { return this.diceParts.find(dicePart => dicePart.hasTest)?.test ?? DiceTest.EmptyTest; }
-    get hasFixed() { return !!this.baseDicePart?.fixedRolls?.length; }
-    get hasTest() { for (const dp of this.diceParts)
-        if (dp.hasTest)
-            return true; return false; }
-    get isD20() { return this.baseDicePart?.sides === 20; }
-    get isEmpty() { return this.diceParts.length === 0 || this.diceParts.filter(dicePart => !dicePart.isEmpty).length === 0; }
-    includes(dicePartOrCore) {
-        const dicePartCore = "toJSON" in dicePartOrCore ? dicePartOrCore.toJSON() : dicePartOrCore;
-        return this.diceParts.find(_dicePart => _dicePart.toJSON() === dicePartCore) !== undefined;
-    }
-    quickRoll() {
-        if (this.isEmpty) {
-            return null;
-        }
-        const _constructor = this.constructor;
-        const roll = _constructor.Roll.create(this, false);
-        return roll.total;
-    }
-    get hasSecret() { return this.diceParts.find(dicePart => dicePart.hasSecret) !== undefined; }
+import { detick } from "../internal/detick.js";
+import { UNICODE_LEFT_ARROW } from "../types/consts.js";
+import { removeDesc } from "../removeDesc.js";
+import { mapDicePartToRollString } from "../mapDicePartToRollString.js";
+import { isBoolean } from "../internal/isBoolean.js";
+import { isDiceOutputType } from "../internal/isDiceOutputType.js";
+export class Dice extends DiceBase {
+    get primary() { return this.children.find(dicePart => dicePart.hasDie); }
+    get max() { return sum(this.children.map(dicePart => dicePart.max)); }
+    get min() { return sum(this.children.map(dicePart => dicePart.min)); }
+    get test() { return this.children.find(dicePart => dicePart.hasTest)?.test ?? DiceTest.EmptyTest; }
+    get grade() { return gradeRoll(this); }
+    get total() { return sumDicePartRolls(this.children); }
+    get hasFixed() { return this.children.some(dicePart => dicePart.fixedRolls.length); }
+    get hasRolls() { return this.children.some(dicePart => dicePart.hasRolls); }
+    get isD20() { return this.primary?.sides === 20; }
+    get isEmpty() { return !this.children.some(dicePart => !dicePart.isEmpty); }
+    get isMax() { return this.total === this.max; }
+    get isMin() { return this.total === this.min; }
     roll() {
-        const _constructor = this.constructor;
-        return _constructor.Roll.create(this, true);
+        this.children.forEach(dicePart => dicePart.roll());
     }
-    toString(outputType) {
-        const _outputType = outputType === DiceOutputType.S ? DiceOutputType.S : DiceOutputType.M;
-        const output = this.diceParts.map((dicePart, index) => dicePart.toString(index, _outputType)).join(" ");
+    toDiceString(_outputType) {
+        const outputType = _outputType === DiceOutputType.S ? DiceOutputType.S : DiceOutputType.M;
+        const output = this.children.map((dicePart, index) => dicePart.toDiceString(outputType, index)).join(" ");
         return cleanWhitespace(output);
+    }
+    _toRollString(outputType, hideRolls) {
+        const xxs = this.toRollStringXXS(hideRolls);
+        const desc = this.children.find(dicePart => dicePart.hasDescription)?.description;
+        const isRollem = outputType === DiceOutputType.ROLLEM;
+        const noDice = [DiceOutputType.L, DiceOutputType.S, DiceOutputType.XS, DiceOutputType.XXS].includes(outputType);
+        const description = this.children.map((roll, index) => mapDicePartToRollString(roll, index, { hideRolls, isRollem, noDice })).join(" ");
+        if (isRollem) {
+            const stripped = xxs.replace(/<\/?(b|em|i|strong)>/ig, "").trim();
+            const [_, emoji, total] = stripped.match(/^(?:(.*?)\s+)(\d+)$/) ?? ["", "", stripped];
+            const escapedTotal = `\` ${total} \``;
+            const output = desc
+                ? `${emoji} '${detick(dequote(desc))}', ${escapedTotal} ${UNICODE_LEFT_ARROW} ${removeDesc(description, desc)}`
+                : `${emoji} ${escapedTotal} ${UNICODE_LEFT_ARROW} ${description}`;
+            return cleanWhitespace(output);
+        }
+        else {
+            const output = desc
+                ? `${xxs} \`${detick(dequote(desc))}\` ${UNICODE_LEFT_ARROW} ${removeDesc(description, desc)}`
+                : `${xxs} ${UNICODE_LEFT_ARROW} ${description}`;
+            return cleanWhitespace(output);
+        }
+    }
+    toRollStringXS(hideRolls) {
+        const xxs = this.toRollStringXXS(hideRolls);
+        const desc = this.children.find(dicePart => dicePart.hasDescription)?.description;
+        const output = desc
+            ? `${xxs} \`${detick(dequote(desc)) ?? ""}\``
+            : xxs;
+        return cleanWhitespace(output);
+    }
+    toRollStringXXS(hideRolls) {
+        const gradeEmoji = gradeToEmoji(this.grade), outputEmoji = hideRolls ? ":question:" : gradeEmoji ?? "", fixedOutput = this.hasFixed ? "f" : "", totalString = `<i><b>${this.total}${fixedOutput}</b></i>`, totalOutput = hideRolls ? `||${totalString}||` : totalString, output = `${outputEmoji} ${totalOutput}`;
+        return cleanWhitespace(output);
+    }
+    toRollString(...args) {
+        const hideRolls = args.find(isBoolean) ?? false;
+        const outputType = args.find(isDiceOutputType) ?? DiceOutputType.M;
+        if (outputType === DiceOutputType.XXS) {
+            return this.toRollStringXXS(hideRolls);
+        }
+        if (outputType === DiceOutputType.XS) {
+            return this.toRollStringXS(hideRolls);
+        }
+        return this._toRollString(outputType, hideRolls);
     }
     static create(diceParts) {
         return new Dice({
             objectType: "Dice",
             gameType: 0,
             id: randomSnowflake(),
-            diceParts: diceParts.map(dicePart => dicePart.toJSON())
+            children: diceParts.map(dicePart => dicePart.toJSON())
         });
     }
     static fromCore(core) {
         return new Dice(core);
     }
-    static fromDicePartCores(dicePartCores) {
-        return Dice.create(dicePartCores.map(DicePart.fromCore));
-    }
-    static Part = DicePart;
-    static Roll;
+    static Child = DicePart;
 }

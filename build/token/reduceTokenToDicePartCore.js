@@ -1,5 +1,5 @@
-import { appendTestToCore } from "./DiceTest.js";
-import { appendManipulationToCore } from "./manipulate/DiceManipulator.js";
+import { appendTestToCore } from "../DiceTest.js";
+import { appendManipulationToCore } from "../manipulate/DiceManipulator.js";
 function reduceDiceToken(core, token, reduceSignToDropKeepData) {
     if (token.key === "dice") {
         let hasChanges = false;

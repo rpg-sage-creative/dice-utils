@@ -1,2 +1,2 @@
-import type { TDicePartRoll } from "./dice/DicePartRoll.js";
-export declare function sumDicePartRolls(dicePartRolls: TDicePartRoll[]): number;
+import type { TDicePart } from "./dice/DicePart.js";
+export declare function sumDicePartRolls(dicePartRolls: TDicePart[]): number;

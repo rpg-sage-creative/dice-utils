@@ -11,6 +11,9 @@ const DieRollGradeEmojis = [undefined, "[critical-failure]", "[failure]", "[succ
 function isValid(grade) {
     return [1, 2, 3, 4].includes(grade);
 }
+export function isGradeCritical(grade) {
+    return grade === DieRollGrade.CriticalFailure || grade === DieRollGrade.CriticalSuccess;
+}
 export function isGradeSuccess(grade) {
     return grade === DieRollGrade.Success || grade === DieRollGrade.CriticalSuccess;
 }

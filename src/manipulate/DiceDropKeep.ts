@@ -1,9 +1,9 @@
+import type { TokenData, TokenParsers } from "@rsc-utils/string-utils";
 import { numberSorter } from "../internal/numberSorter.js";
 import { rollDataSorter } from "../internal/rollDataSorter.js";
 import { markAsDropped } from "../markup.js";
 import { sum } from "../sum.js";
-import { RollData } from "../types/RollData.js";
-import type { TokenData, TokenParsers } from "../types/index.js";
+import type { RollData } from "../types/RollData.js";
 
 export enum DiceDropKeepType {
 	None = 0,

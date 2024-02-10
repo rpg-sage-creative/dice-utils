@@ -1,50 +1,62 @@
-import { HasIdCore } from "@rsc-utils/class-utils";
 import { randomSnowflake } from "@rsc-utils/snowflake-utils";
 import { DiceTest } from "../DiceTest.js";
 import { cleanDicePartDescription } from "../cleanDicePartDescription.js";
 import { hasSecretFlag } from "../internal/hasSecretFlag.js";
 import { DiceManipulator } from "../manipulate/DiceManipulator.js";
-import { reduceTokenToDicePartCore } from "../reduceTokenToDicePartCore.js";
+import { rollDice } from "../roll/rollDice.js";
 import { DiceOutputType } from "../types/DiceOutputType.js";
-export class DicePart extends HasIdCore {
-    get gameType() { return this.core.gameType; }
+import { DiceBase } from "./DiceBase.js";
+export class DicePart extends DiceBase {
     get count() { return this.core.count; }
     get description() { return this.core.description; }
-    get hasDescription() { return this.core.description.length > 0; }
     get fixedRolls() { return this.core.fixedRolls ?? []; }
+    get initialRolls() { return this.core.initialRolls ?? []; }
+    get manipulatedRolls() { return this.core.manipulatedRolls ?? []; }
     _manipulation;
     get manipulation() { return this._manipulation ?? (this._manipulation = new DiceManipulator(this.core.manipulation)); }
-    get hasManipulation() { return !this.manipulation.isEmpty; }
     get modifier() { return this.core.modifier; }
-    get noSort() { return this.manipulation.noSort; }
     get sides() { return this.core.sides; }
     get sign() { return this.core.sign; }
     _test;
     get test() { return this._test ?? (this._test = new DiceTest(this.core.test)); }
-    get hasTest() { return !this.test.isEmpty; }
     get adjustedCount() { return this.manipulation.adjustedCount; }
     get biggest() { return this.adjustedCount * this.sides + this.modifier; }
-    get smallest() { return this.adjustedCount + this.modifier; }
     get max() { return this.sign === "-" ? -1 * this.smallest : this.biggest; }
+    get maxCount() { return this.manipulatedRolls.filter(roll => roll === this.sides).length; }
     get min() { return this.sign === "-" ? -1 * this.biggest : this.smallest; }
-    get hasDie() { return this.count > 0 && this.sides > 0; }
-    get isEmpty() { return this.count === 0 && this.sides === 0 && this.modifier === 0; }
-    quickRoll() {
-        if (this.isEmpty) {
-            return null;
+    get minCount() { return this.manipulatedRolls.filter(roll => roll === 1).length; }
+    get smallest() { return this.adjustedCount + this.modifier; }
+    get total() {
+        if (this.hasRolls) {
+            const mod = this.modifier;
+            const adjustedSum = this.manipulation.adjustedSum;
+            const mult = this.sign === "-" ? -1 : 1;
+            return mult * (mod + adjustedSum);
         }
-        const _constructor = this.constructor;
-        const roll = _constructor.Roll.create(this);
-        return roll.total;
+        return 0;
     }
-    get hasSecret() {
-        return hasSecretFlag(this.description);
-    }
+    get hasDescription() { return this.core.description.length > 0; }
+    get hasDie() { return this.count > 0 && this.sides > 0; }
+    get hasManipulation() { return !this.manipulation.isEmpty; }
+    get hasRolls() { return this.initialRolls.length > 0; }
+    get hasSecret() { return hasSecretFlag(this.description); }
+    get hasTest() { return !this.test.isEmpty; }
+    get isEmpty() { return this.count === 0 && this.sides === 0 && this.modifier === 0; }
+    get isMax() { return this.total === this.max; }
+    get isMin() { return this.total === this.min; }
     roll() {
-        const _constructor = this.constructor;
-        return _constructor.Roll.create(this);
+        if (this.isEmpty) {
+            return;
+        }
+        const rolls = this.fixedRolls.slice(0, this.count);
+        if (rolls.length < this.count) {
+            rolls.push(...rollDice(this.count - rolls.length, this.sides));
+        }
+        this.manipulation.manipulate(rolls);
+        this.core.initialRolls = rolls;
+        this.core.manipulatedRolls;
     }
-    toString(index, outputType) {
+    toDiceString(outputType, index) {
         const die = this.count && this.sides ? `${this.count}d${this.sides}` : ``, manipulation = this.manipulation.toString(), mod = this.modifier ? ` ${this.modifier}` : ``, valueTest = this.test.toString(), withoutDescription = die + manipulation + mod + valueTest;
         if (outputType === DiceOutputType.S) {
             return withoutDescription;
@@ -52,6 +64,7 @@ export class DicePart extends HasIdCore {
         const sign = index && !this.isEmpty ? `${this.sign ?? "+"}` : ``;
         return `${sign} ${withoutDescription} ${this.description}`.trim();
     }
+    toRollString() { return ""; }
     static create(args = {}) {
         return new DicePart({
             objectType: "DicePart",
@@ -62,17 +75,14 @@ export class DicePart extends HasIdCore {
             manipulation: args.manipulation,
             modifier: args.modifier ?? 0,
             fixedRolls: args.fixedRolls,
+            initialRolls: args.initialRolls,
             sides: args.sides ?? 0,
             sign: args.sign,
-            test: args.test
+            test: args.test,
+            children: undefined
         });
     }
     static fromCore(core) {
         return new DicePart(core);
     }
-    static fromTokens(tokens) {
-        const core = tokens.reduce(reduceTokenToDicePartCore, { description: "" });
-        return DicePart.create(core);
-    }
-    static Roll;
 }

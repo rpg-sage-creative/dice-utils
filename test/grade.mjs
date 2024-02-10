@@ -1,6 +1,6 @@
 import { debug } from "@rsc-utils/console-utils";
 import { assert, runTests, startAsserting } from "@rsc-utils/test-utils";
-import { Dice, DiceRoll, DieRollGrade, isGradeSuccess, isGradeFailure, increaseGrade, decreaseGrade, gradeToEmoji, gradeRoll, DiceTestType } from "../build/index.js";
+import { Dice, DiceRoll, DieRollGrade, isGradeCritical, isGradeSuccess, isGradeFailure, increaseGrade, decreaseGrade, gradeToEmoji, gradeRoll, DiceTestType } from "../build/index.js";
 
 runTests(async function testGrade() {
 	const cf = DieRollGrade.CriticalFailure;
@@ -8,6 +8,13 @@ runTests(async function testGrade() {
 	const s = DieRollGrade.Success;
 	const cs = DieRollGrade.CriticalSuccess;
 	const u = DieRollGrade.Unknown;
+
+	startAsserting("isGradeCritical");
+	assert(true, isGradeCritical, cf);
+	assert(false, isGradeCritical, f);
+	assert(false, isGradeCritical, s);
+	assert(true, isGradeCritical, cs);
+	assert(false, isGradeCritical, u);
 
 	startAsserting("isGradeFailure");
 	assert(true, isGradeFailure, cf);

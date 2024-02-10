@@ -1,13 +1,12 @@
 import { rollDataMapper } from "./internal/rollDataMapper.js";
 import { rollDataSorter } from "./internal/rollDataSorter.js";
-export function createSortedRollData(dicePartRoll, markDropped) {
-    const { dice, rolls } = dicePartRoll;
-    const { fixedRolls, sides } = dice;
+export function createSortedRollData(dicePart, markDropped) {
+    const { fixedRolls, initialRolls, sides } = dicePart;
     const fixedRollsLength = fixedRolls?.length ?? 0;
-    const byIndex = rolls.map((roll, index) => rollDataMapper(roll, index, sides, index < fixedRollsLength));
+    const byIndex = initialRolls.map((roll, index) => rollDataMapper(roll, index, sides, index < fixedRollsLength));
     const byRoll = byIndex.slice().sort(rollDataSorter);
     if (markDropped) {
-        dicePartRoll.dice.manipulation.dropKeep.markDropped(byIndex);
+        dicePart.manipulation.dropKeep.markDropped(byIndex);
     }
-    return { byIndex: byIndex, byRoll: byRoll, length: rolls.length };
+    return { byIndex: byIndex, byRoll: byRoll, length: initialRolls.length };
 }

@@ -1,5 +1,5 @@
-import { RollData } from "../types/RollData.js";
-import type { TokenData, TokenParsers } from "../types/index.js";
+import type { TokenData, TokenParsers } from "@rsc-utils/string-utils";
+import type { RollData } from "../types/RollData.js";
 export declare enum DiceDropKeepType {
     None = 0,
     DropLowest = 1,

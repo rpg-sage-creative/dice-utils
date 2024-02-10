@@ -1,5 +1,5 @@
-import type { TDiceRoll } from "./dice/DiceRoll.js";
-import type { TokenData, TokenParsers } from "./types/index.js";
+import { TokenData, TokenParsers } from "@rsc-utils/string-utils";
+import type { TDice } from "./dice/Dice.js";
 
 export enum DiceTestType {
 	None = 0,
@@ -144,8 +144,8 @@ export class DiceTest {
 	}
 
 	/** Tests the roll for pass/fail. If isEmpty, undefined is returned instead. */
-	public static test(roll: TDiceRoll): boolean | undefined {
-		return roll.dice.test.test(roll.total);
+	public static test(dice: TDice): boolean | undefined {
+		return dice.test.test(dice.total);
 	}
 
 	public static readonly EmptyTest = new DiceTest();

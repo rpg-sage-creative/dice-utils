@@ -10,7 +10,7 @@ Ex: [1d8bt2] would mean that when a 1 is rolled, a value of 2 would be used.
 maybe use lt (lowest threshold) and ht (highest threshold) to match dh and dl and kh and kl (drop/keep)
 */
 
-import type { TokenData, TokenParsers } from "../types/index.js";
+import type { TokenData, TokenParsers } from "@rsc-utils/string-utils";
 
 export enum DiceThresholdType {
 	None = 0,

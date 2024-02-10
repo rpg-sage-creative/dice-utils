@@ -1,4 +1,4 @@
-import type { TDicePartRoll } from "./dice/DicePartRoll.js";
+import type { TDicePart } from "./dice/DicePart.js";
 import { rollDataMapper } from "./internal/rollDataMapper.js";
 import { rollDataSorter } from "./internal/rollDataSorter.js";
 import type { RollData } from "./types/RollData.js";
@@ -14,14 +14,13 @@ type SortedRollData = {
 };
 
 /** Creates the SortedRollData used to generate formatted dice output. */
-export function createSortedRollData(dicePartRoll: TDicePartRoll, markDropped?: boolean): SortedRollData {
-	const { dice, rolls } = dicePartRoll;
-	const { fixedRolls, sides } = dice;
+export function createSortedRollData(dicePart: TDicePart, markDropped?: boolean): SortedRollData {
+	const { fixedRolls, initialRolls, sides } = dicePart;
 	const fixedRollsLength = fixedRolls?.length ?? 0;
-	const byIndex = rolls.map((roll, index) => rollDataMapper(roll, index, sides, index < fixedRollsLength));
+	const byIndex = initialRolls.map((roll, index) => rollDataMapper(roll, index, sides, index < fixedRollsLength));
 	const byRoll = byIndex.slice().sort(rollDataSorter);
 	if (markDropped) {
-		dicePartRoll.dice.manipulation.dropKeep.markDropped(byIndex);
+		dicePart.manipulation.dropKeep.markDropped(byIndex);
 	}
-	return { byIndex:byIndex, byRoll:byRoll, length:rolls.length };
+	return { byIndex:byIndex, byRoll:byRoll, length:initialRolls.length };
 }

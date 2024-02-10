@@ -1,9 +1,9 @@
-import { appendTestToCore } from "./DiceTest.js";
-import type { DicePartCore } from "./dice/DicePart.js";
-import type { DiceDropKeepType } from "./manipulate/DiceDropKeep.js";
-import { appendManipulationToCore } from "./manipulate/DiceManipulator.js";
-import type { DiceOperator } from "./types/DiceOperator.js";
-import type { TokenData } from "./types/TokenData.js";
+import type { TokenData } from "@rsc-utils/string-utils";
+import { appendTestToCore } from "../DiceTest.js";
+import type { DicePartCore } from "../dice/DicePart.js";
+import type { DiceDropKeepType } from "../manipulate/DiceDropKeep.js";
+import { appendManipulationToCore } from "../manipulate/DiceManipulator.js";
+import type { DiceOperator } from "../types/DiceOperator.js";
 
 export type ReduceSignToDropKeep = {
 	sign: DiceOperator;

@@ -8,8 +8,8 @@ The concept here is to allow complex combinations.
 	5. lowest threshold 2
 */
 
+import type { TokenData } from "@rsc-utils/string-utils";
 import { sum } from "../sum.js";
-import type { TokenData } from "../types/TokenData.js";
 import { DiceDropKeep, type DiceDropKeepData } from "./DiceDropKeep.js";
 import { DiceExplode, type DiceExplodeData } from "./DiceExplode.js";
 import { DiceThreshold, type DiceThresholdData } from "./DiceThreshold.js";
@@ -47,26 +47,63 @@ export function appendManipulationToCore(core: HasDiceManipulationData, token: T
 }
 
 export class DiceManipulator {
-	public constructor(protected data?: DiceManipulationData[], protected diceCount = 0) { }
+
+	public constructor(protected data?: DiceManipulationData[]) { }
 
 	public get adjustedCount(): number {
-		if (this.isEmpty) {
-			return this.diceCount;
+		if (this.hasRolls) {
+			if (this.isEmpty) {
+				return this.rolls.length;
+			}
+			/** @todo perform all dice manipulation, in order, and then expose the final dice count as adjustedCount */
+			return this.dropKeep?.adjustCount(this.rolls.length) ?? this.rolls.length;
 		}
-		/** @todo perform all dice manipulation, in order, and then expose the final dice count as adjustedCount */
-		return this.dropKeep?.adjustCount(this.diceCount) ?? this.diceCount;
+		return 0;
 	}
+
+	public get adjustedRolls(): number[] {
+		if (this.hasRolls) {
+			if (this.isEmpty) {
+				return this.rolls.slice();
+			}
+			return this.rolls.slice();
+		}
+		return [];
+	}
+
+	public get adjustedSum(): number {
+		if (this.hasRolls) {
+			if (this.isEmpty) {
+				return sum(this.rolls);
+			}
+			/** @todo perform all dice manipulation, in order, and then expose the final dice count as adjustedCount */
+			return this.dropKeep?.adjustSum(this.rolls) ?? sum(this.rolls);
+		}
+		return 0;
+	}
+
+	public get dropKeep(): DiceDropKeep { return new DiceDropKeep(this.data?.find(m => m.dropKeep)?.dropKeep); }
+
+	public get hasDropKeep(): boolean { return !this.dropKeep.isEmpty; }
+
+	public get hasRolls(): boolean { return !!this._rolls?.length; }
 
 	public get isEmpty(): boolean { return !!this.data?.length; }
 
-	public get dropKeep(): DiceDropKeep { return new DiceDropKeep(this.data?.find(m => m.dropKeep)?.dropKeep); }
-	public get hasDropKeep(): boolean { return !this.dropKeep.isEmpty; }
+	private _rolls?: number[];
+	public get rolls(): number[] { return this._rolls?.slice() ?? []; }
+
+	public manipulate(rolls: number[]) {
+		if (this.hasRolls) {
+			return;
+		}
+
+		this._rolls = rolls;
+	}
 
 	public get noSort(): boolean { return this.data?.find(m => m.noSort)?.noSort === true; }
 
-	public toJSON() {
-		return this.data;
-	}
+	public toJSON() { return this.data; }
 
 	public toString(): string {
 		return this.data?.map(m => {
@@ -81,32 +118,5 @@ export class DiceManipulator {
 		})
 		.filter(s => s?.length)
 		.join(" ") ?? "";
-	}
-}
-
-export class DiceRollManipulator {
-	public constructor(public manipulator: DiceManipulator, public rolls: number[]) {
-		/** @todo this is likely where i will iterate the manipulations and create the rolldata array */
-	}
-
-	public get isEmpty(): boolean { return this.manipulator.isEmpty || this.rolls.length === 0; }
-
-	public get adjustedCount(): number {
-		return this.manipulator.adjustedCount;
-	}
-
-	public get adjustedRolls(): number[] {
-		if (this.manipulator.isEmpty) {
-			return this.rolls.slice();
-		}
-		return this.rolls.slice();
-	}
-
-	public get adjustedSum(): number {
-		if (this.manipulator.isEmpty) {
-			return sum(this.rolls);
-		}
-		/** @todo perform all dice manipulation, in order, and then expose the final dice count as adjustedCount */
-		return this.manipulator.dropKeep?.adjustSum(this.rolls) ?? sum(this.rolls);
 	}
 }

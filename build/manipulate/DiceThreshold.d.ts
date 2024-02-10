@@ -1,4 +1,4 @@
-import type { TokenData, TokenParsers } from "../types/index.js";
+import type { TokenData, TokenParsers } from "@rsc-utils/string-utils";
 export declare enum DiceThresholdType {
     None = 0,
     LowestThreshold = 1,

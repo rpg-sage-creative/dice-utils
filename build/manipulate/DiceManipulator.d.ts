@@ -1,4 +1,4 @@
-import type { TokenData } from "../types/TokenData.js";
+import type { TokenData } from "@rsc-utils/string-utils";
 import { DiceDropKeep, type DiceDropKeepData } from "./DiceDropKeep.js";
 import { type DiceExplodeData } from "./DiceExplode.js";
 import { type DiceThresholdData } from "./DiceThreshold.js";
@@ -14,22 +14,18 @@ export type HasDiceManipulationData = {
 export declare function appendManipulationToCore(core: HasDiceManipulationData, token: TokenData, index: number, tokens: TokenData[]): boolean;
 export declare class DiceManipulator {
     protected data?: DiceManipulationData[] | undefined;
-    protected diceCount: number;
-    constructor(data?: DiceManipulationData[] | undefined, diceCount?: number);
-    get adjustedCount(): number;
-    get isEmpty(): boolean;
-    get dropKeep(): DiceDropKeep;
-    get hasDropKeep(): boolean;
-    get noSort(): boolean;
-    toJSON(): DiceManipulationData[] | undefined;
-    toString(): string;
-}
-export declare class DiceRollManipulator {
-    manipulator: DiceManipulator;
-    rolls: number[];
-    constructor(manipulator: DiceManipulator, rolls: number[]);
-    get isEmpty(): boolean;
+    constructor(data?: DiceManipulationData[] | undefined);
     get adjustedCount(): number;
     get adjustedRolls(): number[];
     get adjustedSum(): number;
+    get dropKeep(): DiceDropKeep;
+    get hasDropKeep(): boolean;
+    get hasRolls(): boolean;
+    get isEmpty(): boolean;
+    private _rolls?;
+    get rolls(): number[];
+    manipulate(rolls: number[]): void;
+    get noSort(): boolean;
+    toJSON(): DiceManipulationData[] | undefined;
+    toString(): string;
 }

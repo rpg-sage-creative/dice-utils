@@ -1,34 +1,38 @@
-import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
 import { DiceTest } from "../DiceTest.js";
+import { DieRollGrade } from "../grade.js";
 import { DiceOutputType } from "../types/DiceOutputType.js";
-import { DicePart, type DicePartCore, type TDicePart } from "./DicePart.js";
-import type { DiceRoll, TDiceRoll } from "./DiceRoll.js";
-export interface DiceCore<GameType extends number = number> extends IdCore<"Dice"> {
-    diceParts: DicePartCore[];
-    gameType: GameType;
-}
-export type TDice = Dice<DiceCore, TDicePart, TDiceRoll>;
-export declare class Dice<T extends DiceCore, U extends TDicePart, V extends TDiceRoll> extends HasIdCore<T> {
-    private _diceParts?;
-    get diceParts(): U[];
-    get baseDicePart(): U | undefined;
+import { DiceBase, DiceBaseCore } from "./DiceBase.js";
+import { type DicePartCore, type TDicePart } from "./DicePart.js";
+type DiceCoreBase = {
+    children: DicePartCore[];
+};
+export type DiceCore<GameType extends number = number> = DiceCoreBase & DiceBaseCore<DicePartCore, "Dice", GameType>;
+export type TDice = Dice<DiceCore, TDicePart>;
+export declare class Dice<CoreType extends DiceCore<GameType>, ChildType extends TDicePart, GameType extends number = number> extends DiceBase<CoreType, ChildType, "Dice", GameType> {
+    /** The first dicePart with a die, typically a d20. */
+    get primary(): ChildType | undefined;
+    /** Sums the max of all the dice parts. */
     get max(): number;
+    /** Sums the min of all the dice parts. */
     get min(): number;
+    /** Gets the first test. */
     get test(): DiceTest;
+    get grade(): DieRollGrade;
+    get total(): number;
     get hasFixed(): boolean;
-    get hasTest(): boolean;
+    get hasRolls(): boolean;
     get isD20(): boolean;
     get isEmpty(): boolean;
-    includes(dicePartOrCore: TDicePart | DicePartCore): boolean;
-    /** Returns null if this.isEmpty is true, otherwise it returns the results */
-    quickRoll(): number | null;
-    get hasSecret(): boolean;
-    roll(): V;
-    toString(outputType?: DiceOutputType): string;
+    get isMax(): boolean;
+    get isMin(): boolean;
+    roll(): void;
+    toDiceString(_outputType?: DiceOutputType): string;
+    protected _toRollString(outputType: DiceOutputType, hideRolls: boolean): string;
+    protected toRollStringXS(hideRolls: boolean): string;
+    protected toRollStringXXS(hideRolls: boolean): string;
+    toRollString(...args: (boolean | DiceOutputType)[]): string;
     static create(diceParts: TDicePart[]): TDice;
-    static fromCore(core: DiceCore): TDice;
-    static fromDicePartCores(dicePartCores: DicePartCore[]): TDice;
-    /** Returns null if diceString can't be parsed, otherwise it returns the results */
-    static Part: typeof DicePart;
-    static Roll: typeof DiceRoll;
+    static fromCore<CoreType, DiceType>(core: CoreType): DiceType;
+    static readonly Child: typeof DiceBase;
 }
+export {};

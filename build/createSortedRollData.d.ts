@@ -1,4 +1,4 @@
-import type { TDicePartRoll } from "./dice/DicePartRoll.js";
+import type { TDicePart } from "./dice/DicePart.js";
 import type { RollData } from "./types/RollData.js";
 /** Contains the Roll Data length and sorted arrays. */
 type SortedRollData = {
@@ -10,5 +10,5 @@ type SortedRollData = {
     length: number;
 };
 /** Creates the SortedRollData used to generate formatted dice output. */
-export declare function createSortedRollData(dicePartRoll: TDicePartRoll, markDropped?: boolean): SortedRollData;
+export declare function createSortedRollData(dicePart: TDicePart, markDropped?: boolean): SortedRollData;
 export {};

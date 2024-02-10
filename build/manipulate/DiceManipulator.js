@@ -24,24 +24,50 @@ export function appendManipulationToCore(core, token, index, tokens) {
 }
 export class DiceManipulator {
     data;
-    diceCount;
-    constructor(data, diceCount = 0) {
+    constructor(data) {
         this.data = data;
-        this.diceCount = diceCount;
     }
     get adjustedCount() {
-        if (this.isEmpty) {
-            return this.diceCount;
+        if (this.hasRolls) {
+            if (this.isEmpty) {
+                return this.rolls.length;
+            }
+            return this.dropKeep?.adjustCount(this.rolls.length) ?? this.rolls.length;
         }
-        return this.dropKeep?.adjustCount(this.diceCount) ?? this.diceCount;
+        return 0;
     }
-    get isEmpty() { return !!this.data?.length; }
+    get adjustedRolls() {
+        if (this.hasRolls) {
+            if (this.isEmpty) {
+                return this.rolls.slice();
+            }
+            return this.rolls.slice();
+        }
+        return [];
+    }
+    get adjustedSum() {
+        if (this.hasRolls) {
+            if (this.isEmpty) {
+                return sum(this.rolls);
+            }
+            return this.dropKeep?.adjustSum(this.rolls) ?? sum(this.rolls);
+        }
+        return 0;
+    }
     get dropKeep() { return new DiceDropKeep(this.data?.find(m => m.dropKeep)?.dropKeep); }
     get hasDropKeep() { return !this.dropKeep.isEmpty; }
-    get noSort() { return this.data?.find(m => m.noSort)?.noSort === true; }
-    toJSON() {
-        return this.data;
+    get hasRolls() { return !!this._rolls?.length; }
+    get isEmpty() { return !!this.data?.length; }
+    _rolls;
+    get rolls() { return this._rolls?.slice() ?? []; }
+    manipulate(rolls) {
+        if (this.hasRolls) {
+            return;
+        }
+        this._rolls = rolls;
     }
+    get noSort() { return this.data?.find(m => m.noSort)?.noSort === true; }
+    toJSON() { return this.data; }
     toString() {
         return this.data?.map(m => {
             if (m.dropKeep) {
@@ -57,29 +83,5 @@ export class DiceManipulator {
         })
             .filter(s => s?.length)
             .join(" ") ?? "";
-    }
-}
-export class DiceRollManipulator {
-    manipulator;
-    rolls;
-    constructor(manipulator, rolls) {
-        this.manipulator = manipulator;
-        this.rolls = rolls;
-    }
-    get isEmpty() { return this.manipulator.isEmpty || this.rolls.length === 0; }
-    get adjustedCount() {
-        return this.manipulator.adjustedCount;
-    }
-    get adjustedRolls() {
-        if (this.manipulator.isEmpty) {
-            return this.rolls.slice();
-        }
-        return this.rolls.slice();
-    }
-    get adjustedSum() {
-        if (this.manipulator.isEmpty) {
-            return sum(this.rolls);
-        }
-        return this.manipulator.dropKeep?.adjustSum(this.rolls) ?? sum(this.rolls);
     }
 }
