@@ -1,10 +1,25 @@
+import { sum } from "./sum.js";
 export function sumDiceParts(diceParts) {
-    return diceParts.reduce((value, dicePart) => {
-        switch (dicePart.sign) {
-            case "-": return value + dicePart.total;
-            case "*": return value * dicePart.total;
-            case "/": return value / dicePart.total;
-            default: return value + dicePart.total;
+    const mathParts = [];
+    diceParts.forEach(dp => {
+        mathParts.push(dp.sign ?? "+", dp.total);
+    });
+    const valuesToAdd = [];
+    let valueToAdd = 0;
+    while (mathParts.length) {
+        const sign = mathParts.shift();
+        const value = mathParts.shift();
+        if (sign === "-" || sign === "+") {
+            valuesToAdd.push(valueToAdd);
+            valueToAdd = value;
         }
-    }, 0);
+        else if (sign === "*") {
+            valueToAdd *= value;
+        }
+        else {
+            valueToAdd /= value;
+        }
+    }
+    valuesToAdd.push(valueToAdd);
+    return sum(valuesToAdd);
 }

@@ -44,13 +44,13 @@ export class Dice extends DiceBase {
             const output = desc
                 ? `${emoji} '${detick(dequote(desc))}', ${escapedTotal} ${UNICODE_LEFT_ARROW} ${removeDesc(description, desc)}`
                 : `${emoji} ${escapedTotal} ${UNICODE_LEFT_ARROW} ${description}`;
-            return cleanWhitespace(output);
+            return Dice.correctEscapeForEmoji(cleanWhitespace(output));
         }
         else {
             const output = desc
                 ? `${xxs} \`${detick(dequote(desc))}\` ${UNICODE_LEFT_ARROW} ${removeDesc(description, desc)}`
                 : `${xxs} ${UNICODE_LEFT_ARROW} ${description}`;
-            return cleanWhitespace(output);
+            return Dice.correctEscapeForEmoji(cleanWhitespace(output));
         }
     }
     toRollStringXS(hideRolls) {
@@ -59,7 +59,7 @@ export class Dice extends DiceBase {
         const output = desc
             ? `${xxs} \`${detick(dequote(desc)) ?? ""}\``
             : xxs;
-        return cleanWhitespace(output);
+        return Dice.correctEscapeForEmoji(cleanWhitespace(output));
     }
     toRollStringXXS(hideRolls) {
         const gradeEmoji = gradeToEmoji(this.grade), outputEmoji = hideRolls ? ":question:" : gradeEmoji ?? "", fixedOutput = this.hasFixed ? "f" : "", totalString = `<i><b>${this.total}${fixedOutput}</b></i>`, totalOutput = hideRolls ? `||${totalString}||` : totalString, output = `${outputEmoji} ${totalOutput}`;
@@ -88,4 +88,5 @@ export class Dice extends DiceBase {
         return new Dice(core);
     }
     static Child = DicePart;
+    static correctEscapeForEmoji = (diceOutput) => diceOutput;
 }

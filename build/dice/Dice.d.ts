@@ -33,5 +33,6 @@ export declare class Dice<CoreType extends DiceCore<GameType>, ChildType extends
     static create(diceParts: TDicePart[]): TDice;
     static fromCore(core: DiceCore): TDice;
     static readonly Child: typeof DiceBase;
+    static correctEscapeForEmoji: (diceOutput: string) => string;
 }
 export {};

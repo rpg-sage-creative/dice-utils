@@ -89,14 +89,12 @@ export class Dice<
 			const output = desc
 				? `${emoji} '${detick(dequote(desc))}', ${escapedTotal} ${UNICODE_LEFT_ARROW} ${removeDesc(description, desc)}`
 				: `${emoji} ${escapedTotal} ${UNICODE_LEFT_ARROW} ${description}`;
-			// return correctEscapeForEmoji(cleanWhitespace(output));
-			return cleanWhitespace(output);
+			return Dice.correctEscapeForEmoji(cleanWhitespace(output));
 		}else {
 			const output = desc
 				? `${xxs} \`${detick(dequote(desc))}\` ${UNICODE_LEFT_ARROW} ${removeDesc(description, desc)}`
 				: `${xxs} ${UNICODE_LEFT_ARROW} ${description}`;
-			// return correctEscapeForEmoji(cleanWhitespace(output));
-			return cleanWhitespace(output);
+			return Dice.correctEscapeForEmoji(cleanWhitespace(output));
 		}
 	}
 
@@ -106,8 +104,7 @@ export class Dice<
 		const output = desc
 			? `${xxs} \`${detick(dequote(desc)) ?? ""}\``
 			: xxs;
-		// return correctEscapeForEmoji(cleanWhitespace(output));
-		return cleanWhitespace(output);
+		return Dice.correctEscapeForEmoji(cleanWhitespace(output));
 	}
 
 	protected toRollStringXXS(hideRolls: boolean): string {
@@ -151,6 +148,8 @@ export class Dice<
 	}
 
 	public static readonly Child = DicePart as typeof DiceBase;
+
+	public static correctEscapeForEmoji: (diceOutput: string) => string = (diceOutput: string) => diceOutput; //NOSONAR
 
 	//#endregion
 }
