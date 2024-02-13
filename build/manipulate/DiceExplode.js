@@ -12,7 +12,7 @@ export class DiceExplode extends DiceManipulation {
             const rollsToCheck = rolls.slice();
             while (rollsToCheck.length) {
                 const rollToCheck = rollsToCheck.shift();
-                if (this.shouldExplode(rollToCheck.outputValue)) {
+                if (this.shouldExplode(rollToCheck.threshold ?? rollToCheck.value)) {
                     rollToCheck.isExploded = true;
                     const explosionValue = rollDie(rollToCheck.dieSize);
                     const explosionIndex = rolls.length + explosionRolls.length;
@@ -38,36 +38,33 @@ export class DiceExplode extends DiceManipulation {
         }
         return false;
     }
-    toString(leftPad, rightPad) {
+    toString(leftPad = "", rightPad = "") {
         if (this.isEmpty) {
             return ``;
         }
         if (this.alias === "x") {
             const test = ["", "", ">", ">=", "<", "<="][this.type];
-            const output = ["x", test, this.value].filter(value => value).join(" ");
+            const output = ["x", test, this.value].filter(value => value).join("");
             return `${leftPad}${output}${rightPad}`;
         }
         return `${leftPad}(${this.alias})${rightPad}`;
     }
     static getParsers() {
-        return { explode: /((x)\s*(<=|<|>=|>|=)?\s*(\d+)?)/i };
+        return { explode: /(x)(?:\s*(<=|<|>=|>|=)?\s*(\d+))?/i };
     }
-    static parseData(token) {
+    static parseData(token, dieSize) {
         if (token.key === "explode") {
             const alias = token.matches[0].toLowerCase();
             const type = ["", "=", ">", ">=", "<", "<="].indexOf(token.matches[1] ?? "=");
-            const value = +token.matches[2] || 0;
+            const value = +(token.matches[2] ?? dieSize ?? 0);
             return { alias, type, value };
         }
         return undefined;
-    }
-    static from(token) {
-        return new DiceExplode(DiceExplode.parseData(token));
     }
     static explode(dieSize, dieValues) {
         const exploder = new DiceExplode({ alias: "x", type: DiceTestType.Equal, value: dieSize });
         const rollData = dieValues.map((roll, index) => rollDataMapper(roll, index, dieSize, false));
         const explodedData = exploder.manipulateRolls(rollData);
-        return explodedData.map(exploded => exploded.outputValue);
+        return explodedData.map(exploded => exploded.value);
     }
 }

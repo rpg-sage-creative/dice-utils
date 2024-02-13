@@ -6,11 +6,10 @@ export function rollDataMapper(roll: number, index: number, dieSize: number, isF
 		dieSize,
 		index,
 		initialValue: roll,
-		isFixed,
-		isMax: roll === dieSize,
-		isMin: roll === 1,
-		output: String(roll),
-		outputValue: roll,
-		sumValue:roll
+		isFixed: isFixed ? true : undefined,
+		isMax: roll === dieSize ? true : undefined,
+		isMin: roll === 1 ? true : undefined,
+		text: String(roll),
+		value: roll
 	};
 }

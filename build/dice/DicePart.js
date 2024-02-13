@@ -12,12 +12,15 @@ export class DicePart extends DiceBase {
     constructor(core) {
         super(core);
         core.manipulation?.forEach(m => {
-            if (m.dropKeep)
+            if (m.dropKeep) {
                 m.dropKeep = new DiceDropKeep(m.dropKeep);
-            if (m.explode)
+            }
+            else if (m.explode) {
                 m.explode = new DiceExplode(m.explode);
-            if (m.threshold)
+            }
+            else if (m.threshold) {
                 m.threshold = new DiceThreshold(m.threshold);
+            }
         });
     }
     get count() { return this.core.count ?? 0; }
@@ -63,7 +66,12 @@ export class DicePart extends DiceBase {
         return this;
     }
     toDiceString(outputType, index) {
-        const die = this.count && this.sides ? `${this.count}d${this.sides}` : ``, manipulation = this.toManipulationString(), mod = this.modifier ? ` ${this.modifier}` : ``, valueTest = this.test.toString(), withoutDescription = die + manipulation + mod + valueTest;
+        const fixed = this.fixedRolls.length ? `(${this.fixedRolls})` : ``;
+        const die = this.count && this.sides ? `${fixed}${this.count}d${this.sides}` : ``;
+        const manipulation = this.toManipulationString(" ");
+        const mod = this.modifier ? ` ${this.modifier}` : ``;
+        const valueTest = this.test.toString();
+        const withoutDescription = die + manipulation + mod + valueTest;
         if (outputType === DiceOutputType.S) {
             return withoutDescription;
         }
@@ -77,7 +85,8 @@ export class DicePart extends DiceBase {
                 ?? m.threshold?.toString(leftPad, rightPad);
         })
             .filter(s => s?.length)
-            .join(" ") ?? "";
+            .join("")
+            ?? "";
     }
     toRollString() { return ""; }
     static create(args = {}) {

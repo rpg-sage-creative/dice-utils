@@ -1,4 +1,3 @@
-import { debug } from "@rsc-utils/console-utils";
 import { rollDataMapper } from "../internal/rollDataMapper.js";
 import { rollDataSorter } from "../internal/rollDataSorter.js";
 import { markRollData } from "../markup/markRollData.js";
@@ -10,17 +9,23 @@ export function rollDicePart(dicePart) {
     if (byIndex.length < count) {
         byIndex.push(...rollDice(count, sides).map(roll => rollDataMapper(roll, byIndex.length, sides, false)));
     }
-    debug({ fixedRolls, byIndex });
     const initialCount = byIndex.length;
-    const initialSum = sum(byIndex.map(roll => roll.outputValue));
+    const initialSum = sum(byIndex.map(roll => roll.value));
     let noSort = false;
     dicePart.manipulation.forEach(m => {
         const rolls = byIndex.filter(roll => !roll.isDropped);
-        m.dropKeep?.manipulateRolls(rolls);
-        m.explode?.manipulateRolls(rolls);
-        m.threshold?.manipulateRolls(rolls);
-        if (m.noSort)
+        if (m.dropKeep) {
+            m.dropKeep.manipulateRolls(rolls);
+        }
+        else if (m.explode) {
+            byIndex.push(...m.explode.manipulateRolls(rolls));
+        }
+        else if (m.threshold) {
+            m.threshold.manipulateRolls(rolls);
+        }
+        else if (m.noSort) {
             noSort = true;
+        }
     });
     byIndex.forEach(markRollData);
     const notDropped = byIndex.filter(roll => !roll.isDropped);
@@ -31,6 +36,6 @@ export function rollDicePart(dicePart) {
         initialCount,
         initialSum,
         noSort,
-        sum: sum(notDropped.map(roll => roll.outputValue))
+        sum: sum(notDropped.map(roll => roll.threshold ?? roll.value))
     };
 }

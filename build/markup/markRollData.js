@@ -6,44 +6,32 @@ import { markAsExplosion } from "./markAsExplosion.js";
 import { markAsFixed } from "./markAsFixed.js";
 import { markAsMax } from "./markAsMax.js";
 import { markAsMin } from "./markAsMin.js";
-export function markRollData(roll) {
-    const isThreshold = roll.isAboveThreshold || roll.isBelowThreshold;
-    const outputValue = isThreshold ? roll.threshold : roll.initialValue;
-    let output = String(outputValue);
-    if (isThreshold) {
-        let threshold = String(roll.threshold);
-        if (roll.isExploded) {
-            threshold = markAsExploded(threshold);
-        }
-        else if (roll.isExplosion) {
-            threshold = markAsExplosion(threshold);
-        }
-        if (roll.isAboveThreshold) {
-            output = markAsAboveThreshold(roll.initialValue, threshold, roll.isFixed);
-        }
-        else if (roll.isBelowThreshold) {
-            output = markAsBelowThreshold(roll.initialValue, threshold, roll.isFixed);
-        }
+export function markRollData(rollData) {
+    const hasThreshold = !!rollData.isAboveThreshold || !!rollData.isBelowThreshold;
+    let text = String(rollData.threshold ?? rollData.value);
+    if (rollData.isFixed && !hasThreshold) {
+        text = markAsFixed(text);
     }
-    else {
-        if (roll.isFixed) {
-            output = markAsFixed(output);
-        }
-        if (roll.isExploded) {
-            output = markAsExploded(output);
-        }
-        else if (roll.isExplosion) {
-            output = markAsExplosion(output);
-        }
+    if (rollData.isExploded) {
+        text = markAsExploded(text);
     }
-    if (roll.isMax) {
-        output = markAsMax(output);
+    if (rollData.isExplosion) {
+        text = markAsExplosion(text);
     }
-    else if (roll.isMin) {
-        output = markAsMin(output);
+    if (rollData.isAboveThreshold) {
+        text = markAsAboveThreshold(rollData.value, text, rollData.isFixed);
     }
-    if (roll.isDropped) {
-        output = markAsDropped(output);
+    else if (rollData.isBelowThreshold) {
+        text = markAsBelowThreshold(rollData.value, text, rollData.isFixed);
     }
-    roll.output = output;
+    if (rollData.isMax) {
+        text = markAsMax(text);
+    }
+    else if (rollData.isMin) {
+        text = markAsMin(text);
+    }
+    if (rollData.isDropped) {
+        text = markAsDropped(text);
+    }
+    rollData.text = text;
 }

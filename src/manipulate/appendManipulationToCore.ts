@@ -12,10 +12,15 @@ function notEmpty<T extends DiceManipulation>(dm: T): T | undefined {
 export function appendManipulationToCore(core: DicePartCore, token: TokenData, index: number, tokens: TokenData[]): boolean {
 	const lastToken = tokens[index - 1];
 	if (["dice", "dropKeep", "explode", "noSort", "threshold"].includes(lastToken?.key)) {
-		const dropKeep = DiceDropKeep.from(token);
-		const explode = DiceExplode.from(token);
-		const noSort = token.key === "noSort"; // if we want to be strict about not duping "ns": && !core.manipulation?.find(m => m.noSort);
-		const threshold = DiceThreshold.from(token);
+		const dropKeep = new DiceDropKeep(DiceDropKeep.parseData(token));
+
+		const explode = new DiceExplode(DiceExplode.parseData(token, core.sides));
+
+		/** @todo consider adding a second ns to a dice roll as breaking the chain adn starting a description? */
+		const noSort = token.key === "noSort";
+
+		const threshold = new DiceThreshold(DiceThreshold.parseData(token));
+
 		if (!dropKeep.isEmpty || !explode.isEmpty || noSort || !threshold.isEmpty) {
 			const manipulation = core.manipulation ?? (core.manipulation = []);
 			manipulation.push({

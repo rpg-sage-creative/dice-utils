@@ -7,10 +7,10 @@ function notEmpty(dm) {
 export function appendManipulationToCore(core, token, index, tokens) {
     const lastToken = tokens[index - 1];
     if (["dice", "dropKeep", "explode", "noSort", "threshold"].includes(lastToken?.key)) {
-        const dropKeep = DiceDropKeep.from(token);
-        const explode = DiceExplode.from(token);
+        const dropKeep = new DiceDropKeep(DiceDropKeep.parseData(token));
+        const explode = new DiceExplode(DiceExplode.parseData(token, core.sides));
         const noSort = token.key === "noSort";
-        const threshold = DiceThreshold.from(token);
+        const threshold = new DiceThreshold(DiceThreshold.parseData(token));
         if (!dropKeep.isEmpty || !explode.isEmpty || noSort || !threshold.isEmpty) {
             const manipulation = core.manipulation ?? (core.manipulation = []);
             manipulation.push({

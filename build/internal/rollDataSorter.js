@@ -1,6 +1,6 @@
 import { numberSorter } from "./numberSorter.js";
 export function rollDataSorter(a, b) {
-    const rollResult = numberSorter(a?.outputValue, b?.outputValue);
+    const rollResult = numberSorter(a?.threshold ?? a?.value, b?.threshold ?? b?.value);
     if (rollResult !== 0) {
         return rollResult;
     }

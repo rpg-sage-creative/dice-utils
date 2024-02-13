@@ -58,7 +58,7 @@ export class DiceDropKeep extends DiceManipulation<DiceDropKeepData> {
 			return ``;
 		}
 		if (["dl", "dh", "kl", "kh"].includes(this.alias)) {
-			return `${leftPad}${this.alias} ${this.value}${rightPad}`;
+			return `${leftPad}${this.alias}${this.value}${rightPad}`;
 		}
 		return `${leftPad}(${this.alias})${rightPad}`;
 	}
@@ -79,7 +79,4 @@ export class DiceDropKeep extends DiceManipulation<DiceDropKeepData> {
 		return undefined;
 	}
 
-	public static from(token?: TokenData | null): DiceDropKeep {
-		return new DiceDropKeep(DiceDropKeep.parseData(token));
-	}
 }

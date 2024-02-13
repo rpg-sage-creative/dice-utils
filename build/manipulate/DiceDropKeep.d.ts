@@ -29,5 +29,4 @@ export declare class DiceDropKeep extends DiceManipulation<DiceDropKeepData> {
     static getParsers(): TokenParsers;
     /** Parses the given TokenData into DropKeepData */
     static parseData(token?: TokenData | null): DiceDropKeepData | undefined;
-    static from(token?: TokenData | null): DiceDropKeep;
 }

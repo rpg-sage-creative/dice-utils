@@ -1,2 +1,2 @@
 import type { RollData } from "../types/RollData.js";
-export declare function markRollData(roll: RollData): void;
+export declare function markRollData(rollData: RollData): void;

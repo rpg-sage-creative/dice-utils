@@ -8,45 +8,42 @@ import { markAsFixed } from "./markAsFixed.js";
 import { markAsMax } from "./markAsMax.js";
 import { markAsMin } from "./markAsMin.js";
 
-export function markRollData(roll: RollData): void {
-	const isThreshold = roll.isAboveThreshold || roll.isBelowThreshold;
-	const outputValue = isThreshold ? roll.threshold! : roll.initialValue;
+export function markRollData(rollData: RollData): void {
+	const hasThreshold = !!rollData.isAboveThreshold || !!rollData.isBelowThreshold;
 
-	// set value and manipulation symbol
-	let output = String(outputValue);
-	if (isThreshold) {
-		let threshold = String(roll.threshold);
-		if (roll.isExploded) {
-			threshold = markAsExploded(threshold);
-		}else if (roll.isExplosion) {
-			threshold = markAsExplosion(threshold);
-		}
-		if (roll.isAboveThreshold) {
-			output = markAsAboveThreshold(roll.initialValue, threshold, roll.isFixed);
-		}else if (roll.isBelowThreshold) {
-			output = markAsBelowThreshold(roll.initialValue, threshold, roll.isFixed);
-		}
-	}else {
-		if (roll.isFixed) {
-			output = markAsFixed(output);
-		}
-		if (roll.isExploded) {
-			output = markAsExploded(output);
-		}else if (roll.isExplosion) {
-			output = markAsExplosion(output);
-		}
+	let text = String(rollData.threshold ?? rollData.value);
+
+	// mark fixed only if not using threshold; we have a superscript f for that
+	if (rollData.isFixed && !hasThreshold) {
+		text = markAsFixed(text);
 	}
 
-	// add markup
-	if (roll.isMax) {
-		output = markAsMax(output);
-	}else if (roll.isMin) {
-		output = markAsMin(output);
+	if (rollData.isExploded) {
+		text = markAsExploded(text);
 	}
-	if (roll.isDropped) {
-		output = markAsDropped(output);
+	if (rollData.isExplosion) {
+		text = markAsExplosion(text);
+	}
+
+	// you can be above or below the threshold, not both
+	if (rollData.isAboveThreshold) {
+		text = markAsAboveThreshold(rollData.value, text, rollData.isFixed);
+	}else if (rollData.isBelowThreshold) {
+		text = markAsBelowThreshold(rollData.value, text, rollData.isFixed);
+	}
+
+	// you can be max or min, not both
+	if (rollData.isMax) {
+		text = markAsMax(text);
+	}else if (rollData.isMin) {
+		text = markAsMin(text);
+	}
+
+	// any value can be dropped
+	if (rollData.isDropped) {
+		text = markAsDropped(text);
 	}
 
 	// save output
-	roll.output = output;
+	rollData.text = text;
 }

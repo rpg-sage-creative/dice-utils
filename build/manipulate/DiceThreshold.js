@@ -12,7 +12,7 @@ export class DiceThreshold extends DiceManipulation {
     manipulateRolls(rolls) {
         if (!this.isEmpty) {
             rolls.forEach(roll => {
-                if (this.shouldUpdate(roll.outputValue)) {
+                if (this.shouldUpdate(roll.threshold ?? roll.value)) {
                     roll.threshold = this.value;
                     if (this.type === DiceThresholdType.HighestThreshold) {
                         roll.isAboveThreshold = true;
@@ -37,29 +37,25 @@ export class DiceThreshold extends DiceManipulation {
     toJSON() {
         return this.data;
     }
-    toString(leftPad, rightPad) {
+    toString(leftPad = "", rightPad = "") {
         if (this.isEmpty) {
             return ``;
         }
-        if (["lt", "bt", "ht", "tt"].includes(this.alias)) {
-            return `${leftPad}${this.alias} ${this.value}${rightPad}`;
+        if (["lt", "ht"].includes(this.alias)) {
+            return `${leftPad}${this.alias}${this.value}${rightPad}`;
         }
         return `${leftPad}(${this.alias})${rightPad}`;
     }
     static getParsers() {
-        return { threshold: /(bt|lt|ht|tt)\s*(\d+)/i };
+        return { threshold: /(lt|ht)\s*(\d+)/i };
     }
     static parseData(token) {
         if (token?.key === "threshold") {
             const alias = token.matches[0].toLowerCase().slice(0, 2);
-            const replaced = alias.replace(/bt/, "lt").replace(/tt/, "ht");
-            const type = [null, "lt", "ht"].indexOf(replaced);
-            const value = +token.matches[1] || 1;
+            const type = [null, "lt", "ht"].indexOf(alias);
+            const value = +token.matches[1];
             return { alias, type, value };
         }
         return undefined;
-    }
-    static from(token) {
-        return new DiceThreshold(DiceThreshold.parseData(token));
     }
 }

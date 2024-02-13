@@ -2,7 +2,7 @@ function dicePartToRollString(dicePart, hideRolls) {
     const sortedRollData = dicePart.sortedRollData;
     if (sortedRollData) {
         const outputRollsAndIndexes = sortedRollData.noSort ? sortedRollData.byIndex : sortedRollData.byValue;
-        const mappedOutuputRolls = outputRollsAndIndexes.map(rollData => rollData.output);
+        const mappedOutuputRolls = outputRollsAndIndexes.map(rollData => rollData.text);
         const output = `[${mappedOutuputRolls.join(", ")}]`;
         return hideRolls ? `||${output}||` : output;
     }

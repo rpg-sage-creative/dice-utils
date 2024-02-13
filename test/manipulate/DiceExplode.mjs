@@ -1,27 +1,33 @@
 import { debug } from "@rsc-utils/console-utils";
 import { assert, runTests } from "@rsc-utils/test-utils";
-import { DiceExplode } from "../../build/index.js";
+import { DiceExplode, DiceGroup } from "../../build/index.js";
+
+/** Roll fixed roll dice part with the given DiceExplode */
+function rollAndReturn(rolls, xString = "") {
+	const dicePart = DiceGroup.parse(`(${rolls})${rolls.length}d6${xString}`).roll().primary.primary;
+	const explode = dicePart.manipulation?.find(m => m.explode)?.explode;
+	return [ dicePart, dicePart.sortedRollData, explode ];
+}
 
 runTests(async function testDiceExplode() {
 
-	const oneSix = [1,2,3,4,5,6];
-	const oneMore = DiceExplode.explode(6, oneSix);
-	assert(oneMore.filter(n => n < 6).length === 1, `oneSix exploded wrong: ${oneMore}.`);
+	const [ dicePartNoExplode, dataNoExplode, explodeNoExplode ] = rollAndReturn([1,2,3,4,5,6]);
+	assert(dataNoExplode.count === dataNoExplode.initialCount, `oneSix exploded wrong: ${dataNoExplode.byIndex.slice(6).map(r => r.text)}`);
 
 	for (let i = 0; i < 10; i++) {
-		const exploder5up = DiceExplode.from({ key:"explode", matches:["x",">=","5"], token:"x>=5" });
-		const more5up = exploder5up.explode(6, oneSix);
-		assert(more5up.filter(n => n < 5).length === 2, `exploder5up exploded wrong: ${more5up}.`);
+		const [ dicePart5up, data5up, explode5up ] = rollAndReturn([1,2,3,4,5,6], "x>=5");
+		const data5upUn = data5up.byIndex.filter(r => r.initialValue < 5).length;
+		assert(data5upUn === 6, `exploder5up exploded wrong: ${data5up.byIndex.slice(6).map(r => r.text)}`);
 	}
 
 	for (let i = 0; i < 10; i++) {
-		const exploderOver4 = DiceExplode.from({ key:"explode", matches:["x",">","4"], token:"x>4" });
-		const moreOver4 = exploderOver4.explode(6, oneSix);
-		assert(moreOver4.filter(n => n < 5).length === 2, `moreOver4 exploded wrong: ${moreOver4}.`);
+		const [ dicePartOver4, dataOver4, explodeOver4 ] = rollAndReturn([1,2,3,4,5,6], "x>4");
+		const dataOver4Un = dataOver4.byIndex.filter(r => r.initialValue < 5).length;
+		assert(dataOver4Un === 6, `moreOver4 exploded wrong: ${dataOver4.byIndex.slice(6).map(r => r.text)}`);
 	}
 
-	const twoSixes = [2,4,6,6];
-	const twoMore = DiceExplode.explode(6, twoSixes);
-	assert(twoMore.filter(n => n < 6).length === 2, `oneSix exploded wrong.`);
+	const [ dicePartTwoSixes, dataTwoSixes, explodeTwoSixes ] = rollAndReturn([2,4,6,6], "x");
+		const dataTwoSixesUn = dataTwoSixes.byIndex.filter(r => r.initialValue < 6).length;
+		assert(dataTwoSixesUn === 4, `twoSixes exploded wrong: ${dataTwoSixes.byIndex.slice(4).map(r => r.text)}`);
 
 }, true);

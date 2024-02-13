@@ -1,14 +1,20 @@
 import { debug, info, warn, error } from "@rsc-utils/console-utils";
 import { assert, runTests, startAsserting, stopAsserting } from "@rsc-utils/test-utils";
-import { DiceThreshold } from "../../build/index.js";
+import { DiceGroup, DiceThreshold } from "../../build/index.js";
+
+/** Roll fixed roll dice part with the given DiceExplode */
+function rollAndReturn(rolls, tString = "") {
+	const dicePart = DiceGroup.parse(`(${rolls})${rolls.length}d6${tString}`).roll().primary.primary;
+	const threshold = dicePart.manipulation?.find(m => m.threshold)?.threshold;
+	return [ dicePart, dicePart.sortedRollData, threshold ];
+}
 
 runTests(async function testDiceThreshold() {
 
-	const lt2 = DiceThreshold.from({ key:"threshold", matches:["lt","2"], token:"lt2" });
-	const lt2Updated = lt2.update([1,1,3,3,5,5]);
-	assert([2,2,3,3,5,5], () => lt2Updated);
+	const [dpLT2, dataLT2, tLT2] = rollAndReturn([1,1,3,3,5,5], "lt2");
+	assert([2,2,3,3,5,5], () => dataLT2.byIndex.map(r => r.threshold??r.value));
 
-	const ht5 = DiceThreshold.from({ key:"threshold", matches:["ht","5"], token:"ht5" });
-	const ht5Updated = ht5.update([2,2,4,4,6,6]);
-	assert([2,2,4,4,5,5], () => ht5Updated);
+	const [dpHT5, dataHT5, tHT5] = rollAndReturn([2,2,4,4,6,6], "ht5");
+	assert([2,2,4,4,5,5], () => dataHT5.byIndex.map(r => r.threshold??r.value));
+
 }, true);

@@ -20,7 +20,6 @@ export declare class DiceExplode extends DiceManipulation<DiceExplodeData> {
     /** The token key/regex used to generate DiceExplodeData */
     static getParsers(): TokenParsers;
     /** Parses the given TokenData into DiceExplodeData */
-    static parseData(token: TokenData): DiceExplodeData | undefined;
-    static from(token: TokenData): DiceExplode;
+    static parseData(token: TokenData, dieSize?: number): DiceExplodeData | undefined;
     static explode(dieSize: number, dieValues: number[]): number[];
 }

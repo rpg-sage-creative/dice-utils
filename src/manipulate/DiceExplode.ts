@@ -26,7 +26,7 @@ export class DiceExplode extends DiceManipulation<DiceExplodeData> {
 			while (rollsToCheck.length) {
 				const rollToCheck = rollsToCheck.shift()!;
 				/** @todo decide if i want to explode values more than once if explode syntax found more than once. */
-				if (this.shouldExplode(rollToCheck.outputValue)) {
+				if (this.shouldExplode(rollToCheck.threshold ?? rollToCheck.value)) {
 					rollToCheck.isExploded = true;
 					const explosionValue = rollDie(rollToCheck.dieSize);
 					const explosionIndex = rolls.length + explosionRolls.length;
@@ -55,7 +55,7 @@ export class DiceExplode extends DiceManipulation<DiceExplodeData> {
 	}
 
 	/** Generates string output for the given DiceExplodeData */
-	public toString(leftPad?: string, rightPad?: string) {
+	public toString(leftPad = "", rightPad = "") {
 		if (this.isEmpty) {
 			return ``;
 		}
@@ -63,7 +63,7 @@ export class DiceExplode extends DiceManipulation<DiceExplodeData> {
 			// get the type if not simply exploding the given value.
 			const test = ["", "", ">", ">=", "<", "<="][this.type];
 			// put the values into an array, filter on non-empty non-zero values, join with spaces
-			const output = ["x", test, this.value].filter(value => value).join(" ");
+			const output = ["x", test, this.value].filter(value => value).join("");
 			return `${leftPad}${output}${rightPad}`;
 		}
 		return `${leftPad}(${this.alias})${rightPad}`;
@@ -71,28 +71,24 @@ export class DiceExplode extends DiceManipulation<DiceExplodeData> {
 
 	/** The token key/regex used to generate DiceExplodeData */
 	public static getParsers(): TokenParsers {
-		return { explode:/((x)\s*(<=|<|>=|>|=)?\s*(\d+)?)/i };
+		return { explode:/(x)(?:\s*(<=|<|>=|>|=)?\s*(\d+))?/i };
 	}
 
 	/** Parses the given TokenData into DiceExplodeData */
-	public static parseData(token: TokenData): DiceExplodeData | undefined {
+	public static parseData(token: TokenData, dieSize?: number): DiceExplodeData | undefined {
 		if (token.key === "explode") {
 			const alias = token.matches[0].toLowerCase();
 			const type = ["", "=", ">", ">=", "<", "<="].indexOf(token.matches[1] ?? "=");
-			const value = +token.matches[2] || 0;
+			const value = +(token.matches[2] ?? dieSize ?? 0);
 			return { alias, type, value };
 		}
 		return undefined;
-	}
-
-	public static from(token: TokenData): DiceExplode {
-		return new DiceExplode(DiceExplode.parseData(token));
 	}
 
 	public static explode(dieSize: number, dieValues: number[]): number[] {
 		const exploder = new DiceExplode({ alias:"x", type:DiceTestType.Equal, value:dieSize });
 		const rollData = dieValues.map((roll, index) => rollDataMapper(roll, index, dieSize, false));
 		const explodedData = exploder.manipulateRolls(rollData);
-		return explodedData.map(exploded => exploded.outputValue);
+		return explodedData.map(exploded => exploded.value);
 	}
 }

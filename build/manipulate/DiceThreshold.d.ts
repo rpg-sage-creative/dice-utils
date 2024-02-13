@@ -28,5 +28,4 @@ export declare class DiceThreshold extends DiceManipulation<DiceThresholdData> {
     static getParsers(): TokenParsers;
     /** Parses the given TokenData into ThresholdData */
     static parseData(token?: TokenData | null): DiceThresholdData | undefined;
-    static from(token?: TokenData | null): DiceThreshold;
 }
