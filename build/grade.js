@@ -39,6 +39,6 @@ function booleanToGrade(value) {
         default: return DieRollGrade.Unknown;
     }
 }
-export function gradeRoll(roll) {
-    return booleanToGrade(DiceTest.test(roll));
+export function gradeRoll(dice) {
+    return booleanToGrade(DiceTest.test(dice));
 }

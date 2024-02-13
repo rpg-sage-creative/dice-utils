@@ -1,13 +1,11 @@
-import { DiceGroup } from "../dice/DiceGroup.js";
 import { tokensToDicePart } from "./tokensToDicePart.js";
-import { Dice } from "../dice/Dice.js";
 function isTestOrTarget(token) {
     return ["test", "target"].includes(token.key);
 }
 function shouldStartNewPart(currentPart, currentToken) {
     return !currentPart || ["dice", "mod", "test"].includes(currentToken.key);
 }
-export function fromTokens(tokens, args) {
+export function tokensToDiceGroup(tokens, dcClass, args) {
     let currentPart;
     const partedTokens = [];
     tokens.forEach(token => {
@@ -33,6 +31,6 @@ export function fromTokens(tokens, args) {
         }
         currentDice.push(dicePart);
     });
-    const _dice = partedDice.map(Dice.create);
-    return DiceGroup.create(_dice, args);
+    const diceCores = partedDice.map(dcClass.Child.create);
+    return dcClass.create(diceCores, args);
 }

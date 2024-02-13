@@ -1,6 +1,5 @@
-import { debug } from "@rsc-utils/console-utils";
 import { assert, runTests, startAsserting } from "@rsc-utils/test-utils";
-import { Dice, DiceRoll, DieRollGrade, isGradeCritical, isGradeSuccess, isGradeFailure, increaseGrade, decreaseGrade, gradeToEmoji, gradeRoll, DiceTestType } from "../build/index.js";
+import { Dice, DiceGroup, DiceTestType, DieRollGrade, decreaseGrade, gradeRoll, gradeToEmoji, increaseGrade, isGradeCritical, isGradeFailure, isGradeSuccess } from "../build/index.js";
 
 runTests(async function testGrade() {
 	const cf = DieRollGrade.CriticalFailure;
@@ -52,30 +51,26 @@ runTests(async function testGrade() {
 	assert(undefined, gradeToEmoji, u);
 
 	startAsserting("gradeRoll");
-	const makeGradeRollDiceRoll = (testType, roll, dicePart = {count:1,sides:20,modifier:0,test:{type:testType,value:10}}) => new DiceRoll({
-		objectType:"DiceRoll",
-		gameType:0,
-		id:"1205381305760485376",
-		dice:{diceParts:[dicePart]},
-		rolls:[{objectType:"DicePartRoll",gameType:0,id:"1205381305764679681",dice:dicePart,rolls:[roll]}]
-	});
+	const makeGradeRollDice = (test, roll) => {
+		return DiceGroup.parse(`(${roll})1d20${test}10`).roll().primary;
+	};
 
-	assert(f, gradeRoll, makeGradeRollDiceRoll(DiceTestType.Equal, 1));
-	assert(s, gradeRoll, makeGradeRollDiceRoll(DiceTestType.Equal, 10));
+	assert(f, gradeRoll, makeGradeRollDice("=", 1));
+	assert(s, gradeRoll, makeGradeRollDice("=", 10));
 
-	assert(f, gradeRoll, makeGradeRollDiceRoll(DiceTestType.GreaterThan, 1));
-	assert(s, gradeRoll, makeGradeRollDiceRoll(DiceTestType.GreaterThan, 20));
+	assert(f, gradeRoll, makeGradeRollDice(">", 1));
+	assert(s, gradeRoll, makeGradeRollDice(">", 20));
 
-	assert(f, gradeRoll, makeGradeRollDiceRoll(DiceTestType.GreaterThan, 1));
-	assert(s, gradeRoll, makeGradeRollDiceRoll(DiceTestType.GreaterThanOrEqual, 10));
-	assert(s, gradeRoll, makeGradeRollDiceRoll(DiceTestType.GreaterThanOrEqual, 20));
+	assert(f, gradeRoll, makeGradeRollDice(">=", 1));
+	assert(s, gradeRoll, makeGradeRollDice(">=", 10));
+	assert(s, gradeRoll, makeGradeRollDice(">=", 20));
 
-	assert(s, gradeRoll, makeGradeRollDiceRoll(DiceTestType.LessThan, 1));
-	assert(f, gradeRoll, makeGradeRollDiceRoll(DiceTestType.LessThan, 20));
+	assert(s, gradeRoll, makeGradeRollDice("<", 1));
+	assert(f, gradeRoll, makeGradeRollDice("<", 20));
 
-	assert(s, gradeRoll, makeGradeRollDiceRoll(DiceTestType.LessThanOrEqual, 1));
-	assert(s, gradeRoll, makeGradeRollDiceRoll(DiceTestType.LessThanOrEqual, 10));
-	assert(f, gradeRoll, makeGradeRollDiceRoll(DiceTestType.LessThanOrEqual, 20));
+	assert(s, gradeRoll, makeGradeRollDice("<=", 1));
+	assert(s, gradeRoll, makeGradeRollDice("<=", 10));
+	assert(f, gradeRoll, makeGradeRollDice("<=", 20));
 
-	assert(u, gradeRoll, makeGradeRollDiceRoll(0, 11));
+	assert(u, gradeRoll, makeGradeRollDice(0, 11));
 }, true);

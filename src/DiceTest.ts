@@ -1,5 +1,6 @@
 import { TokenData, TokenParsers } from "@rsc-utils/string-utils";
 import type { TDice } from "./dice/Dice.js";
+import { debug, warn } from "@rsc-utils/console-utils";
 
 export enum DiceTestType {
 	None = 0,
@@ -86,6 +87,7 @@ export class DiceTest {
 	/** Tests the value for pass/fail. If isEmpty, undefined is returned instead. */
 	public test(total: number): boolean | undefined {
 		if (!this.isEmpty) {
+			debug({total,isEmpty:this.isEmpty,type:DiceTestType[this.type]});
 			switch (this.type) {
 				case DiceTestType.Equal:
 					return total === this.value;
@@ -98,7 +100,7 @@ export class DiceTest {
 				case DiceTestType.LessThanOrEqual:
 					return total <= this.value;
 				default:
-					console.warn(`testRoll(): invalid roll.dice.test.type = ${this.type} (${this.alias})`);
+					warn(`testRoll(): invalid roll.dice.test.type = ${this.type} (${this.alias})`);
 			}
 		}
 		return undefined;

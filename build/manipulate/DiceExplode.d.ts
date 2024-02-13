@@ -1,5 +1,7 @@
 import type { TokenData, TokenParsers } from "@rsc-utils/string-utils";
 import { DiceTestType } from "../DiceTest.js";
+import type { RollData } from "../types/RollData.js";
+import { DiceManipulation } from "./DiceManipulation.js";
 export type DiceExplodeData = {
     alias: string;
     /** the fundamental action */
@@ -7,16 +9,12 @@ export type DiceExplodeData = {
     /** the value we explode (around) */
     value: number;
 };
-export declare class DiceExplode {
-    protected data?: DiceExplodeData | undefined;
-    constructor(data?: DiceExplodeData | undefined);
+export declare class DiceExplode extends DiceManipulation<DiceExplodeData> {
     get alias(): string;
-    get isEmpty(): boolean;
     get type(): DiceTestType;
     get value(): number;
-    explode(dieSize: number, dieValues: number[]): number[];
+    manipulateRolls(rolls: RollData[]): RollData[];
     shouldExplode(value: number): boolean;
-    toJSON(): DiceExplodeData | undefined;
     /** Generates string output for the given DiceExplodeData */
     toString(leftPad?: string, rightPad?: string): string;
     /** The token key/regex used to generate DiceExplodeData */

@@ -1,6 +1,6 @@
 import type { TokenData } from "@rsc-utils/string-utils";
 import type { DicePartCore } from "../dice/DicePart.js";
-import type { DiceDropKeepType } from "../manipulate/DiceDropKeep.js";
+import { type DiceDropKeepType } from "../manipulate/DiceDropKeep.js";
 import type { DiceOperator } from "../types/DiceOperator.js";
 export type ReduceSignToDropKeep = {
     sign: DiceOperator;

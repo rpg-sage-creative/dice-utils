@@ -2,33 +2,30 @@ import { randomSnowflake } from "@rsc-utils/snowflake-utils";
 import { cleanWhitespace, dequote } from "@rsc-utils/string-utils";
 import { DiceTest } from "../DiceTest.js";
 import { gradeRoll, gradeToEmoji } from "../grade.js";
-import { sum } from "../sum.js";
-import { sumDicePartRolls } from "../sumDicePartRolls.js";
-import { DiceOutputType } from "../types/DiceOutputType.js";
-import { DiceBase } from "./DiceBase.js";
-import { DicePart } from "./DicePart.js";
 import { detick } from "../internal/detick.js";
-import { UNICODE_LEFT_ARROW } from "../types/consts.js";
-import { removeDesc } from "../removeDesc.js";
-import { mapDicePartToRollString } from "../mapDicePartToRollString.js";
 import { isBoolean } from "../internal/isBoolean.js";
 import { isDiceOutputType } from "../internal/isDiceOutputType.js";
+import { mapDicePartToRollString } from "../mapDicePartToRollString.js";
+import { removeDesc } from "../removeDesc.js";
+import { sum } from "../sum.js";
+import { sumDiceParts } from "../sumDiceParts.js";
+import { DiceOutputType } from "../types/DiceOutputType.js";
+import { UNICODE_LEFT_ARROW } from "../types/consts.js";
+import { DiceBase } from "./DiceBase.js";
+import { DicePart } from "./DicePart.js";
 export class Dice extends DiceBase {
     get primary() { return this.children.find(dicePart => dicePart.hasDie); }
     get max() { return sum(this.children.map(dicePart => dicePart.max)); }
     get min() { return sum(this.children.map(dicePart => dicePart.min)); }
     get test() { return this.children.find(dicePart => dicePart.hasTest)?.test ?? DiceTest.EmptyTest; }
     get grade() { return gradeRoll(this); }
-    get total() { return sumDicePartRolls(this.children); }
+    get total() { return sumDiceParts(this.children); }
     get hasFixed() { return this.children.some(dicePart => dicePart.fixedRolls.length); }
     get hasRolls() { return this.children.some(dicePart => dicePart.hasRolls); }
     get isD20() { return this.primary?.sides === 20; }
     get isEmpty() { return !this.children.some(dicePart => !dicePart.isEmpty); }
     get isMax() { return this.total === this.max; }
     get isMin() { return this.total === this.min; }
-    roll() {
-        this.children.forEach(dicePart => dicePart.roll());
-    }
     toDiceString(_outputType) {
         const outputType = _outputType === DiceOutputType.S ? DiceOutputType.S : DiceOutputType.M;
         const output = this.children.map((dicePart, index) => dicePart.toDiceString(outputType, index)).join(" ");

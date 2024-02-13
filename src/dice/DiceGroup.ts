@@ -7,6 +7,9 @@ import { DiceOutputType } from "../types/DiceOutputType.js";
 import { DiceSecretMethodType } from "../types/DiceSecretMethodType.js";
 import { Dice, type DiceCore, type TDice } from "./Dice.js";
 import { DiceBase, type DiceBaseCore } from "./DiceBase.js";
+import { tokenize } from "@rsc-utils/string-utils";
+import { getDiceTokenParsers } from "../token/getDiceTokenParsers.js";
+import { tokensToDiceGroup } from "../token/tokensToDiceGroup.js";
 
 type DiceGroupCoreBase = {
 	criticalMethodType?: DiceCriticalMethodType;
@@ -32,6 +35,8 @@ export class DiceGroup<
 	public get criticalMethodType(): DiceCriticalMethodType | undefined { return this.core.criticalMethodType; }
 
 	public get outputType(): DiceOutputType | undefined { return this.core.outputType; }
+
+	public get primary(): ChildType | undefined { return this.children.find(child => child.primary); }
 
 	public get secretMethodType(): DiceSecretMethodType | undefined { return this.core.secretMethodType; }
 
@@ -71,10 +76,16 @@ export class DiceGroup<
 	}
 
 	public static fromCore<CoreType, DiceType>(core: CoreType): DiceType {
-		return new DiceGroup(core as DiceGroupCore) as DiceType;
+		const _constructor = this;
+		return new _constructor(core as DiceGroupCore) as DiceType;
 	}
 
-	public static Child = Dice as typeof DiceBase;
+	public static parse<T extends TDiceGroup>(diceString: string, outputType?: DiceOutputType): T {
+		const tokens = tokenize(diceString, getDiceTokenParsers(), "desc");
+		return tokensToDiceGroup(tokens, this, { outputType });
+	}
+
+	public static readonly Child = Dice as typeof DiceBase;
 
 	//#endregion
 }

@@ -57,6 +57,6 @@ function booleanToGrade(value?: boolean | null): DieRollGrade {
 }
 
 /** Grades the given dice roll to simple success/failure/unknown. No critical logic. */
-export function gradeRoll(roll: TDice): DieRollGrade {
-	return booleanToGrade(DiceTest.test(roll));
+export function gradeRoll(dice: TDice): DieRollGrade {
+	return booleanToGrade(DiceTest.test(dice));
 }

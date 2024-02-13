@@ -1,8 +1,8 @@
 import type { TokenData } from "@rsc-utils/string-utils";
 import { appendTestToCore } from "../DiceTest.js";
 import type { DicePartCore } from "../dice/DicePart.js";
-import type { DiceDropKeepType } from "../manipulate/DiceDropKeep.js";
-import { appendManipulationToCore } from "../manipulate/DiceManipulator.js";
+import { DiceDropKeep, type DiceDropKeepType } from "../manipulate/DiceDropKeep.js";
+import { appendManipulationToCore } from "../manipulate/appendManipulationToCore.js";
 import type { DiceOperator } from "../types/DiceOperator.js";
 
 export type ReduceSignToDropKeep = {
@@ -33,7 +33,7 @@ function reduceDiceToken<T extends DicePartCore>(core: T, token: TokenData, redu
 		const dropKeep = reduceSignToDropKeepData?.find(dropKeepData => dropKeepData.test(core, token));
 		if (dropKeep) {
 			const manipulation = core.manipulation ?? (core.manipulation = []);
-			manipulation.push({ dropKeep });
+			manipulation.push({ dropKeep:new DiceDropKeep(dropKeep) });
 			delete core.sign;
 			hasChanges = true;
 		}

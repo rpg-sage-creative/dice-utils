@@ -13,9 +13,10 @@ export declare abstract class DiceBase<Core extends DiceBaseCore<any, any, GameT
     get gameType(): GameType;
     get hasSecret(): boolean;
     get hasTest(): boolean;
-    roll(): void;
+    roll(): this;
     abstract toDiceString(outputType?: DiceOutputType): string;
     abstract toRollString(...args: (boolean | DiceOutputType)[]): string;
-    static fromCore<CoreType, DiceType>(_core: CoreType): DiceType;
+    static create(..._args: any[]): any;
+    static fromCore(_core: any): any;
     static Child: typeof DiceBase;
 }

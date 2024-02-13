@@ -1,5 +1,6 @@
 import { appendTestToCore } from "../DiceTest.js";
-import { appendManipulationToCore } from "../manipulate/DiceManipulator.js";
+import { DiceDropKeep } from "../manipulate/DiceDropKeep.js";
+import { appendManipulationToCore } from "../manipulate/appendManipulationToCore.js";
 function reduceDiceToken(core, token, reduceSignToDropKeepData) {
     if (token.key === "dice") {
         let hasChanges = false;
@@ -16,7 +17,7 @@ function reduceDiceToken(core, token, reduceSignToDropKeepData) {
         const dropKeep = reduceSignToDropKeepData?.find(dropKeepData => dropKeepData.test(core, token));
         if (dropKeep) {
             const manipulation = core.manipulation ?? (core.manipulation = []);
-            manipulation.push({ dropKeep });
+            manipulation.push({ dropKeep: new DiceDropKeep(dropKeep) });
             delete core.sign;
             hasChanges = true;
         }

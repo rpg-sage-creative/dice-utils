@@ -1,6 +1,15 @@
 export type RollData = {
+	dieSize: number;
+
 	/** The original index of the roll (order it was rolled in) */
 	index: number;
+
+	/** The value rolled. */
+	initialValue: number;
+
+	isAboveThreshold?: boolean;
+
+	isBelowThreshold?: boolean;
 
 	/** Has the roll been dropped. */
 	isDropped?: boolean;
@@ -23,6 +32,12 @@ export type RollData = {
 	/** String output to be marked as: min, max, dropped, etc. */
 	output: string;
 
-	/** The roll value */
-	roll: number;
+	/** The value after manipulation (such as threshold) */
+	outputValue: number;
+
+	/** Value used to determine sum (usually 0 for dropped) */
+	sumValue: number;
+
+	/** The threshold checked against. */
+	threshold?: number;
 };

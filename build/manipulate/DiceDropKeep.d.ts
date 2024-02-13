@@ -1,5 +1,6 @@
 import type { TokenData, TokenParsers } from "@rsc-utils/string-utils";
 import type { RollData } from "../types/RollData.js";
+import { DiceManipulation } from "./DiceManipulation.js";
 export declare enum DiceDropKeepType {
     None = 0,
     DropLowest = 1,
@@ -16,20 +17,12 @@ export type DiceDropKeepData = {
     /** a human readable alternative for output */
     alias?: string;
 };
-export declare class DiceDropKeep {
-    protected data?: DiceDropKeepData | undefined;
-    constructor(data?: DiceDropKeepData | undefined);
+export declare class DiceDropKeep extends DiceManipulation<DiceDropKeepData> {
     get alias(): string;
-    get isEmpty(): boolean;
     get type(): DiceDropKeepType;
     get value(): number;
-    /** Adjusts the count by removing any dice that were dropped. */
-    adjustCount(count: number): number;
     /** Marks all rolls to be dropped as such. */
-    markDropped(rolls: RollData[]): void;
-    /** Adjusts the sum by removing any dice that were dropped. */
-    adjustSum(values: number[]): number;
-    toJSON(): DiceDropKeepData | undefined;
+    manipulateRolls(rolls: RollData[]): void;
     /** Generates string output for the given DropKeepData */
     toString(leftPad?: string, rightPad?: string): string;
     /** The token key/regex used to generate DropKeepData */

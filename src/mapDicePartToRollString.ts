@@ -1,4 +1,3 @@
-import { createSortedRollData } from "./createSortedRollData.js";
 import { TDicePart } from "./dice/DicePart.js";
 
 type MapDicePartRollOptions = {
@@ -10,11 +9,14 @@ type MapDicePartRollOptions = {
 };
 
 function dicePartToRollString(dicePart: TDicePart, hideRolls?: boolean): string {
-	const sortedRollData = createSortedRollData(dicePart, true);
-	const outputRollsAndIndexes = dicePart.manipulation.noSort ? sortedRollData.byIndex : sortedRollData.byRoll;
-	const mappedOutuputRolls = outputRollsAndIndexes.map(rollData => rollData.output);
-	const output = `[${mappedOutuputRolls.join(", ")}]`;
-	return hideRolls ? `||${output}||` : output;
+	const sortedRollData = dicePart.sortedRollData;
+	if (sortedRollData) {
+		const outputRollsAndIndexes = sortedRollData.noSort ? sortedRollData.byIndex : sortedRollData.byValue;
+		const mappedOutuputRolls = outputRollsAndIndexes.map(rollData => rollData.output);
+		const output = `[${mappedOutuputRolls.join(", ")}]`;
+		return hideRolls ? `||${output}||` : output;
+	}
+	return "";
 }
 
 export function mapDicePartToRollString(dicePart: TDicePart, dicePartIndex: number, options: MapDicePartRollOptions): string {

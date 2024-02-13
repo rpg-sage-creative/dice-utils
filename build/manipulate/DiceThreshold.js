@@ -1,20 +1,28 @@
+import { DiceManipulation } from "./DiceManipulation.js";
 export var DiceThresholdType;
 (function (DiceThresholdType) {
     DiceThresholdType[DiceThresholdType["None"] = 0] = "None";
     DiceThresholdType[DiceThresholdType["LowestThreshold"] = 1] = "LowestThreshold";
     DiceThresholdType[DiceThresholdType["HighestThreshold"] = 2] = "HighestThreshold";
 })(DiceThresholdType || (DiceThresholdType = {}));
-export class DiceThreshold {
-    data;
-    constructor(data) {
-        this.data = data;
-    }
+export class DiceThreshold extends DiceManipulation {
     get alias() { return this.data?.alias ?? ""; }
-    get isEmpty() { return !this.type || !this.value; }
     get type() { return this.data?.type ?? DiceThresholdType.None; }
     get value() { return this.data?.value ?? 0; }
-    update(dieValues) {
-        return dieValues.map(value => this.shouldUpdate(value) ? this.value : value);
+    manipulateRolls(rolls) {
+        if (!this.isEmpty) {
+            rolls.forEach(roll => {
+                if (this.shouldUpdate(roll.outputValue)) {
+                    roll.threshold = this.value;
+                    if (this.type === DiceThresholdType.HighestThreshold) {
+                        roll.isAboveThreshold = true;
+                    }
+                    else {
+                        roll.isBelowThreshold = true;
+                    }
+                }
+            });
+        }
     }
     shouldUpdate(value) {
         if (!this.isEmpty) {

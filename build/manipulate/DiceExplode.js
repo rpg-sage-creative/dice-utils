@@ -1,25 +1,29 @@
 import { DiceTestType } from "../DiceTest.js";
+import { rollDataMapper } from "../internal/rollDataMapper.js";
 import { rollDie } from "../roll/rollDie.js";
-export class DiceExplode {
-    data;
-    constructor(data) {
-        this.data = data;
-    }
+import { DiceManipulation } from "./DiceManipulation.js";
+export class DiceExplode extends DiceManipulation {
     get alias() { return this.data?.alias ?? ""; }
-    get isEmpty() { return !this.type || !this.value; }
     get type() { return this.data?.type ?? DiceTestType.None; }
     get value() { return this.data?.value ?? 0; }
-    explode(dieSize, dieValues) {
-        const explodedValues = [];
-        let extra = dieValues.filter(value => this.shouldExplode(value)).length;
-        while (extra > 0) {
-            const rollValue = rollDie(dieSize);
-            explodedValues.push(rollValue);
-            if (!this.shouldExplode(rollValue)) {
-                extra--;
+    manipulateRolls(rolls) {
+        const explosionRolls = [];
+        if (!this.isEmpty) {
+            const rollsToCheck = rolls.slice();
+            while (rollsToCheck.length) {
+                const rollToCheck = rollsToCheck.shift();
+                if (this.shouldExplode(rollToCheck.outputValue)) {
+                    rollToCheck.isExploded = true;
+                    const explosionValue = rollDie(rollToCheck.dieSize);
+                    const explosionIndex = rolls.length + explosionRolls.length;
+                    const explosionRoll = rollDataMapper(explosionValue, explosionIndex, rollToCheck.dieSize, false);
+                    explosionRoll.isExplosion = true;
+                    explosionRolls.push(explosionRoll);
+                    rollsToCheck.push(explosionRoll);
+                }
             }
         }
-        return explodedValues;
+        return explosionRolls;
     }
     shouldExplode(value) {
         if (!this.isEmpty) {
@@ -33,9 +37,6 @@ export class DiceExplode {
             }
         }
         return false;
-    }
-    toJSON() {
-        return this.data;
     }
     toString(leftPad, rightPad) {
         if (this.isEmpty) {
@@ -65,6 +66,8 @@ export class DiceExplode {
     }
     static explode(dieSize, dieValues) {
         const exploder = new DiceExplode({ alias: "x", type: DiceTestType.Equal, value: dieSize });
-        return exploder.explode(dieSize, dieValues);
+        const rollData = dieValues.map((roll, index) => rollDataMapper(roll, index, dieSize, false));
+        const explodedData = exploder.manipulateRolls(rollData);
+        return explodedData.map(exploded => exploded.outputValue);
     }
 }

@@ -2,17 +2,17 @@ import { randomSnowflake } from "@rsc-utils/snowflake-utils";
 import { cleanWhitespace, dequote } from "@rsc-utils/string-utils";
 import { DiceTest } from "../DiceTest.js";
 import { DieRollGrade, gradeRoll, gradeToEmoji } from "../grade.js";
-import { sum } from "../sum.js";
-import { sumDicePartRolls } from "../sumDicePartRolls.js";
-import { DiceOutputType } from "../types/DiceOutputType.js";
-import { DiceBase, DiceBaseCore } from "./DiceBase.js";
-import { DicePart, type DicePartCore, type TDicePart } from "./DicePart.js";
 import { detick } from "../internal/detick.js";
-import { UNICODE_LEFT_ARROW } from "../types/consts.js";
-import { removeDesc } from "../removeDesc.js";
-import { mapDicePartToRollString } from "../mapDicePartToRollString.js";
 import { isBoolean } from "../internal/isBoolean.js";
 import { isDiceOutputType } from "../internal/isDiceOutputType.js";
+import { mapDicePartToRollString } from "../mapDicePartToRollString.js";
+import { removeDesc } from "../removeDesc.js";
+import { sum } from "../sum.js";
+import { sumDiceParts } from "../sumDiceParts.js";
+import { DiceOutputType } from "../types/DiceOutputType.js";
+import { UNICODE_LEFT_ARROW } from "../types/consts.js";
+import { DiceBase, type DiceBaseCore } from "./DiceBase.js";
+import { DicePart, type DicePartCore, type TDicePart } from "./DicePart.js";
 
 type DiceCoreBase = {
 	children: DicePartCore[];
@@ -46,7 +46,7 @@ export class Dice<
 
 	public get grade(): DieRollGrade { return gradeRoll(this); }
 
-	public get total(): number { return sumDicePartRolls(this.children); }
+	public get total(): number { return sumDiceParts(this.children); }
 
 	//#endregion
 
@@ -64,10 +64,6 @@ export class Dice<
 	// public includes(childOrCore: TDicePart | DicePartCore): boolean {
 	// 	return this.children.some(dicePart => dicePart.is(childOrCore));
 	// }
-
-	public roll(): void {
-		this.children.forEach(dicePart => dicePart.roll());
-	}
 
 	public toDiceString(_outputType?: DiceOutputType): string {
 		const outputType = _outputType === DiceOutputType.S ? DiceOutputType.S : DiceOutputType.M;
@@ -150,8 +146,8 @@ export class Dice<
 		});
 	}
 
-	public static fromCore<CoreType, DiceType>(core: CoreType): DiceType {
-		return new Dice(core as DiceCore) as DiceType;
+	public static fromCore(core: DiceCore): TDice {
+		return new Dice(core);
 	}
 
 	public static readonly Child = DicePart as typeof DiceBase;

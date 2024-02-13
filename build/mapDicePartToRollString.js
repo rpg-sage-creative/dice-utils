@@ -1,10 +1,12 @@
-import { createSortedRollData } from "./createSortedRollData.js";
 function dicePartToRollString(dicePart, hideRolls) {
-    const sortedRollData = createSortedRollData(dicePart, true);
-    const outputRollsAndIndexes = dicePart.manipulation.noSort ? sortedRollData.byIndex : sortedRollData.byRoll;
-    const mappedOutuputRolls = outputRollsAndIndexes.map(rollData => rollData.output);
-    const output = `[${mappedOutuputRolls.join(", ")}]`;
-    return hideRolls ? `||${output}||` : output;
+    const sortedRollData = dicePart.sortedRollData;
+    if (sortedRollData) {
+        const outputRollsAndIndexes = sortedRollData.noSort ? sortedRollData.byIndex : sortedRollData.byValue;
+        const mappedOutuputRolls = outputRollsAndIndexes.map(rollData => rollData.output);
+        const output = `[${mappedOutuputRolls.join(", ")}]`;
+        return hideRolls ? `||${output}||` : output;
+    }
+    return "";
 }
 export function mapDicePartToRollString(dicePart, dicePartIndex, options) {
     let dicePartRollOutput = "";

@@ -12,7 +12,11 @@ export class DiceBase extends HasIdCore {
     get hasSecret() { return this.children.some(child => child.hasSecret); }
     get hasTest() { return this.children.some(child => child.hasTest); }
     roll() {
-        this.children.forEach(dicePart => dicePart.roll());
+        this.children.forEach(child => child.roll());
+        return this;
+    }
+    static create(..._args) {
+        throw new TypeError("Not Implemented.");
     }
     static fromCore(_core) {
         throw new TypeError("Not Implemented.");

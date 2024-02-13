@@ -14,11 +14,13 @@ export type TDiceGroup = DiceGroup<DiceGroupCore, TDice>;
 export declare class DiceGroup<CoreType extends DiceGroupCore<GameType>, ChildType extends TDice, GameType extends number = number> extends DiceBase<CoreType, ChildType, "DiceGroup", GameType> {
     get criticalMethodType(): DiceCriticalMethodType | undefined;
     get outputType(): DiceOutputType | undefined;
+    get primary(): ChildType | undefined;
     get secretMethodType(): DiceSecretMethodType | undefined;
     toDiceString(outputType?: DiceOutputType): string;
     toRollString(...args: (boolean | DiceOutputType)[]): string;
     static create(dice: TDice[], args?: DiceGroupCoreArgs): TDiceGroup;
     static fromCore<CoreType, DiceType>(core: CoreType): DiceType;
-    static Child: typeof DiceBase;
+    static parse<T extends TDiceGroup>(diceString: string, outputType?: DiceOutputType): T;
+    static readonly Child: typeof DiceBase;
 }
 export {};

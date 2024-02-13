@@ -1,7 +1,5 @@
-import { numberSorter } from "../internal/numberSorter.js";
 import { rollDataSorter } from "../internal/rollDataSorter.js";
-import { markAsDropped } from "../markup.js";
-import { sum } from "../sum.js";
+import { DiceManipulation } from "./DiceManipulation.js";
 export var DiceDropKeepType;
 (function (DiceDropKeepType) {
     DiceDropKeepType[DiceDropKeepType["None"] = 0] = "None";
@@ -23,59 +21,18 @@ function shouldBeDropped(_roll, index, rolls) {
         default: return false;
     }
 }
-export class DiceDropKeep {
-    data;
-    constructor(data) {
-        this.data = data;
-    }
+export class DiceDropKeep extends DiceManipulation {
     get alias() { return this.data?.alias ?? ""; }
-    get isEmpty() { return !this.type || !this.value; }
     get type() { return this.data?.type ?? DiceDropKeepType.None; }
     get value() { return this.data?.value ?? 0; }
-    adjustCount(count) {
-        if (!this.isEmpty) {
-            switch (this.type) {
-                case DiceDropKeepType.DropHighest:
-                case DiceDropKeepType.DropLowest:
-                    return count - this.value;
-                case DiceDropKeepType.KeepHighest:
-                case DiceDropKeepType.KeepLowest:
-                    return this.value;
-            }
-        }
-        return count;
-    }
-    markDropped(rolls) {
+    manipulateRolls(rolls) {
         if (!this.isEmpty) {
             const sorted = rolls.slice();
             sorted.sort(rollDataSorter);
             sorted.filter(shouldBeDropped, this.data).forEach(roll => {
-                if (!roll.isDropped) {
-                    roll.isDropped = true;
-                    roll.output = markAsDropped(roll.output);
-                }
+                roll.isDropped = true;
             });
         }
-    }
-    adjustSum(values) {
-        if (!this.isEmpty) {
-            const sorted = values.slice().sort(numberSorter);
-            switch (this.type) {
-                case DiceDropKeepType.DropHighest:
-                    return sum(sorted.slice(0, -this.value));
-                case DiceDropKeepType.DropLowest:
-                    return sum(sorted.slice(this.value));
-                case DiceDropKeepType.KeepHighest:
-                    return sum(sorted.slice(-this.value));
-                case DiceDropKeepType.KeepLowest:
-                    return sum(sorted.slice(0, this.value));
-            }
-            console.warn(`Invalid dropKeep.type = ${this.type} (${DiceDropKeepType[this.type]})`);
-        }
-        return sum(values);
-    }
-    toJSON() {
-        return this.data;
     }
     toString(leftPad = "", rightPad = "") {
         if (this.isEmpty) {

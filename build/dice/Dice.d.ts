@@ -1,7 +1,7 @@
 import { DiceTest } from "../DiceTest.js";
 import { DieRollGrade } from "../grade.js";
 import { DiceOutputType } from "../types/DiceOutputType.js";
-import { DiceBase, DiceBaseCore } from "./DiceBase.js";
+import { DiceBase, type DiceBaseCore } from "./DiceBase.js";
 import { type DicePartCore, type TDicePart } from "./DicePart.js";
 type DiceCoreBase = {
     children: DicePartCore[];
@@ -25,14 +25,13 @@ export declare class Dice<CoreType extends DiceCore<GameType>, ChildType extends
     get isEmpty(): boolean;
     get isMax(): boolean;
     get isMin(): boolean;
-    roll(): void;
     toDiceString(_outputType?: DiceOutputType): string;
     protected _toRollString(outputType: DiceOutputType, hideRolls: boolean): string;
     protected toRollStringXS(hideRolls: boolean): string;
     protected toRollStringXXS(hideRolls: boolean): string;
     toRollString(...args: (boolean | DiceOutputType)[]): string;
     static create(diceParts: TDicePart[]): TDice;
-    static fromCore<CoreType, DiceType>(core: CoreType): DiceType;
+    static fromCore(core: DiceCore): TDice;
     static readonly Child: typeof DiceBase;
 }
 export {};

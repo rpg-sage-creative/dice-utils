@@ -4,7 +4,7 @@ import { numberSorter } from "./numberSorter.js";
 /** @internal */
 export function rollDataSorter(a: RollData, b: RollData): -1 | 0 | 1 {
 	// The first sort of .roll sorts the rolls in ascending order by roll value.
-	const rollResult = numberSorter(a?.roll, b?.roll);
+	const rollResult = numberSorter(a?.outputValue, b?.outputValue);
 	if (rollResult !== 0) {
 		return rollResult;
 	}

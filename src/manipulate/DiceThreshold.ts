@@ -11,6 +11,8 @@ maybe use lt (lowest threshold) and ht (highest threshold) to match dh and dl an
 */
 
 import type { TokenData, TokenParsers } from "@rsc-utils/string-utils";
+import type { RollData } from "../types/RollData.js";
+import { DiceManipulation } from "./DiceManipulation.js";
 
 export enum DiceThresholdType {
 	None = 0,
@@ -28,16 +30,25 @@ export type DiceThresholdData = {
 	alias?: string;
 };
 
-export class DiceThreshold {
-	public constructor(protected data?: DiceThresholdData) { }
+export class DiceThreshold extends DiceManipulation<DiceThresholdData> {
 
 	public get alias(): string { return this.data?.alias ?? ""; }
-	public get isEmpty(): boolean { return !this.type || !this.value; }
 	public get type(): DiceThresholdType { return this.data?.type ?? DiceThresholdType.None; }
 	public get value(): number { return this.data?.value ?? 0; }
 
-	public update(dieValues: number[]): number[] {
-		return dieValues.map(value => this.shouldUpdate(value) ? this.value : value);
+	public manipulateRolls(rolls: RollData[]): void {
+		if (!this.isEmpty) {
+			rolls.forEach(roll => {
+				if (this.shouldUpdate(roll.outputValue)) {
+					roll.threshold = this.value;
+					if (this.type === DiceThresholdType.HighestThreshold) {
+						roll.isAboveThreshold = true;
+					}else {
+						roll.isBelowThreshold = true;
+					}
+				}
+			});
+		}
 	}
 
 	public shouldUpdate(value: number): boolean {

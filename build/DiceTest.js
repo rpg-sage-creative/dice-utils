@@ -1,3 +1,4 @@
+import { debug, warn } from "@rsc-utils/console-utils";
 export var DiceTestType;
 (function (DiceTestType) {
     DiceTestType[DiceTestType["None"] = 0] = "None";
@@ -51,6 +52,7 @@ export class DiceTest {
     get value() { return this.data?.value ?? 0; }
     test(total) {
         if (!this.isEmpty) {
+            debug({ total, isEmpty: this.isEmpty, type: DiceTestType[this.type] });
             switch (this.type) {
                 case DiceTestType.Equal:
                     return total === this.value;
@@ -63,7 +65,7 @@ export class DiceTest {
                 case DiceTestType.LessThanOrEqual:
                     return total <= this.value;
                 default:
-                    console.warn(`testRoll(): invalid roll.dice.test.type = ${this.type} (${this.alias})`);
+                    warn(`testRoll(): invalid roll.dice.test.type = ${this.type} (${this.alias})`);
             }
         }
         return undefined;

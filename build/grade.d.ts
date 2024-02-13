@@ -20,5 +20,5 @@ export declare function decreaseGrade(grade: DieRollGrade): DieRollGrade;
 /** Returns the bracket name Sage uses for dice results emoji based on the grade. Ex: [success] or [failure] */
 export declare function gradeToEmoji(grade: DieRollGrade): TDieRollGradeEmoji;
 /** Grades the given dice roll to simple success/failure/unknown. No critical logic. */
-export declare function gradeRoll(roll: TDice): DieRollGrade;
+export declare function gradeRoll(dice: TDice): DieRollGrade;
 export {};

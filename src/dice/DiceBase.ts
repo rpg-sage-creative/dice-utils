@@ -39,14 +39,19 @@ export abstract class DiceBase<
 
 	public get hasTest(): boolean { return this.children.some(child => child.hasTest); }
 
-	public roll(): void {
-		this.children.forEach(dicePart => dicePart.roll());
+	public roll(): this {
+		this.children.forEach(child => child.roll());
+		return this;
 	}
 
 	public abstract toDiceString(outputType?: DiceOutputType): string;
 	public abstract toRollString(...args: (boolean | DiceOutputType)[]): string;
 
-	public static fromCore<CoreType, DiceType>(_core: CoreType): DiceType {
+	public static create(..._args: any[]): any {
+		throw new TypeError("Not Implemented.");
+	}
+
+	public static fromCore(_core: any): any {
 		throw new TypeError("Not Implemented.");
 	}
 

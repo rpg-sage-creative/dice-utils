@@ -5,9 +5,13 @@ import { isDiceOutputType } from "../internal/isDiceOutputType.js";
 import { DiceOutputType } from "../types/DiceOutputType.js";
 import { Dice } from "./Dice.js";
 import { DiceBase } from "./DiceBase.js";
+import { tokenize } from "@rsc-utils/string-utils";
+import { getDiceTokenParsers } from "../token/getDiceTokenParsers.js";
+import { tokensToDiceGroup } from "../token/tokensToDiceGroup.js";
 export class DiceGroup extends DiceBase {
     get criticalMethodType() { return this.core.criticalMethodType; }
     get outputType() { return this.core.outputType; }
+    get primary() { return this.children.find(child => child.primary); }
     get secretMethodType() { return this.core.secretMethodType; }
     toDiceString(outputType) {
         return `[${this.children.map(dice => dice.toDiceString(outputType)).join("; ")}]`;
@@ -38,7 +42,12 @@ export class DiceGroup extends DiceBase {
         });
     }
     static fromCore(core) {
-        return new DiceGroup(core);
+        const _constructor = this;
+        return new _constructor(core);
+    }
+    static parse(diceString, outputType) {
+        const tokens = tokenize(diceString, getDiceTokenParsers(), "desc");
+        return tokensToDiceGroup(tokens, this, { outputType });
     }
     static Child = Dice;
 }

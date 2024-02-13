@@ -1,4 +1,6 @@
 import type { TokenData, TokenParsers } from "@rsc-utils/string-utils";
+import type { RollData } from "../types/RollData.js";
+import { DiceManipulation } from "./DiceManipulation.js";
 export declare enum DiceThresholdType {
     None = 0,
     LowestThreshold = 1,
@@ -13,14 +15,11 @@ export type DiceThresholdData = {
     /** a human readable alternative for output */
     alias?: string;
 };
-export declare class DiceThreshold {
-    protected data?: DiceThresholdData | undefined;
-    constructor(data?: DiceThresholdData | undefined);
+export declare class DiceThreshold extends DiceManipulation<DiceThresholdData> {
     get alias(): string;
-    get isEmpty(): boolean;
     get type(): DiceThresholdType;
     get value(): number;
-    update(dieValues: number[]): number[];
+    manipulateRolls(rolls: RollData[]): void;
     shouldUpdate(value: number): boolean;
     toJSON(): DiceThresholdData | undefined;
     /** Generates string output for the given DiceExplodeData */
