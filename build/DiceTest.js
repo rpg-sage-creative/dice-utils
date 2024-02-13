@@ -1,4 +1,4 @@
-import { debug, warn } from "@rsc-utils/console-utils";
+import { warn } from "@rsc-utils/console-utils";
 export var DiceTestType;
 (function (DiceTestType) {
     DiceTestType[DiceTestType["None"] = 0] = "None";
@@ -52,7 +52,6 @@ export class DiceTest {
     get value() { return this.data?.value ?? 0; }
     test(total) {
         if (!this.isEmpty) {
-            debug({ total, isEmpty: this.isEmpty, type: DiceTestType[this.type] });
             switch (this.type) {
                 case DiceTestType.Equal:
                     return total === this.value;
