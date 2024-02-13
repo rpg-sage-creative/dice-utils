@@ -90,7 +90,7 @@ export class DicePart extends DiceBase {
     }
     toRollString() { return ""; }
     static create(args = {}) {
-        return new DicePart({
+        return new this({
             objectType: "DicePart",
             gameType: 0,
             id: randomSnowflake(),
@@ -107,6 +107,6 @@ export class DicePart extends DiceBase {
         });
     }
     static fromCore(core) {
-        return new DicePart(core);
+        return new this(core);
     }
 }

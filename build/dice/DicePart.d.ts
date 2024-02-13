@@ -69,7 +69,7 @@ export declare class DicePart<CoreType extends DicePartCore<GameType>, GameType 
     toDiceString(outputType?: DiceOutputType, index?: number): string;
     protected toManipulationString(leftPad?: string, rightPad?: string): string;
     toRollString(): string;
-    static create(args?: DicePartCoreArgs): TDicePart;
-    static fromCore<CoreType, DiceType>(core: CoreType): DiceType;
+    static create<DicePartType extends TDicePart>(args?: DicePartCoreArgs): DicePartType;
+    static fromCore<CoreType extends DicePartCore, DicePartType extends TDicePart>(core: CoreType): DicePartType;
 }
 export {};

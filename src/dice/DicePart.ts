@@ -184,8 +184,8 @@ export class DicePart<
 
 	//#region static
 
-	public static create(args: DicePartCoreArgs = {}): TDicePart {
-		return new DicePart({
+	public static create<DicePartType extends TDicePart>(args: DicePartCoreArgs = {}): DicePartType {
+		return new this({
 			objectType: "DicePart",
 			gameType: 0,
 			id: randomSnowflake(),
@@ -201,11 +201,11 @@ export class DicePart<
 			test: args.test,
 
 			children: undefined!
-		});
+		}) as DicePartType;
 	}
 
-	public static fromCore<CoreType, DiceType>(core: CoreType): DiceType {
-		return new DicePart(core as DicePartCore) as DiceType;
+	public static fromCore<CoreType extends DicePartCore, DicePartType extends TDicePart>(core: CoreType): DicePartType {
+		return new this(core as DicePartCore) as DicePartType;
 	}
 
 	//#endregion

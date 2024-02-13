@@ -77,7 +77,7 @@ export class Dice extends DiceBase {
         return this._toRollString(outputType, hideRolls);
     }
     static create(diceParts) {
-        return new Dice({
+        return new this({
             objectType: "Dice",
             gameType: 0,
             id: randomSnowflake(),
@@ -85,7 +85,7 @@ export class Dice extends DiceBase {
         });
     }
     static fromCore(core) {
-        return new Dice(core);
+        return new this(core);
     }
     static Child = DicePart;
     static correctEscapeForEmoji = (diceOutput) => diceOutput;

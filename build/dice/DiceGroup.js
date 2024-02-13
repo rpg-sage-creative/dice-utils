@@ -31,7 +31,7 @@ export class DiceGroup extends DiceBase {
         return output.join(joiner);
     }
     static create(dice, args = {}) {
-        return new DiceGroup({
+        return new this({
             objectType: "DiceGroup",
             gameType: 0,
             id: randomSnowflake(),
@@ -42,8 +42,7 @@ export class DiceGroup extends DiceBase {
         });
     }
     static fromCore(core) {
-        const _constructor = this;
-        return new _constructor(core);
+        return new this(core);
     }
     static parse(diceString, outputType) {
         const tokens = tokenize(diceString, getDiceTokenParsers(), "desc");

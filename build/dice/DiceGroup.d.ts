@@ -18,9 +18,9 @@ export declare class DiceGroup<CoreType extends DiceGroupCore<GameType>, ChildTy
     get secretMethodType(): DiceSecretMethodType | undefined;
     toDiceString(outputType?: DiceOutputType): string;
     toRollString(...args: (boolean | DiceOutputType)[]): string;
-    static create(dice: TDice[], args?: DiceGroupCoreArgs): TDiceGroup;
-    static fromCore<CoreType, DiceType>(core: CoreType): DiceType;
-    static parse<T extends TDiceGroup>(diceString: string, outputType?: DiceOutputType): T;
+    static create<DiceGroupType extends TDiceGroup, DiceType extends TDice>(dice: DiceType[], args?: DiceGroupCoreArgs): DiceGroupType;
+    static fromCore<CoreType extends DiceGroupCore, DiceGroupType extends TDiceGroup>(core: CoreType): DiceGroupType;
+    static parse<DiceType extends TDiceGroup>(diceString: string, outputType?: DiceOutputType): DiceType;
     static readonly Child: typeof DiceBase;
 }
 export {};

@@ -62,8 +62,8 @@ export class DiceGroup<
 
 	//#region static
 
-	public static create(dice: TDice[], args: DiceGroupCoreArgs = {}): TDiceGroup {
-		return new DiceGroup({
+	public static create<DiceGroupType extends TDiceGroup, DiceType extends TDice>(dice: DiceType[], args: DiceGroupCoreArgs = {}): DiceGroupType {
+		return new this({
 			objectType: "DiceGroup",
 			gameType: 0,
 			id: randomSnowflake(),
@@ -72,15 +72,14 @@ export class DiceGroup<
 			criticalMethodType: args.criticalMethodType,
 			outputType: args.outputType,
 			secretMethodType: args.secretMethodType
-		});
+		}) as DiceGroupType;
 	}
 
-	public static fromCore<CoreType, DiceType>(core: CoreType): DiceType {
-		const _constructor = this;
-		return new _constructor(core as DiceGroupCore) as DiceType;
+	public static fromCore<CoreType extends DiceGroupCore, DiceGroupType extends TDiceGroup>(core: CoreType): DiceGroupType {
+		return new this(core as DiceGroupCore) as DiceGroupType;
 	}
 
-	public static parse<T extends TDiceGroup>(diceString: string, outputType?: DiceOutputType): T {
+	public static parse<DiceType extends TDiceGroup>(diceString: string, outputType?: DiceOutputType): DiceType {
 		const tokens = tokenize(diceString, getDiceTokenParsers(), "desc");
 		return tokensToDiceGroup(tokens, this, { outputType });
 	}

@@ -133,18 +133,17 @@ export class Dice<
 
 	//#region static
 
-	public static create(diceParts: TDicePart[]): TDice {
-		return new Dice({
+	public static create<DiceType extends TDice, DicePartType extends TDicePart>(diceParts: DicePartType[]): DiceType {
+		return new this({
 			objectType: "Dice",
 			gameType: 0,
 			id: randomSnowflake(),
-
 			children: diceParts.map(dicePart => dicePart.toJSON())
-		});
+		}) as DiceType;
 	}
 
-	public static fromCore(core: DiceCore): TDice {
-		return new Dice(core);
+	public static fromCore<CoreType extends DiceCore, DiceType extends TDice>(core: CoreType): DiceType {
+		return new this(core as DiceCore) as DiceType;
 	}
 
 	public static readonly Child = DicePart as typeof DiceBase;

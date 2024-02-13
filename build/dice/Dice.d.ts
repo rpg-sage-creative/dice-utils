@@ -30,8 +30,8 @@ export declare class Dice<CoreType extends DiceCore<GameType>, ChildType extends
     protected toRollStringXS(hideRolls: boolean): string;
     protected toRollStringXXS(hideRolls: boolean): string;
     toRollString(...args: (boolean | DiceOutputType)[]): string;
-    static create(diceParts: TDicePart[]): TDice;
-    static fromCore(core: DiceCore): TDice;
+    static create<DiceType extends TDice, DicePartType extends TDicePart>(diceParts: DicePartType[]): DiceType;
+    static fromCore<CoreType extends DiceCore, DiceType extends TDice>(core: CoreType): DiceType;
     static readonly Child: typeof DiceBase;
     static correctEscapeForEmoji: (diceOutput: string) => string;
 }
