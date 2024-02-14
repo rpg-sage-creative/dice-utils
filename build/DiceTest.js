@@ -99,8 +99,5 @@ export class DiceTest {
     static from(token) {
         return new DiceTest(DiceTest.parseData(token));
     }
-    static test(dice) {
-        return dice.test.test(dice.total);
-    }
     static EmptyTest = new DiceTest();
 }

@@ -1,4 +1,3 @@
-import { DiceTest } from "./DiceTest.js";
 export var DieRollGrade;
 (function (DieRollGrade) {
     DieRollGrade[DieRollGrade["Unknown"] = 0] = "Unknown";
@@ -29,16 +28,16 @@ export function decreaseGrade(grade) {
 function ensureGrade(modifiedGrade, originalGrade) {
     return isValid(modifiedGrade) ? modifiedGrade : originalGrade;
 }
-export function gradeToEmoji(grade) {
+export function gradeToEmoji(grade, _hasTest) {
     return isValid(grade) ? DieRollGradeEmojis[grade] : undefined;
 }
-function booleanToGrade(value) {
-    switch (value) {
-        case true: return DieRollGrade.Success;
-        case false: return DieRollGrade.Failure;
-        default: return DieRollGrade.Unknown;
-    }
-}
 export function gradeRoll(dice) {
-    return booleanToGrade(DiceTest.test(dice));
+    const result = dice.test.test(dice.total);
+    if (result === true) {
+        return DieRollGrade.Success;
+    }
+    if (result === false) {
+        return DieRollGrade.Failure;
+    }
+    return DieRollGrade.Unknown;
 }

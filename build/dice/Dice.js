@@ -62,7 +62,7 @@ export class Dice extends DiceBase {
         return Dice.correctEscapeForEmoji(cleanWhitespace(output));
     }
     toRollStringXXS(hideRolls) {
-        const gradeEmoji = this.constructor.gradeToEmoji(this.grade), outputEmoji = hideRolls ? ":question:" : gradeEmoji ?? "", fixedOutput = this.hasFixed ? "f" : "", totalString = `<i><b>${this.total}${fixedOutput}</b></i>`, totalOutput = hideRolls ? `||${totalString}||` : totalString, output = `${outputEmoji} ${totalOutput}`;
+        const gradeEmoji = this.constructor.gradeToEmoji(this.grade, this.hasTest), outputEmoji = hideRolls ? ":question:" : gradeEmoji ?? "", fixedOutput = this.hasFixed ? "f" : "", totalString = `<i><b>${this.total}${fixedOutput}</b></i>`, totalOutput = hideRolls ? `||${totalString}||` : totalString, output = `${outputEmoji} ${totalOutput}`;
         return cleanWhitespace(output);
     }
     toRollString(...args) {
