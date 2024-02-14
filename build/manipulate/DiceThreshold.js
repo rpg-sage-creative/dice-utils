@@ -2,8 +2,8 @@ import { DiceManipulation } from "./DiceManipulation.js";
 export var DiceThresholdType;
 (function (DiceThresholdType) {
     DiceThresholdType[DiceThresholdType["None"] = 0] = "None";
-    DiceThresholdType[DiceThresholdType["LowestThreshold"] = 1] = "LowestThreshold";
-    DiceThresholdType[DiceThresholdType["HighestThreshold"] = 2] = "HighestThreshold";
+    DiceThresholdType[DiceThresholdType["BottomThreshold"] = 1] = "BottomThreshold";
+    DiceThresholdType[DiceThresholdType["TopThreshold"] = 2] = "TopThreshold";
 })(DiceThresholdType || (DiceThresholdType = {}));
 export class DiceThreshold extends DiceManipulation {
     get alias() { return this.data?.alias ?? ""; }
@@ -14,7 +14,7 @@ export class DiceThreshold extends DiceManipulation {
             rolls.forEach(roll => {
                 if (this.shouldUpdate(roll.threshold ?? roll.value)) {
                     roll.threshold = this.value;
-                    if (this.type === DiceThresholdType.HighestThreshold) {
+                    if (this.type === DiceThresholdType.TopThreshold) {
                         roll.isAboveThreshold = true;
                     }
                     else {
@@ -27,8 +27,8 @@ export class DiceThreshold extends DiceManipulation {
     shouldUpdate(value) {
         if (!this.isEmpty) {
             switch (this.type) {
-                case DiceThresholdType.HighestThreshold: return value > this.value;
-                case DiceThresholdType.LowestThreshold: return value < this.value;
+                case DiceThresholdType.TopThreshold: return value > this.value;
+                case DiceThresholdType.BottomThreshold: return value < this.value;
                 case DiceThresholdType.None: return false;
             }
         }
@@ -41,18 +41,18 @@ export class DiceThreshold extends DiceManipulation {
         if (this.isEmpty) {
             return ``;
         }
-        if (["lt", "ht"].includes(this.alias)) {
+        if (["bt", "tt"].includes(this.alias)) {
             return `${leftPad}${this.alias}${this.value}${rightPad}`;
         }
         return `${leftPad}(${this.alias})${rightPad}`;
     }
     static getParsers() {
-        return { threshold: /(lt|ht)\s*(\d+)/i };
+        return { threshold: /(bt|tt)\s*(\d+)/i };
     }
     static parseData(token) {
         if (token?.key === "threshold") {
             const alias = token.matches[0].toLowerCase().slice(0, 2);
-            const type = [null, "lt", "ht"].indexOf(alias);
+            const type = [null, "bt", "tt"].indexOf(alias);
             const value = +token.matches[1];
             return { alias, type, value };
         }

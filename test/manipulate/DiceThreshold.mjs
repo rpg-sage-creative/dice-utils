@@ -11,10 +11,10 @@ function rollAndReturn(rolls, tString = "") {
 
 runTests(async function testDiceThreshold() {
 
-	const [dpLT2, dataLT2, tLT2] = rollAndReturn([1,1,3,3,5,5], "lt2");
-	assert([2,2,3,3,5,5], () => dataLT2.byIndex.map(r => r.threshold??r.value));
+	const [dpBT2, dataBT2, tBT2] = rollAndReturn([1,1,3,3,5,5], "bt2");
+	assert([2,2,3,3,5,5], () => dataBT2.byIndex.map(r => r.threshold??r.value));
 
-	const [dpHT5, dataHT5, tHT5] = rollAndReturn([2,2,4,4,6,6], "ht5");
-	assert([2,2,4,4,5,5], () => dataHT5.byIndex.map(r => r.threshold??r.value));
+	const [dpTT5, dataTT5, tTT5] = rollAndReturn([2,2,4,4,6,6], "tt5");
+	assert([2,2,4,4,5,5], () => dataTT5.byIndex.map(r => r.threshold??r.value));
 
 }, true);

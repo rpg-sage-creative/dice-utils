@@ -10,7 +10,7 @@ runTests(async function testDiceGroup() {
 		["1d20", "[1d20]"],
 		["2d20kh1", "[2d20 kh1]"],
 		["3d6x", "[3d6 x6]"],
-		["4d6lt2kh3", "[4d6 lt2 kh3]"],
+		["4d6bt2kh3", "[4d6 bt2 kh3]"],
 	].forEach(([input, output]) => {
 		const diceGroup = DiceGroup.parse(input);
 		assert(output, toDiceString, diceGroup);
