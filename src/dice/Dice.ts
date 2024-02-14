@@ -44,7 +44,7 @@ export class Dice<
 	/** Gets the first test. */
 	public get test(): DiceTest { return this.children.find(dicePart => dicePart.hasTest)?.test ?? DiceTest.EmptyTest; }
 
-	public get grade(): DieRollGrade { return gradeRoll(this); }
+	public get grade(): DieRollGrade { return (this.constructor as typeof Dice).gradeRoll(this); }
 
 	public get total(): number { return sumDiceParts(this.children); }
 
@@ -108,7 +108,7 @@ export class Dice<
 	}
 
 	protected toRollStringXXS(hideRolls: boolean): string {
-		const gradeEmoji = gradeToEmoji(this.grade),
+		const gradeEmoji = (this.constructor as typeof Dice).gradeToEmoji(this.grade),
 			outputEmoji = hideRolls ? ":question:" : gradeEmoji ?? "",
 			fixedOutput = this.hasFixed ? "f" : "",
 			totalString = `<i><b>${this.total}${fixedOutput}</b></i>`,
@@ -149,6 +149,10 @@ export class Dice<
 	public static readonly Child = DicePart as typeof DiceBase;
 
 	public static correctEscapeForEmoji: (diceOutput: string) => string = (diceOutput: string) => diceOutput; //NOSONAR
+
+	public static readonly gradeRoll = gradeRoll;
+
+	public static readonly gradeToEmoji = gradeToEmoji;
 
 	//#endregion
 }

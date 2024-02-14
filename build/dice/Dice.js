@@ -18,7 +18,7 @@ export class Dice extends DiceBase {
     get max() { return sum(this.children.map(dicePart => dicePart.max)); }
     get min() { return sum(this.children.map(dicePart => dicePart.min)); }
     get test() { return this.children.find(dicePart => dicePart.hasTest)?.test ?? DiceTest.EmptyTest; }
-    get grade() { return gradeRoll(this); }
+    get grade() { return this.constructor.gradeRoll(this); }
     get total() { return sumDiceParts(this.children); }
     get hasFixed() { return this.children.some(dicePart => dicePart.fixedRolls.length); }
     get hasRolls() { return this.children.some(dicePart => dicePart.hasRolls); }
@@ -62,7 +62,7 @@ export class Dice extends DiceBase {
         return Dice.correctEscapeForEmoji(cleanWhitespace(output));
     }
     toRollStringXXS(hideRolls) {
-        const gradeEmoji = gradeToEmoji(this.grade), outputEmoji = hideRolls ? ":question:" : gradeEmoji ?? "", fixedOutput = this.hasFixed ? "f" : "", totalString = `<i><b>${this.total}${fixedOutput}</b></i>`, totalOutput = hideRolls ? `||${totalString}||` : totalString, output = `${outputEmoji} ${totalOutput}`;
+        const gradeEmoji = this.constructor.gradeToEmoji(this.grade), outputEmoji = hideRolls ? ":question:" : gradeEmoji ?? "", fixedOutput = this.hasFixed ? "f" : "", totalString = `<i><b>${this.total}${fixedOutput}</b></i>`, totalOutput = hideRolls ? `||${totalString}||` : totalString, output = `${outputEmoji} ${totalOutput}`;
         return cleanWhitespace(output);
     }
     toRollString(...args) {
@@ -89,4 +89,6 @@ export class Dice extends DiceBase {
     }
     static Child = DicePart;
     static correctEscapeForEmoji = (diceOutput) => diceOutput;
+    static gradeRoll = gradeRoll;
+    static gradeToEmoji = gradeToEmoji;
 }

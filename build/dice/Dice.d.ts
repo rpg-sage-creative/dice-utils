@@ -1,5 +1,5 @@
 import { DiceTest } from "../DiceTest.js";
-import { DieRollGrade } from "../grade.js";
+import { DieRollGrade, gradeRoll, gradeToEmoji } from "../grade.js";
 import { DiceOutputType } from "../types/DiceOutputType.js";
 import { DiceBase, type DiceBaseCore } from "./DiceBase.js";
 import { type DicePartCore, type TDicePart } from "./DicePart.js";
@@ -34,5 +34,7 @@ export declare class Dice<CoreType extends DiceCore<GameType>, ChildType extends
     static fromCore<CoreType extends DiceCore, DiceType extends TDice>(core: CoreType): DiceType;
     static readonly Child: typeof DiceBase;
     static correctEscapeForEmoji: (diceOutput: string) => string;
+    static readonly gradeRoll: typeof gradeRoll;
+    static readonly gradeToEmoji: typeof gradeToEmoji;
 }
 export {};
