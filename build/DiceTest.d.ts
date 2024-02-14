@@ -8,13 +8,13 @@ export declare enum DiceTestType {
     LessThanOrEqual = 5
 }
 /** The information about how to test dice results for success/failure and how to display that in the output. */
-export type DiceTestData = {
+export type DiceTestData<Type extends number = DiceTestType> = {
     /** a human readable alternative output */
     alias?: string;
     /** wether or not this test should be hidden */
     hidden: boolean;
     /** the fundamental test */
-    type: DiceTestType;
+    type: Type;
     /** the value to test against */
     value: number;
 };
@@ -36,8 +36,8 @@ export type HasDiceTest = {
 };
 export declare function appendTestToCore(core: HasDiceTestData, token: TokenData, _index: number, _tokens: TokenData[]): boolean;
 export declare class DiceTest {
-    protected data?: DiceTestData | undefined;
-    constructor(data?: DiceTestData | undefined);
+    protected data?: DiceTestData<DiceTestType> | undefined;
+    constructor(data?: DiceTestData<DiceTestType> | undefined);
     get alias(): string;
     get isHidden(): boolean;
     get isEmpty(): boolean;
@@ -45,7 +45,7 @@ export declare class DiceTest {
     get value(): number;
     /** Tests the value for pass/fail. If isEmpty, undefined is returned instead. */
     test(total: number): boolean | undefined;
-    toJSON(): DiceTestData | undefined;
+    toJSON(): DiceTestData<DiceTestType> | undefined;
     toString(leftPad?: string, rightPad?: string): string;
     /** The token key/regex used to generate DiceTestData */
     static getParsers(): TokenParsers;

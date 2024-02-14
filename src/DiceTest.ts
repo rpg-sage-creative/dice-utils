@@ -11,13 +11,13 @@ export enum DiceTestType {
 }
 
 /** The information about how to test dice results for success/failure and how to display that in the output. */
-export type DiceTestData = {
+export type DiceTestData<Type extends number = DiceTestType> = {
 	/** a human readable alternative output */
 	alias?: string;
 	/** wether or not this test should be hidden */
 	hidden: boolean;
 	/** the fundamental test */
-	type: DiceTestType;
+	type: Type;
 	/** the value to test against */
 	value: number;
 };
