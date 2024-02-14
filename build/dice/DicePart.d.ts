@@ -7,7 +7,7 @@ import { DiceOutputType } from "../types/DiceOutputType.js";
 import type { RollData } from "../types/RollData.js";
 import type { SortedRollData } from "../types/SortedDataRoll.js";
 import { DiceBase, type DiceBaseCore } from "./DiceBase.js";
-type DicePartCoreBase = {
+type DicePartCoreBase<TargetType extends number = DiceTestType> = {
     /** number of dice */
     count?: number;
     /** description of dice or modifier */
@@ -26,10 +26,10 @@ type DicePartCoreBase = {
     /** a target value test parsed generically */
     test?: DiceTestData;
     /** a target value data specific to the game system */
-    target?: DiceTestData;
+    target?: DiceTestData<TargetType>;
 };
-export type DicePartCoreArgs<TestType extends number = DiceTestType> = Partial<Omit<DicePartCoreBase, "target">> & {
-    targetOrTest?: DiceTestData<TestType>;
+export type DicePartCoreArgs<TargetType extends number = DiceTestType> = Partial<Omit<DicePartCoreBase, "target">> & {
+    targetOrTest?: DiceTestData<TargetType>;
 };
 export type DicePartCore<GameType extends number = number> = DicePartCoreBase & DiceBaseCore<never, "DicePart", GameType>;
 export type TDicePart = DicePart<DicePartCore>;
