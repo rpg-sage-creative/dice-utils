@@ -116,5 +116,5 @@ export class DicePart extends DiceBase {
         return this.create(core);
     }
     static reduceTokenToCore = reduceTokenToDicePartCore;
-    static targetDataToTestData = (_targetData) => undefined;
+    static targetDataToTestData = () => undefined;
 }

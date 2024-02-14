@@ -222,7 +222,7 @@ export class DicePart<
 
 	public static readonly reduceTokenToCore = reduceTokenToDicePartCore;
 
-	public static readonly targetDataToTestData: (targetData?: DiceTestData) => DiceTestData | undefined = (_targetData?: DiceTestData) => undefined;
+	public static readonly targetDataToTestData: (targetData?: DiceTestData) => DiceTestData | undefined = () => undefined;
 
 	//#endregion
 }
