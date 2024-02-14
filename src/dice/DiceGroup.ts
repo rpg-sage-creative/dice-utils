@@ -7,9 +7,11 @@ import { DiceOutputType } from "../types/DiceOutputType.js";
 import { DiceSecretMethodType } from "../types/DiceSecretMethodType.js";
 import { Dice, type DiceCore, type TDice } from "./Dice.js";
 import { DiceBase, type DiceBaseCore } from "./DiceBase.js";
-import { tokenize } from "@rsc-utils/string-utils";
+import { TokenData, tokenize } from "@rsc-utils/string-utils";
 import { getDiceTokenParsers } from "../token/getDiceTokenParsers.js";
-import { tokensToDiceGroup } from "../token/tokensToDiceGroup.js";
+import { partitionDicePartTokens } from "../token/partitionDicePartTokens.js";
+import { partitionDiceParts } from "../token/partitionDiceParts.js";
+import { TDicePart } from "./DicePart.js";
 
 type DiceGroupCoreBase = {
 	criticalMethodType?: DiceCriticalMethodType;
@@ -79,10 +81,22 @@ export class DiceGroup<
 		return new this(core as DiceGroupCore) as DiceGroupType;
 	}
 
-	public static parse<DiceType extends TDiceGroup>(diceString: string, outputType?: DiceOutputType): DiceType {
+	public static parse<DiceType extends TDiceGroup>(diceString: string, args?: DiceGroupCoreArgs): DiceType {
 		const tokens = tokenize(diceString, getDiceTokenParsers(), "desc");
-		return tokensToDiceGroup(tokens, this, { outputType });
+		return this.fromTokens(tokens, args);
 	}
+
+	public static fromTokens<DiceGroupType extends TDiceGroup>(tokens: TokenData[], args?: DiceGroupCoreArgs): DiceGroupType {
+		const partedTokens = this.partitionDicePartTokens(tokens);
+		const diceParts = partedTokens.map(tokens => this.Child.Child.fromTokens(tokens) as TDicePart);
+		const partedDiceParts = this.partitionDiceParts(diceParts);
+		const dice = partedDiceParts.map(diceCore => this.Child.create(diceCore) as TDice);
+		return this.create(dice, args);
+	}
+
+	public static readonly partitionDicePartTokens = partitionDicePartTokens; //NOSONAR
+
+	public static readonly partitionDiceParts = partitionDiceParts; //NOSONAR
 
 	public static readonly Child = Dice as typeof DiceBase;
 

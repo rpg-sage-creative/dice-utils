@@ -3,6 +3,9 @@ import { DiceOutputType } from "../types/DiceOutputType.js";
 import { DiceSecretMethodType } from "../types/DiceSecretMethodType.js";
 import { type DiceCore, type TDice } from "./Dice.js";
 import { DiceBase, type DiceBaseCore } from "./DiceBase.js";
+import { TokenData } from "@rsc-utils/string-utils";
+import { partitionDicePartTokens } from "../token/partitionDicePartTokens.js";
+import { partitionDiceParts } from "../token/partitionDiceParts.js";
 type DiceGroupCoreBase = {
     criticalMethodType?: DiceCriticalMethodType;
     outputType?: DiceOutputType;
@@ -20,7 +23,10 @@ export declare class DiceGroup<CoreType extends DiceGroupCore<GameType>, ChildTy
     toRollString(...args: (boolean | DiceOutputType)[]): string;
     static create<DiceGroupType extends TDiceGroup, DiceType extends TDice>(dice: DiceType[], args?: DiceGroupCoreArgs): DiceGroupType;
     static fromCore<CoreType extends DiceGroupCore, DiceGroupType extends TDiceGroup>(core: CoreType): DiceGroupType;
-    static parse<DiceType extends TDiceGroup>(diceString: string, outputType?: DiceOutputType): DiceType;
+    static parse<DiceType extends TDiceGroup>(diceString: string, args?: DiceGroupCoreArgs): DiceType;
+    static fromTokens<DiceGroupType extends TDiceGroup>(tokens: TokenData[], args?: DiceGroupCoreArgs): DiceGroupType;
+    static readonly partitionDicePartTokens: typeof partitionDicePartTokens;
+    static readonly partitionDiceParts: typeof partitionDiceParts;
     static readonly Child: typeof DiceBase;
 }
 export {};

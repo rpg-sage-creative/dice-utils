@@ -7,7 +7,8 @@ import { Dice } from "./Dice.js";
 import { DiceBase } from "./DiceBase.js";
 import { tokenize } from "@rsc-utils/string-utils";
 import { getDiceTokenParsers } from "../token/getDiceTokenParsers.js";
-import { tokensToDiceGroup } from "../token/tokensToDiceGroup.js";
+import { partitionDicePartTokens } from "../token/partitionDicePartTokens.js";
+import { partitionDiceParts } from "../token/partitionDiceParts.js";
 export class DiceGroup extends DiceBase {
     get criticalMethodType() { return this.core.criticalMethodType; }
     get outputType() { return this.core.outputType; }
@@ -44,9 +45,18 @@ export class DiceGroup extends DiceBase {
     static fromCore(core) {
         return new this(core);
     }
-    static parse(diceString, outputType) {
+    static parse(diceString, args) {
         const tokens = tokenize(diceString, getDiceTokenParsers(), "desc");
-        return tokensToDiceGroup(tokens, this, { outputType });
+        return this.fromTokens(tokens, args);
     }
+    static fromTokens(tokens, args) {
+        const partedTokens = this.partitionDicePartTokens(tokens);
+        const diceParts = partedTokens.map(tokens => this.Child.Child.fromTokens(tokens));
+        const partedDiceParts = this.partitionDiceParts(diceParts);
+        const dice = partedDiceParts.map(diceCore => this.Child.create(diceCore));
+        return this.create(dice, args);
+    }
+    static partitionDicePartTokens = partitionDicePartTokens;
+    static partitionDiceParts = partitionDiceParts;
     static Child = Dice;
 }

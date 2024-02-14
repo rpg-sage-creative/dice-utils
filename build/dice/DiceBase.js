@@ -21,10 +21,9 @@ export class DiceBase extends HasIdCore {
     static fromCore(_core) {
         throw new TypeError("Not Implemented.");
     }
-    static fromTokens(_tokens) {
+    static fromTokens(_tokens, ..._args) {
         throw new TypeError("Not Implemented.");
     }
-    static reduceTokenToCore;
     static Child;
     static GameType = 0;
 }

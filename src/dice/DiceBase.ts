@@ -1,7 +1,6 @@
 import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import type { TokenData } from "@rsc-utils/string-utils";
-import type { reduceTokenToCore } from "../token/reduceTokenToDicePartCore.js";
 import { DiceOutputType } from "../types/DiceOutputType.js";
 
 export type TDiceBaseCore = DiceBaseCore<any, any>;
@@ -50,18 +49,16 @@ export abstract class DiceBase<
 	public abstract toRollString(...args: (boolean | DiceOutputType)[]): string;
 
 	public static create(..._args: any[]): any {
-		throw new TypeError("Not Implemented.");
+		throw new TypeError("Not Implemented."); //NOSONAR
 	}
 
 	public static fromCore(_core: any): any {
-		throw new TypeError("Not Implemented.");
+		throw new TypeError("Not Implemented."); //NOSONAR
 	}
 
-	public static fromTokens(_tokens: TokenData[]): any {
-		throw new TypeError("Not Implemented.");
+	public static fromTokens(_tokens: TokenData[], ..._args: any[]): any {
+		throw new TypeError("Not Implemented."); //NOSONAR
 	}
-
-	public static reduceTokenToCore: reduceTokenToCore<any>; //NOSONAR
 
 	public static Child: typeof DiceBase; //NOSONAR
 
