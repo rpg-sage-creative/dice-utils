@@ -6,9 +6,9 @@ import { DiceDropKeep } from "../manipulate/DiceDropKeep.js";
 import { DiceExplode } from "../manipulate/DiceExplode.js";
 import { DiceThreshold } from "../manipulate/DiceThreshold.js";
 import { rollDicePart } from "../roll/rollDicePart.js";
+import { reduceTokenToDicePartCore } from "../token/reduceTokenToDicePartCore.js";
 import { DiceOutputType } from "../types/DiceOutputType.js";
 import { DiceBase } from "./DiceBase.js";
-import { reduceTokenToDicePartCore } from "../token/reduceTokenToDicePartCore.js";
 export class DicePart extends DiceBase {
     constructor(core) {
         super(core);
@@ -103,7 +103,8 @@ export class DicePart extends DiceBase {
             sides: args.sides ?? 0,
             sign: args.sign,
             sortedRollData: args.sortedRollData,
-            test: args.test,
+            target: args.targetOrTest,
+            test: this.targetDataToTestData(args.targetOrTest) ?? args.test,
             children: undefined
         });
     }
@@ -115,4 +116,5 @@ export class DicePart extends DiceBase {
         return this.create(core);
     }
     static reduceTokenToCore = reduceTokenToDicePartCore;
+    static targetDataToTestData = (_targetData) => undefined;
 }

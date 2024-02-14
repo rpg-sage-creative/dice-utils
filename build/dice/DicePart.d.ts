@@ -1,12 +1,12 @@
-import { DiceTest, type DiceTestData } from "../DiceTest.js";
+import type { TokenData } from "@rsc-utils/string-utils";
+import { DiceTest, type DiceTestData, type DiceTestType } from "../DiceTest.js";
 import { type DiceManipulationData } from "../manipulate/DiceManipulationData.js";
+import { reduceTokenToDicePartCore } from "../token/reduceTokenToDicePartCore.js";
 import type { DiceOperator } from "../types/DiceOperator.js";
 import { DiceOutputType } from "../types/DiceOutputType.js";
 import type { RollData } from "../types/RollData.js";
 import type { SortedRollData } from "../types/SortedDataRoll.js";
 import { DiceBase, type DiceBaseCore } from "./DiceBase.js";
-import { TokenData } from "@rsc-utils/string-utils";
-import { reduceTokenToDicePartCore } from "../token/reduceTokenToDicePartCore.js";
 type DicePartCoreBase = {
     /** number of dice */
     count?: number;
@@ -23,10 +23,14 @@ type DicePartCoreBase = {
     /** sign (- or +) of the dice or modifier */
     sign?: DiceOperator;
     sortedRollData?: SortedRollData;
-    /** target test information */
+    /** a target value test parsed generically */
     test?: DiceTestData;
+    /** a target value data specific to the game system */
+    target?: DiceTestData;
 };
-export type DicePartCoreArgs = Partial<DicePartCoreBase>;
+export type DicePartCoreArgs<TestType extends number = DiceTestType> = Partial<Omit<DicePartCoreBase, "target">> & {
+    targetOrTest?: DiceTestData<TestType>;
+};
 export type DicePartCore<GameType extends number = number> = DicePartCoreBase & DiceBaseCore<never, "DicePart", GameType>;
 export type TDicePart = DicePart<DicePartCore>;
 export declare class DicePart<CoreType extends DicePartCore<GameType>, GameType extends number = number> extends DiceBase<CoreType, never, "DicePart", GameType> {
@@ -74,6 +78,7 @@ export declare class DicePart<CoreType extends DicePartCore<GameType>, GameType 
     static create<DicePartType extends TDicePart>(args?: DicePartCoreArgs): DicePartType;
     static fromCore<CoreType extends DicePartCore, DicePartType extends TDicePart>(core: CoreType): DicePartType;
     static fromTokens<DicePartType extends TDicePart>(tokens: TokenData[]): DicePartType;
-    static reduceTokenToCore: typeof reduceTokenToDicePartCore;
+    static readonly reduceTokenToCore: typeof reduceTokenToDicePartCore;
+    static readonly targetDataToTestData: (targetData?: DiceTestData) => DiceTestData | undefined;
 }
 export {};

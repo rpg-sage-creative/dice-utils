@@ -1,5 +1,6 @@
 import { randomSnowflake } from "@rsc-utils/snowflake-utils";
-import { DiceTest, type DiceTestData } from "../DiceTest.js";
+import type { TokenData } from "@rsc-utils/string-utils";
+import { DiceTest, type DiceTestData, type DiceTestType } from "../DiceTest.js";
 import { cleanDicePartDescription } from "../cleanDicePartDescription.js";
 import { hasSecretFlag } from "../internal/hasSecretFlag.js";
 import { DiceDropKeep } from "../manipulate/DiceDropKeep.js";
@@ -7,13 +8,12 @@ import { DiceExplode } from "../manipulate/DiceExplode.js";
 import { type DiceManipulationData } from "../manipulate/DiceManipulationData.js";
 import { DiceThreshold } from "../manipulate/DiceThreshold.js";
 import { rollDicePart } from "../roll/rollDicePart.js";
+import { reduceTokenToDicePartCore } from "../token/reduceTokenToDicePartCore.js";
 import type { DiceOperator } from "../types/DiceOperator.js";
 import { DiceOutputType } from "../types/DiceOutputType.js";
 import type { RollData } from "../types/RollData.js";
 import type { SortedRollData } from "../types/SortedDataRoll.js";
 import { DiceBase, type DiceBaseCore } from "./DiceBase.js";
-import { TokenData } from "@rsc-utils/string-utils";
-import { reduceTokenToDicePartCore } from "../token/reduceTokenToDicePartCore.js";
 
 type DicePartCoreBase = {
 
@@ -40,12 +40,16 @@ type DicePartCoreBase = {
 
 	sortedRollData?: SortedRollData;
 
-	/** target test information */
+	/** a target value test parsed generically */
 	test?: DiceTestData;
 
+	/** a target value data specific to the game system */
+	target?: DiceTestData;
 };
 
-export type DicePartCoreArgs = Partial<DicePartCoreBase>;
+export type DicePartCoreArgs<TestType extends number = DiceTestType> = Partial<Omit<DicePartCoreBase,"target">> & {
+	targetOrTest?: DiceTestData<TestType>;
+};
 
 export type DicePartCore<GameType extends number = number>
 	= DicePartCoreBase
@@ -200,7 +204,8 @@ export class DicePart<
 			sides: args.sides ?? 0,
 			sign: args.sign,
 			sortedRollData: args.sortedRollData,
-			test: args.test,
+			target: args.targetOrTest,
+			test: this.targetDataToTestData(args.targetOrTest) ?? args.test,
 
 			children: undefined!
 		});
@@ -215,7 +220,9 @@ export class DicePart<
 		return this.create(core);
 	}
 
-	public static reduceTokenToCore = reduceTokenToDicePartCore; //NOSONAR
+	public static readonly reduceTokenToCore = reduceTokenToDicePartCore;
+
+	public static readonly targetDataToTestData: (targetData?: DiceTestData) => DiceTestData | undefined = (_targetData?: DiceTestData) => undefined;
 
 	//#endregion
 }
