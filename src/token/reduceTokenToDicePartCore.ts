@@ -1,5 +1,6 @@
 import type { TokenData } from "@rsc-utils/string-utils";
 import { appendTestToCore } from "../DiceTest.js";
+import type { TDiceBaseCore } from "../dice/DiceBase.js";
 import type { DicePartCore } from "../dice/DicePart.js";
 import { DiceDropKeep, type DiceDropKeepType } from "../manipulate/DiceDropKeep.js";
 import { appendManipulationToCore } from "../manipulate/appendManipulationToCore.js";
@@ -55,6 +56,8 @@ function reduceDescriptionToken<T extends DicePartCore>(core: T, token: TokenDat
 	core.description = (core.description ?? "") + token.token;
 	return core;
 }
+
+export type reduceTokenToCore<T extends TDiceBaseCore> = (core: T, token: TokenData, index: number, tokens: TokenData[], reduceSignToDropKeepData?: ReduceSignToDropKeep[]) => T;
 
 export function reduceTokenToDicePartCore<T extends DicePartCore>(core: T, token: TokenData, index: number, tokens: TokenData[], reduceSignToDropKeepData?: ReduceSignToDropKeep[]): T {
 	if (reduceDiceToken(core, token, reduceSignToDropKeepData)) {

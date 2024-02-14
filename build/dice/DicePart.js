@@ -8,6 +8,7 @@ import { DiceThreshold } from "../manipulate/DiceThreshold.js";
 import { rollDicePart } from "../roll/rollDicePart.js";
 import { DiceOutputType } from "../types/DiceOutputType.js";
 import { DiceBase } from "./DiceBase.js";
+import { reduceTokenToDicePartCore } from "../token/reduceTokenToDicePartCore.js";
 export class DicePart extends DiceBase {
     constructor(core) {
         super(core);
@@ -90,7 +91,7 @@ export class DicePart extends DiceBase {
     }
     toRollString() { return ""; }
     static create(args = {}) {
-        return new this({
+        return this.fromCore({
             objectType: "DicePart",
             gameType: 0,
             id: randomSnowflake(),
@@ -109,4 +110,9 @@ export class DicePart extends DiceBase {
     static fromCore(core) {
         return new this(core);
     }
+    static fromTokens(tokens) {
+        const core = tokens.reduce(this.reduceTokenToCore, { description: "" });
+        return this.create(core);
+    }
+    static reduceTokenToCore = reduceTokenToDicePartCore;
 }

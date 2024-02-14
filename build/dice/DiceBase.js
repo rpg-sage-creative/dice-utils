@@ -3,8 +3,8 @@ export class DiceBase extends HasIdCore {
     _children;
     get children() {
         if (!this._children) {
-            const fromCore = this.constructor.Child.fromCore;
-            this._children = this.core.children.map(fromCore);
+            const childClass = this.constructor.Child;
+            this._children = this.core.children.map(childCore => childClass.fromCore(childCore));
         }
         return this._children;
     }
@@ -21,5 +21,9 @@ export class DiceBase extends HasIdCore {
     static fromCore(_core) {
         throw new TypeError("Not Implemented.");
     }
+    static fromTokens(_tokens) {
+        throw new TypeError("Not Implemented.");
+    }
+    static reduceTokenToCore;
     static Child;
 }

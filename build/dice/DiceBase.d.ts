@@ -1,5 +1,7 @@
 import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
+import type { TokenData } from "@rsc-utils/string-utils";
+import type { reduceTokenToCore } from "../token/reduceTokenToDicePartCore.js";
 import { DiceOutputType } from "../types/DiceOutputType.js";
 export type TDiceBaseCore = DiceBaseCore<any, any>;
 export type DiceBaseCore<ChildCoreType extends TDiceBaseCore, ObjectType extends string, GameType extends number = number> = IdCore<ObjectType, Snowflake> & {
@@ -18,5 +20,7 @@ export declare abstract class DiceBase<Core extends DiceBaseCore<any, any, GameT
     abstract toRollString(...args: (boolean | DiceOutputType)[]): string;
     static create(..._args: any[]): any;
     static fromCore(_core: any): any;
+    static fromTokens(_tokens: TokenData[]): any;
+    static reduceTokenToCore: reduceTokenToCore<any>;
     static Child: typeof DiceBase;
 }

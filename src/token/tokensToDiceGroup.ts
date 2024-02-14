@@ -1,7 +1,6 @@
 import type { TokenData } from "@rsc-utils/string-utils";
 import type { DiceGroup, DiceGroupCoreArgs, TDiceGroup } from "../dice/DiceGroup.js";
 import type { TDicePart } from "../dice/DicePart.js";
-import { tokensToDicePart } from "./tokensToDicePart.js";
 
 function isTestOrTarget(token: TokenData): token is TokenData<"target" | "test"> {
 	return ["test", "target"].includes(token.key);
@@ -15,7 +14,7 @@ export function tokensToDiceGroup<
 			T extends TDiceGroup,
 			U extends typeof DiceGroup = typeof DiceGroup,
 			V extends DiceGroupCoreArgs = DiceGroupCoreArgs
-			>(tokens: TokenData[], dcClass: U, args: V): T {
+			>(tokens: TokenData[], dgClass: U, args: V): T {
 
 	let currentPart: TokenData[];
 	const partedTokens: TokenData[][] = [];
@@ -30,7 +29,9 @@ export function tokensToDiceGroup<
 			partedTokens.push(currentPart);
 		}
 	});
-	const diceParts = partedTokens.filter(array => array.length).map(tokensToDicePart);
+	const diceParts = partedTokens
+		.filter(array => array.length)
+		.map(tokens => dgClass.Child.Child.fromTokens(tokens));
 
 	let currentDice: TDicePart[];
 	const partedDice: TDicePart[][] = [];
@@ -45,6 +46,6 @@ export function tokensToDiceGroup<
 		//TODO: After a test, wee need to start another dicepart ... Or a test becomes its own dicepart
 	});
 
-	const diceCores = partedDice.map(dcClass.Child.create);
-	return dcClass.create(diceCores, args) as T;
+	const diceCores = partedDice.map(diceCore => dgClass.Child.create(diceCore));
+	return dgClass.create(diceCores, args);
 }

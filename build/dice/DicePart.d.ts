@@ -5,6 +5,8 @@ import { DiceOutputType } from "../types/DiceOutputType.js";
 import type { RollData } from "../types/RollData.js";
 import type { SortedRollData } from "../types/SortedDataRoll.js";
 import { DiceBase, type DiceBaseCore } from "./DiceBase.js";
+import { TokenData } from "@rsc-utils/string-utils";
+import { reduceTokenToDicePartCore } from "../token/reduceTokenToDicePartCore.js";
 type DicePartCoreBase = {
     /** number of dice */
     count?: number;
@@ -71,5 +73,7 @@ export declare class DicePart<CoreType extends DicePartCore<GameType>, GameType 
     toRollString(): string;
     static create<DicePartType extends TDicePart>(args?: DicePartCoreArgs): DicePartType;
     static fromCore<CoreType extends DicePartCore, DicePartType extends TDicePart>(core: CoreType): DicePartType;
+    static fromTokens<DicePartType extends TDicePart>(tokens: TokenData[]): DicePartType;
+    static reduceTokenToCore: typeof reduceTokenToDicePartCore;
 }
 export {};

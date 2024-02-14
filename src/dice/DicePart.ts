@@ -12,6 +12,8 @@ import { DiceOutputType } from "../types/DiceOutputType.js";
 import type { RollData } from "../types/RollData.js";
 import type { SortedRollData } from "../types/SortedDataRoll.js";
 import { DiceBase, type DiceBaseCore } from "./DiceBase.js";
+import { TokenData } from "@rsc-utils/string-utils";
+import { reduceTokenToDicePartCore } from "../token/reduceTokenToDicePartCore.js";
 
 type DicePartCoreBase = {
 
@@ -185,7 +187,7 @@ export class DicePart<
 	//#region static
 
 	public static create<DicePartType extends TDicePart>(args: DicePartCoreArgs = {}): DicePartType {
-		return new this({
+		return this.fromCore({
 			objectType: "DicePart",
 			gameType: 0,
 			id: randomSnowflake(),
@@ -201,12 +203,19 @@ export class DicePart<
 			test: args.test,
 
 			children: undefined!
-		}) as DicePartType;
+		});
 	}
 
 	public static fromCore<CoreType extends DicePartCore, DicePartType extends TDicePart>(core: CoreType): DicePartType {
 		return new this(core as DicePartCore) as DicePartType;
 	}
+
+	public static fromTokens<DicePartType extends TDicePart>(tokens: TokenData[]): DicePartType {
+		const core = tokens.reduce(this.reduceTokenToCore, { description:"" } as DicePartCore);
+		return this.create(core);
+	}
+
+	public static reduceTokenToCore = reduceTokenToDicePartCore; //NOSONAR
 
 	//#endregion
 }
