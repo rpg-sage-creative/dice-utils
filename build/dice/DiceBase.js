@@ -26,4 +26,5 @@ export class DiceBase extends HasIdCore {
     }
     static reduceTokenToCore;
     static Child;
+    static GameType = 0;
 }

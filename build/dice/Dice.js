@@ -79,7 +79,7 @@ export class Dice extends DiceBase {
     static create(diceParts) {
         return new this({
             objectType: "Dice",
-            gameType: 0,
+            gameType: this.GameType,
             id: randomSnowflake(),
             children: diceParts.map(dicePart => dicePart.toJSON())
         });

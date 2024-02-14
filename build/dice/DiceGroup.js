@@ -33,7 +33,7 @@ export class DiceGroup extends DiceBase {
     static create(dice, args = {}) {
         return new this({
             objectType: "DiceGroup",
-            gameType: 0,
+            gameType: this.GameType,
             id: randomSnowflake(),
             children: dice.map(dice => dice.toJSON()),
             criticalMethodType: args.criticalMethodType,

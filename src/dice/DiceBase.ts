@@ -64,4 +64,6 @@ export abstract class DiceBase<
 	public static reduceTokenToCore: reduceTokenToCore<any>; //NOSONAR
 
 	public static Child: typeof DiceBase; //NOSONAR
+
+	public static GameType = 0; //NOSONAR
 }

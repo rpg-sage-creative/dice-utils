@@ -136,7 +136,7 @@ export class Dice<
 	public static create<DiceType extends TDice, DicePartType extends TDicePart>(diceParts: DicePartType[]): DiceType {
 		return new this({
 			objectType: "Dice",
-			gameType: 0,
+			gameType: this.GameType,
 			id: randomSnowflake(),
 			children: diceParts.map(dicePart => dicePart.toJSON())
 		}) as DiceType;

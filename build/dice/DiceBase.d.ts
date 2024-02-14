@@ -23,4 +23,5 @@ export declare abstract class DiceBase<Core extends DiceBaseCore<any, any, GameT
     static fromTokens(_tokens: TokenData[]): any;
     static reduceTokenToCore: reduceTokenToCore<any>;
     static Child: typeof DiceBase;
+    static GameType: number;
 }

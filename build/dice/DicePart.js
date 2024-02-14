@@ -93,7 +93,7 @@ export class DicePart extends DiceBase {
     static create(args = {}) {
         return this.fromCore({
             objectType: "DicePart",
-            gameType: 0,
+            gameType: this.GameType,
             id: randomSnowflake(),
             count: args.count ?? 0,
             description: cleanDicePartDescription(args.description),

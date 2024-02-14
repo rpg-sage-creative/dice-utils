@@ -189,7 +189,7 @@ export class DicePart<
 	public static create<DicePartType extends TDicePart>(args: DicePartCoreArgs = {}): DicePartType {
 		return this.fromCore({
 			objectType: "DicePart",
-			gameType: 0,
+			gameType: this.GameType,
 			id: randomSnowflake(),
 
 			count: args.count ?? 0,
