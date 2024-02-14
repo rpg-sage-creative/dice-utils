@@ -4,6 +4,7 @@ import { DiceSecretMethodType } from "../types/DiceSecretMethodType.js";
 import { type DiceCore, type TDice } from "./Dice.js";
 import { DiceBase, type DiceBaseCore } from "./DiceBase.js";
 import { TokenData } from "@rsc-utils/string-utils";
+import { getDiceTokenParsers } from "../token/getDiceTokenParsers.js";
 import { partitionDicePartTokens } from "../token/partitionDicePartTokens.js";
 import { partitionDiceParts } from "../token/partitionDiceParts.js";
 type DiceGroupCoreBase = {
@@ -25,6 +26,7 @@ export declare class DiceGroup<CoreType extends DiceGroupCore<GameType>, ChildTy
     static fromCore<CoreType extends DiceGroupCore, DiceGroupType extends TDiceGroup>(core: CoreType): DiceGroupType;
     static parse<DiceType extends TDiceGroup>(diceString: string, args?: DiceGroupCoreArgs): DiceType;
     static fromTokens<DiceGroupType extends TDiceGroup>(tokens: TokenData[], args?: DiceGroupCoreArgs): DiceGroupType;
+    static readonly getTokenParsers: typeof getDiceTokenParsers;
     static readonly partitionDicePartTokens: typeof partitionDicePartTokens;
     static readonly partitionDiceParts: typeof partitionDiceParts;
     static readonly Child: typeof DiceBase;

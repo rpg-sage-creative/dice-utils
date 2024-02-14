@@ -70,7 +70,7 @@ export class DiceGroup<
 			gameType: this.GameType,
 			id: randomSnowflake(),
 
-			children: dice.map(dice => dice.toJSON()),
+			children: dice.map(_dice => _dice.toJSON()),
 			criticalMethodType: args.criticalMethodType,
 			outputType: args.outputType,
 			secretMethodType: args.secretMethodType
@@ -82,7 +82,7 @@ export class DiceGroup<
 	}
 
 	public static parse<DiceType extends TDiceGroup>(diceString: string, args?: DiceGroupCoreArgs): DiceType {
-		const tokens = tokenize(diceString, getDiceTokenParsers(), "desc");
+		const tokens = tokenize(diceString, this.getTokenParsers(), "desc");
 		return this.fromTokens(tokens, args);
 	}
 
@@ -94,9 +94,11 @@ export class DiceGroup<
 		return this.create(dice, args);
 	}
 
-	public static readonly partitionDicePartTokens = partitionDicePartTokens; //NOSONAR
+	public static readonly getTokenParsers = getDiceTokenParsers;
 
-	public static readonly partitionDiceParts = partitionDiceParts; //NOSONAR
+	public static readonly partitionDicePartTokens = partitionDicePartTokens;
+
+	public static readonly partitionDiceParts = partitionDiceParts;
 
 	public static readonly Child = Dice as typeof DiceBase;
 
