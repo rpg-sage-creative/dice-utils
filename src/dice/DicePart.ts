@@ -47,8 +47,8 @@ type DicePartCoreBase<TargetType extends number = DiceTestType> = {
 	target?: DiceTestData<TargetType>;
 };
 
-export type DicePartCoreArgs<TargetType extends number = DiceTestType> = Partial<Omit<DicePartCoreBase,"target">> & {
-	targetOrTest?: DiceTestData<TargetType>;
+export type DicePartCoreArgs = Partial<Omit<DicePartCoreBase,"target">> & {
+	targetOrTest?: DiceTestData<number>;
 };
 
 export type DicePartCore<TargetType extends number = number, GameType extends number = number>
