@@ -47,9 +47,7 @@ type DicePartCoreBase<TargetType extends number = DiceTestType> = {
 	target?: DiceTestData<TargetType>;
 };
 
-export type DicePartCoreArgs = Partial<Omit<DicePartCoreBase,"target">> & {
-	targetOrTest?: DiceTestData<number>;
-};
+export type DicePartCoreArgs = Partial<DicePartCoreBase<number>>;
 
 export type DicePartCore<TargetType extends number = number, GameType extends number = number>
 	= DicePartCoreBase<TargetType>
@@ -197,18 +195,17 @@ export class DicePart<
 			gameType: this.GameType,
 			id: randomSnowflake(),
 
+			children: undefined!,
 			count: args.count ?? 0,
 			description: cleanDicePartDescription(args.description),
+			fixedRolls: args.fixedRolls,
 			manipulation: args.manipulation,
 			modifier: args.modifier ?? 0,
-			fixedRolls: args.fixedRolls,
 			sides: args.sides ?? 0,
 			sign: args.sign,
 			sortedRollData: args.sortedRollData,
-			target: args.targetOrTest,
-			test: this.targetDataToTestData(args.targetOrTest) ?? args.test,
-
-			children: undefined!
+			target: args.target,
+			test: this.targetDataToTestData(args.target) ?? args.test,
 		});
 	}
 
