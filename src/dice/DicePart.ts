@@ -51,14 +51,15 @@ export type DicePartCoreArgs<TargetType extends number = DiceTestType> = Partial
 	targetOrTest?: DiceTestData<TargetType>;
 };
 
-export type DicePartCore<GameType extends number = number>
-	= DicePartCoreBase
+export type DicePartCore<TargetType extends number = DiceTestType, GameType extends number = number>
+	= DicePartCoreBase<TargetType>
 	& DiceBaseCore<never, "DicePart", GameType>;
 
 export type TDicePart = DicePart<DicePartCore>;
 
 export class DicePart<
-			CoreType extends DicePartCore<GameType>,
+			CoreType extends DicePartCore<TargetType, GameType>,
+			TargetType extends number = DiceTestType,
 			GameType extends number = number
 			>extends DiceBase<CoreType, never, "DicePart", GameType> {
 
