@@ -28,9 +28,7 @@ type DicePartCoreBase<TargetType extends number = DiceTestType> = {
     /** a target value data specific to the game system */
     target?: DiceTestData<TargetType>;
 };
-export type DicePartCoreArgs<TargetType extends number = DiceTestType> = Partial<Omit<DicePartCoreBase, "target">> & {
-    targetOrTest?: DiceTestData<TargetType>;
-};
+export type DicePartCoreArgs = Partial<DicePartCoreBase<number>>;
 export type DicePartCore<TargetType extends number = number, GameType extends number = number> = DicePartCoreBase<TargetType> & DiceBaseCore<never, "DicePart", GameType>;
 export type TDicePart = DicePart<DicePartCore>;
 export declare class DicePart<CoreType extends DicePartCore<TargetType, GameType>, TargetType extends number = number, GameType extends number = number> extends DiceBase<CoreType, never, "DicePart", GameType> {

@@ -95,17 +95,17 @@ export class DicePart extends DiceBase {
             objectType: "DicePart",
             gameType: this.GameType,
             id: randomSnowflake(),
+            children: undefined,
             count: args.count ?? 0,
             description: cleanDicePartDescription(args.description),
+            fixedRolls: args.fixedRolls,
             manipulation: args.manipulation,
             modifier: args.modifier ?? 0,
-            fixedRolls: args.fixedRolls,
             sides: args.sides ?? 0,
             sign: args.sign,
             sortedRollData: args.sortedRollData,
-            target: args.targetOrTest,
-            test: this.targetDataToTestData(args.targetOrTest) ?? args.test,
-            children: undefined
+            target: args.target,
+            test: this.targetDataToTestData(args.target) ?? args.test,
         });
     }
     static fromCore(core) {
