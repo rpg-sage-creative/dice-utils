@@ -31,9 +31,9 @@ type DicePartCoreBase<TargetType extends number = DiceTestType> = {
 export type DicePartCoreArgs<TargetType extends number = DiceTestType> = Partial<Omit<DicePartCoreBase, "target">> & {
     targetOrTest?: DiceTestData<TargetType>;
 };
-export type DicePartCore<TargetType extends number = DiceTestType, GameType extends number = number> = DicePartCoreBase<TargetType> & DiceBaseCore<never, "DicePart", GameType>;
+export type DicePartCore<TargetType extends number = number, GameType extends number = number> = DicePartCoreBase<TargetType> & DiceBaseCore<never, "DicePart", GameType>;
 export type TDicePart = DicePart<DicePartCore>;
-export declare class DicePart<CoreType extends DicePartCore<TargetType, GameType>, TargetType extends number = DiceTestType, GameType extends number = number> extends DiceBase<CoreType, never, "DicePart", GameType> {
+export declare class DicePart<CoreType extends DicePartCore<TargetType, GameType>, TargetType extends number = number, GameType extends number = number> extends DiceBase<CoreType, never, "DicePart", GameType> {
     constructor(core: CoreType);
     get count(): number;
     get description(): string;
@@ -79,6 +79,6 @@ export declare class DicePart<CoreType extends DicePartCore<TargetType, GameType
     static fromCore<CoreType extends DicePartCore, DicePartType extends TDicePart>(core: CoreType): DicePartType;
     static fromTokens<DicePartType extends TDicePart>(tokens: TokenData[]): DicePartType;
     static readonly reduceTokenToCore: typeof reduceTokenToDicePartCore;
-    static readonly targetDataToTestData: (targetData?: DiceTestData) => DiceTestData | undefined;
+    static readonly targetDataToTestData: (targetData?: DiceTestData<number>) => DiceTestData | undefined;
 }
 export {};

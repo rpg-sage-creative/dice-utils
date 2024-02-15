@@ -51,7 +51,7 @@ export type DicePartCoreArgs<TargetType extends number = DiceTestType> = Partial
 	targetOrTest?: DiceTestData<TargetType>;
 };
 
-export type DicePartCore<TargetType extends number = DiceTestType, GameType extends number = number>
+export type DicePartCore<TargetType extends number = number, GameType extends number = number>
 	= DicePartCoreBase<TargetType>
 	& DiceBaseCore<never, "DicePart", GameType>;
 
@@ -59,7 +59,7 @@ export type TDicePart = DicePart<DicePartCore>;
 
 export class DicePart<
 			CoreType extends DicePartCore<TargetType, GameType>,
-			TargetType extends number = DiceTestType,
+			TargetType extends number = number,
 			GameType extends number = number
 			>extends DiceBase<CoreType, never, "DicePart", GameType> {
 
@@ -223,7 +223,7 @@ export class DicePart<
 
 	public static readonly reduceTokenToCore = reduceTokenToDicePartCore;
 
-	public static readonly targetDataToTestData: (targetData?: DiceTestData) => DiceTestData | undefined = () => undefined;
+	public static readonly targetDataToTestData: (targetData?: DiceTestData<number>) => DiceTestData | undefined = () => undefined;
 
 	//#endregion
 }
