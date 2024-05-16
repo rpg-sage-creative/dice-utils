@@ -1,7 +1,7 @@
 {
 	"name": "@rsc-utils/dice-utils",
 	"version": "0.0.13",
-	"license": "ISC",
+	"license": "LGPL-3.0-or-later",
 	"main": "build/index.js",
 	"type": "module",
 	"scripts": {
