@@ -6,4 +6,6 @@ export function targetDataToTestData(targetData?: DiceTestData<TargetType>): Dic
 		return DiceTest.createData(DiceTestType.GreaterThanOrEqual, targetData.value, targetData.hidden, "vs");
 	}
 	return undefined;
+	// do we assume a default?
+	// return DiceTest.createData(DiceTestType.GreaterThanOrEqual, 8, false, "vs");
 }
