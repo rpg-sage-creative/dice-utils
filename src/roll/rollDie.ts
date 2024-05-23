@@ -1,4 +1,4 @@
-import { randomInt } from "@rsc-utils/random-utils";
+import { randomInt } from "../random/randomInt.js";
 
 /**
  * Returns the results of rolling a single die.
