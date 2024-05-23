@@ -1,5 +1,5 @@
 import { DiceTest } from "../DiceTest.js";
-import { DieRollGrade, gradeRoll, gradeToEmoji } from "../grade.js";
+import { gradeRoll, gradeToEmoji, type DieRollGrade } from "../grade.js";
 import { DiceOutputType } from "../types/DiceOutputType.js";
 import { DiceBase, type DiceBaseCore } from "./DiceBase.js";
 import { type DicePartCore, type TDicePart } from "./DicePart.js";

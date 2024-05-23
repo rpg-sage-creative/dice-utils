@@ -1,7 +1,7 @@
 import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
 import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import type { TokenData } from "@rsc-utils/string-utils";
-import { DiceOutputType } from "../types/DiceOutputType.js";
+import type { DiceOutputType } from "../types/DiceOutputType.js";
 
 export type TDiceBaseCore = DiceBaseCore<any, any>;
 

@@ -1,7 +1,7 @@
 import { randomSnowflake } from "@rsc-utils/snowflake-utils";
 import { cleanWhitespace, dequote } from "@rsc-utils/string-utils";
 import { DiceTest } from "../DiceTest.js";
-import { DieRollGrade, gradeRoll, gradeToEmoji } from "../grade.js";
+import { gradeRoll, gradeToEmoji, type DieRollGrade } from "../grade.js";
 import { detick } from "../internal/detick.js";
 import { isBoolean } from "../internal/isBoolean.js";
 import { isDiceOutputType } from "../internal/isDiceOutputType.js";
