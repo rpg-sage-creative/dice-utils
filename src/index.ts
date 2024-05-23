@@ -4,7 +4,6 @@ export * from "./markup/index.js";
 export * from "./math/index.js";
 export * from "./roll/index.js";
 export * from "./stats/index.js";
-export * from "./systems/index.js";
 export * from "./token/index.js";
 export * from "./types/index.js";
 export * from "./cleanDicePartDescription.js";
