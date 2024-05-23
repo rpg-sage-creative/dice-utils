@@ -1,0 +1,1 @@
+export enum TargetType { None = 0, VS = 1 }
