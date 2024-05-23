@@ -1,12 +1,12 @@
+import { TokenData } from "@rsc-utils/string-utils";
+import { getDiceTokenParsers } from "../token/getDiceTokenParsers.js";
+import { partitionDicePartTokens } from "../token/partitionDicePartTokens.js";
+import { partitionDiceParts } from "../token/partitionDiceParts.js";
 import { DiceCriticalMethodType } from "../types/DiceCriticalMethodType.js";
 import { DiceOutputType } from "../types/DiceOutputType.js";
 import { DiceSecretMethodType } from "../types/DiceSecretMethodType.js";
 import { type DiceCore, type TDice } from "./Dice.js";
 import { DiceBase, type DiceBaseCore } from "./DiceBase.js";
-import { TokenData } from "@rsc-utils/string-utils";
-import { getDiceTokenParsers } from "../token/getDiceTokenParsers.js";
-import { partitionDicePartTokens } from "../token/partitionDicePartTokens.js";
-import { partitionDiceParts } from "../token/partitionDiceParts.js";
 type DiceGroupCoreBase = {
     criticalMethodType?: DiceCriticalMethodType;
     outputType?: DiceOutputType;

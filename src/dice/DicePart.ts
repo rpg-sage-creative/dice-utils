@@ -1,8 +1,8 @@
-import { randomSnowflake } from "@rsc-utils/snowflake-utils";
 import type { TokenData } from "@rsc-utils/string-utils";
 import { DiceTest, type DiceTestData, type DiceTestType } from "../DiceTest.js";
 import { cleanDicePartDescription } from "../cleanDicePartDescription.js";
 import { hasSecretFlag } from "../internal/hasSecretFlag.js";
+import { randomSnowflake } from "../internal/randomSnowflake.js";
 import { DiceDropKeep } from "../manipulate/DiceDropKeep.js";
 import { DiceExplode } from "../manipulate/DiceExplode.js";
 import { type DiceManipulationData } from "../manipulate/DiceManipulationData.js";

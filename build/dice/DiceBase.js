@@ -1,5 +1,8 @@
-import { HasIdCore } from "@rsc-utils/class-utils";
-export class DiceBase extends HasIdCore {
+export class DiceBase {
+    core;
+    constructor(core) {
+        this.core = core;
+    }
     _children;
     get children() {
         if (!this._children) {
@@ -8,12 +11,25 @@ export class DiceBase extends HasIdCore {
         }
         return this._children;
     }
-    get gameType() { return this.core.gameType; }
-    get hasSecret() { return this.children.some(child => child.hasSecret); }
-    get hasTest() { return this.children.some(child => child.hasTest); }
+    get gameType() {
+        return this.core.gameType;
+    }
+    get hasSecret() {
+        return this.children.some(child => child.hasSecret);
+    }
+    get hasTest() {
+        return this.children.some(child => child.hasTest);
+    }
+    get id() { return this.core.id; }
+    get objectType() {
+        return this.core.objectType;
+    }
     roll() {
         this.children.forEach(child => child.roll());
         return this;
+    }
+    toJSON() {
+        return this.core;
     }
     static create(..._args) {
         throw new TypeError("Not Implemented.");

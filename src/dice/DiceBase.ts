@@ -1,6 +1,5 @@
-import { HasIdCore, type IdCore } from "@rsc-utils/class-utils";
-import type { Snowflake } from "@rsc-utils/snowflake-utils";
 import type { TokenData } from "@rsc-utils/string-utils";
+import type { Snowflake } from "discord.js";
 import { DiceOutputType } from "../types/DiceOutputType.js";
 
 export type TDiceBaseCore = DiceBaseCore<any, any>;
@@ -10,10 +9,11 @@ export type DiceBaseCore<
 	ObjectType extends string,
 	GameType extends number = number
 >
-= IdCore<ObjectType, Snowflake>
-& {
+= {
 	children: ChildCoreType extends never ? never : ChildCoreType[];
 	gameType: GameType;
+	id: Snowflake;
+	objectType: ObjectType;
 };
 
 export type TDiceBase = DiceBase<any, any, any, any>;
@@ -23,7 +23,9 @@ export abstract class DiceBase<
 			ChildType extends TDiceBase,
 			ObjectType extends string,
 			GameType extends number = number
-			>extends HasIdCore<Core, ObjectType, Snowflake> {
+			> {
+
+	public constructor(protected core: Core) { }
 
 	private _children?: ChildType[];
 	public get children(): ChildType[] {
@@ -34,11 +36,25 @@ export abstract class DiceBase<
 		return this._children;
 	}
 
-	public get gameType(): GameType { return this.core.gameType; }
+	public get gameType(): GameType {
+		return this.core.gameType;
+	}
 
-	public get hasSecret(): boolean { return this.children.some(child => child.hasSecret); }
+	public get hasSecret(): boolean {
+		return this.children.some(child => child.hasSecret);
+	}
 
-	public get hasTest(): boolean { return this.children.some(child => child.hasTest); }
+	public get hasTest(): boolean {
+		return this.children.some(child => child.hasTest);
+	}
+
+	/** The unique identifier for this object. */
+	public get id(): Snowflake { return this.core.id; }
+
+	/** The type of data that is represented. Often the Class that the Core is for. */
+	public get objectType(): ObjectType {
+		return this.core.objectType;
+	}
 
 	public roll(): this {
 		this.children.forEach(child => child.roll());
@@ -47,6 +63,11 @@ export abstract class DiceBase<
 
 	public abstract toDiceString(outputType?: DiceOutputType): string;
 	public abstract toRollString(...args: (boolean | DiceOutputType)[]): string;
+
+	/** Returns this object's core. */
+	public toJSON(): Core {
+		return this.core;
+	}
 
 	public static create(..._args: any[]): any {
 		throw new TypeError("Not Implemented."); //NOSONAR
