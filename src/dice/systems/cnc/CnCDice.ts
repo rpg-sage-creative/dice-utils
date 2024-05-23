@@ -5,7 +5,7 @@ import type { GameSystemType } from "../../../types/GameSystemType.js";
 import { Dice, type DiceCore } from "../../Dice.js";
 import type { DiceBase } from "../../DiceBase.js";
 import { CnCDicePart } from "./CnCDicePart.js";
-import { gradeRoll } from "./internal/gradeRoll.js";
+import { gradeCnCRoll } from "./internal/gradeCnCRoll.js";
 
 export class CnCDice extends Dice<DiceCore, CnCDicePart, GameSystemType> {
 	public toRollString(): string {
@@ -15,7 +15,7 @@ export class CnCDice extends Dice<DiceCore, CnCDicePart, GameSystemType> {
 		const critValues = sortedRollData?.byIndex.slice(baseCount).map(r => r.value) ?? [];
 		const vs = this.test?.value ?? 8;
 		const vsOutput = vs !== 8 ? ` vs ${vs} ` : ``;
-		const [grade, gradeValues] = gradeRoll(baseValues, critValues, vs);
+		const [grade, gradeValues] = gradeCnCRoll(baseValues, critValues, vs);
 		const gradeOutput = gradeToEmoji(grade);
 		const baseOutput = ` [${baseValues.join(",")}]${baseValues.length}d12 ${vsOutput} (**${gradeValues[0]}**)`;
 		const critOutput = critValues.length ? ` + [${critValues.join(",")}]${critValues.length}d12 ${vsOutput} (**${gradeValues[5]}**)` : ``;
@@ -29,7 +29,7 @@ export class CnCDice extends Dice<DiceCore, CnCDicePart, GameSystemType> {
 
 	public static readonly GameType = CnCDicePart.GameType;
 
-	// We shouldn't be using this, but just in case let's return 0.
+	// We shouldn't be using this, but just in case let's return 0 (DieRollGrade.Unknown).
 	public static readonly gradeRoll = () => 0;
 
 	public static readonly gradeToEmoji = gradeToEmoji;

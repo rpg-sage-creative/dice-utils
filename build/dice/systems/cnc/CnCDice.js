@@ -3,7 +3,7 @@ import { gradeToEmoji } from "../../../grade.js";
 import { UNICODE_LEFT_ARROW } from "../../../types/consts.js";
 import { Dice } from "../../Dice.js";
 import { CnCDicePart } from "./CnCDicePart.js";
-import { gradeRoll } from "./internal/gradeRoll.js";
+import { gradeCnCRoll } from "./internal/gradeCnCRoll.js";
 export class CnCDice extends Dice {
     toRollString() {
         const sortedRollData = this.primary?.sortedRollData;
@@ -12,7 +12,7 @@ export class CnCDice extends Dice {
         const critValues = sortedRollData?.byIndex.slice(baseCount).map(r => r.value) ?? [];
         const vs = this.test?.value ?? 8;
         const vsOutput = vs !== 8 ? ` vs ${vs} ` : ``;
-        const [grade, gradeValues] = gradeRoll(baseValues, critValues, vs);
+        const [grade, gradeValues] = gradeCnCRoll(baseValues, critValues, vs);
         const gradeOutput = gradeToEmoji(grade);
         const baseOutput = ` [${baseValues.join(",")}]${baseValues.length}d12 ${vsOutput} (**${gradeValues[0]}**)`;
         const critOutput = critValues.length ? ` + [${critValues.join(",")}]${critValues.length}d12 ${vsOutput} (**${gradeValues[5]}**)` : ``;

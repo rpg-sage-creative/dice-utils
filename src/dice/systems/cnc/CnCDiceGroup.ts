@@ -5,7 +5,7 @@ import type { TDice } from "../../Dice.js";
 import type { DiceBase } from "../../DiceBase.js";
 import { DiceGroup, type DiceGroupCore, type DiceGroupCoreArgs, type TDiceGroup } from "../../DiceGroup.js";
 import { CnCDice } from "./CnCDice.js";
-import { getTokenParsers } from "./internal/getTokenParsers.js";
+import { getCnCTokenParsers } from "./internal/getCnCTokenParsers.js";
 
 export class CnCDiceGroup extends DiceGroup<DiceGroupCore, CnCDice, GameSystemType> {
 
@@ -22,7 +22,7 @@ export class CnCDiceGroup extends DiceGroup<DiceGroupCore, CnCDice, GameSystemTy
 		}) as DiceGroupType;
 	}
 
-	public static readonly getTokenParsers = getTokenParsers;
+	public static readonly getTokenParsers = getCnCTokenParsers;
 
 	public static readonly Child = CnCDice as typeof DiceBase;
 

@@ -2,7 +2,7 @@ import { randomSnowflake } from "@rsc-utils/snowflake-utils";
 import { DiceSecretMethodType } from "../../../types/DiceSecretMethodType.js";
 import { DiceGroup } from "../../DiceGroup.js";
 import { CnCDice } from "./CnCDice.js";
-import { getTokenParsers } from "./internal/getTokenParsers.js";
+import { getCnCTokenParsers } from "./internal/getCnCTokenParsers.js";
 export class CnCDiceGroup extends DiceGroup {
     static create(dice, args) {
         return new CnCDiceGroup({
@@ -15,7 +15,7 @@ export class CnCDiceGroup extends DiceGroup {
             secretMethodType: DiceSecretMethodType.Ignore,
         });
     }
-    static getTokenParsers = getTokenParsers;
+    static getTokenParsers = getCnCTokenParsers;
     static Child = CnCDice;
     static GameType = CnCDice.GameType;
 }

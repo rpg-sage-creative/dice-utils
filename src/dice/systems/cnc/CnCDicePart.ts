@@ -4,8 +4,8 @@ import { DiceTestType } from "../../../DiceTest.js";
 import { DiceExplode } from "../../../manipulate/DiceExplode.js";
 import { GameSystemType } from "../../../types/GameSystemType.js";
 import { DicePart, type DicePartCore, type DicePartCoreArgs, type TDicePart } from "../../DicePart.js";
-import { reduceTokenToDicePartCore } from "./internal/reduceTokenToDicePartCore.js";
-import { targetDataToTestData } from "./internal/targetDataToTestData.js";
+import { reduceTokenToCnCDicePartCore } from "./internal/reduceTokenToCnCDicePartCore.js";
+import { targetDataToCnCTestData } from "./internal/targetDataToCnCTestData.js";
 import type { TargetType } from "./internal/TargetType.js";
 
 export class CnCDicePart extends DicePart<DicePartCore<TargetType>, TargetType, GameSystemType> {
@@ -24,14 +24,14 @@ export class CnCDicePart extends DicePart<DicePartCore<TargetType>, TargetType, 
 			modifier: 0,
 			sides: 12,
 			sign: undefined!,
-			test: this.targetDataToTestData(target),
+			test: CnCDicePart.targetDataToTestData(target),
 			target
 		}) as DicePartType;
 	}
 
-	public static readonly reduceTokenToCore = reduceTokenToDicePartCore;
+	public static readonly reduceTokenToCore = reduceTokenToCnCDicePartCore;
 
-	public static readonly targetDataToTestData = targetDataToTestData;
+	public static readonly targetDataToTestData = targetDataToCnCTestData;
 
 	public static readonly GameType = GameSystemType.CnC;
 

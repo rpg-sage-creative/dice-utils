@@ -4,8 +4,8 @@ import { DiceTestType } from "../../../DiceTest.js";
 import { DiceExplode } from "../../../manipulate/DiceExplode.js";
 import { GameSystemType } from "../../../types/GameSystemType.js";
 import { DicePart } from "../../DicePart.js";
-import { reduceTokenToDicePartCore } from "./internal/reduceTokenToDicePartCore.js";
-import { targetDataToTestData } from "./internal/targetDataToTestData.js";
+import { reduceTokenToCnCDicePartCore } from "./internal/reduceTokenToCnCDicePartCore.js";
+import { targetDataToCnCTestData } from "./internal/targetDataToCnCTestData.js";
 export class CnCDicePart extends DicePart {
     static create({ count, description, target } = {}) {
         return new CnCDicePart({
@@ -20,11 +20,11 @@ export class CnCDicePart extends DicePart {
             modifier: 0,
             sides: 12,
             sign: undefined,
-            test: this.targetDataToTestData(target),
+            test: CnCDicePart.targetDataToTestData(target),
             target
         });
     }
-    static reduceTokenToCore = reduceTokenToDicePartCore;
-    static targetDataToTestData = targetDataToTestData;
+    static reduceTokenToCore = reduceTokenToCnCDicePartCore;
+    static targetDataToTestData = targetDataToCnCTestData;
     static GameType = GameSystemType.CnC;
 }
