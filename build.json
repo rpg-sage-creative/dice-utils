@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/dice-utils",
-"version":"0.0.13",
+"version":"0.0.14",
 "branch":"main",
-"commit":"f21f832c1f791b3f9b48d7bbf1dfd26cad1cf9a6",
-"commitSubject":"remove need for DiceTest.test",
-"commitTs":1707949233000,
-"commitDate":"2024-02-14-1420",
-"buildTs":1707949267000,
-"buildDate":"2024-02-14-1421",
-"author":"Randal T Meyer"
+"commit":"439ed02248ef67fb892c6b6c3e0aa5e7a67c2bfd",
+"commitSubject":"remove string-utils; add xregexp",
+"commitTs":1716499134000,
+"commitDate":"2024-05-23-1418",
+"buildTs":1716499184000,
+"buildDate":"2024-05-23-1419",
+"author":"Randal"
 }
