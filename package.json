@@ -19,6 +19,7 @@
 		"@rsc-utils/number-utils": "github:rpg-sage-creative/number-utils",
 		"@rsc-utils/random-utils": "github:rpg-sage-creative/random-utils",
 		"@rsc-utils/snowflake-utils": "github:rpg-sage-creative/snowflake-utils",
-		"@rsc-utils/string-utils": "github:rpg-sage-creative/string-utils"
+		"@rsc-utils/string-utils": "github:rpg-sage-creative/string-utils",
+		"xregexp": "^5.1.1"
 	}
 }

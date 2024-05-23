@@ -3,17 +3,12 @@ import { DiceTest } from "../DiceTest.js";
 import { DiceDropKeep } from "../manipulate/DiceDropKeep.js";
 import { DiceExplode } from "../manipulate/DiceExplode.js";
 import { DiceThreshold } from "../manipulate/DiceThreshold.js";
-
-// dice parser parts
-// sign:  ([\-\+\*\/])?
-// rolls: (?:\s*\((\s*\d*(?:\s*,\s*\d+)*\s*)\))?
-// count: (?:\s*(\d+)\s*|\b)
-// sides: d\s*(\d+)
+import { getDiceRegex } from "./getDiceRegex.js";
 
 /** Returns a new object with the default dice parsers for use with Tokenizer */
 export function getDiceTokenParsers(): TokenParsers {
 	return {
-		dice: /([-+*/])?(?:\s*\((\s*\d*(?:\s*,\s*\d+)*\s*)\))?(?:\s*(\d+)\s*|\b)d\s*(\d+)/i,
+		dice: getDiceRegex(),
 		...DiceDropKeep.getParsers(),
 		...DiceThreshold.getParsers(),
 		...DiceExplode.getParsers(),
