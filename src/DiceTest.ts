@@ -1,5 +1,5 @@
 import { warn } from "@rsc-utils/console-utils";
-import type { TokenData, TokenParsers } from "@rsc-utils/string-utils";
+import type { TokenData, TokenParsers } from "./internal/tokenize.js";
 
 export enum DiceTestType {
 	None = 0,

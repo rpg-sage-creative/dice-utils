@@ -1,6 +1,6 @@
-import type { TokenData } from "@rsc-utils/string-utils";
 import type { Snowflake } from "discord.js";
-import { DiceOutputType } from "../types/DiceOutputType.js";
+import type { TokenData } from "../internal/tokenize.js";
+import type { DiceOutputType } from "../types/DiceOutputType.js";
 export type TDiceBaseCore = DiceBaseCore<any, any>;
 export type DiceBaseCore<ChildCoreType extends TDiceBaseCore, ObjectType extends string, GameType extends number = number> = {
     children: ChildCoreType extends never ? never : ChildCoreType[];

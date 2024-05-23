@@ -1,11 +1,11 @@
-import { cleanWhitespace, dequote } from "@rsc-utils/string-utils";
 import { DiceTest } from "../DiceTest.js";
 import { gradeRoll, gradeToEmoji } from "../grade.js";
-import { detick } from "../internal/detick.js";
+import { cleanWhitespace } from "../internal/cleanWhitespace.js";
 import { isBoolean } from "../internal/isBoolean.js";
 import { isDiceOutputType } from "../internal/isDiceOutputType.js";
-import { randomSnowflake } from "../random/randomSnowflake.js";
+import { unquoteAndDetick } from "../internal/unquoteAndDetick.js";
 import { mapDicePartToRollString } from "../mapDicePartToRollString.js";
+import { randomSnowflake } from "../random/randomSnowflake.js";
 import { removeDesc } from "../removeDesc.js";
 import { sum } from "../sum.js";
 import { sumDiceParts } from "../sumDiceParts.js";
@@ -42,13 +42,13 @@ export class Dice extends DiceBase {
             const [_, emoji, total] = stripped.match(/^(?:(.*?)\s+)(\d+)$/) ?? ["", "", stripped];
             const escapedTotal = `\` ${total} \``;
             const output = desc
-                ? `${emoji} '${detick(dequote(desc))}', ${escapedTotal} ${UNICODE_LEFT_ARROW} ${removeDesc(description, desc)}`
+                ? `${emoji} '${unquoteAndDetick(desc)}', ${escapedTotal} ${UNICODE_LEFT_ARROW} ${removeDesc(description, desc)}`
                 : `${emoji} ${escapedTotal} ${UNICODE_LEFT_ARROW} ${description}`;
             return Dice.correctEscapeForEmoji(cleanWhitespace(output));
         }
         else {
             const output = desc
-                ? `${xxs} \`${detick(dequote(desc))}\` ${UNICODE_LEFT_ARROW} ${removeDesc(description, desc)}`
+                ? `${xxs} \`${unquoteAndDetick(desc)}\` ${UNICODE_LEFT_ARROW} ${removeDesc(description, desc)}`
                 : `${xxs} ${UNICODE_LEFT_ARROW} ${description}`;
             return Dice.correctEscapeForEmoji(cleanWhitespace(output));
         }
@@ -57,7 +57,7 @@ export class Dice extends DiceBase {
         const xxs = this.toRollStringXXS(hideRolls);
         const desc = this.children.find(dicePart => dicePart.hasDescription)?.description;
         const output = desc
-            ? `${xxs} \`${detick(dequote(desc)) ?? ""}\``
+            ? `${xxs} \`${unquoteAndDetick(desc) ?? ""}\``
             : xxs;
         return Dice.correctEscapeForEmoji(cleanWhitespace(output));
     }

@@ -1,6 +1,6 @@
-import type { TokenData } from "@rsc-utils/string-utils";
 import { DiceTest, type DiceTestData, type DiceTestType } from "../DiceTest.js";
-import { type DiceManipulationData } from "../manipulate/DiceManipulationData.js";
+import type { TokenData } from "../internal/tokenize.js";
+import type { DiceManipulationData } from "../manipulate/DiceManipulationData.js";
 import { reduceTokenToDicePartCore } from "../token/reduceTokenToDicePartCore.js";
 import type { DiceOperator } from "../types/DiceOperator.js";
 import { DiceOutputType } from "../types/DiceOutputType.js";

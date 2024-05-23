@@ -1,4 +1,4 @@
-import type { TokenData, TokenParsers } from "@rsc-utils/string-utils";
+import type { TokenData, TokenParsers } from "../internal/tokenize.js";
 import type { RollData } from "../types/RollData.js";
 import { DiceManipulation } from "./DiceManipulation.js";
 export declare enum DiceThresholdType {

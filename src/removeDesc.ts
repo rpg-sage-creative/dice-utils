@@ -1,5 +1,5 @@
-import { tokenize } from "@rsc-utils/string-utils";
 import * as XRegExp from "xregexp";
+import { tokenize } from "./internal/tokenize.js";
 
 /** Removes the first instance of desc from description while ensuring it doesn't break HTML (ex: Removing "b" from "<b>8</b> b") */
 export function removeDesc(description: string, desc: string): string {

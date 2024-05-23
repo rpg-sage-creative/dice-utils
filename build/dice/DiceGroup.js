@@ -1,7 +1,7 @@
-import { tokenize } from "@rsc-utils/string-utils";
 import { isGradeFailure } from "../grade.js";
 import { isBoolean } from "../internal/isBoolean.js";
 import { isDiceOutputType } from "../internal/isDiceOutputType.js";
+import { tokenize } from "../internal/tokenize.js";
 import { randomSnowflake } from "../random/randomSnowflake.js";
 import { getDiceTokenParsers } from "../token/getDiceTokenParsers.js";
 import { partitionDicePartTokens } from "../token/partitionDicePartTokens.js";

@@ -1,2 +1,2 @@
-import type { TokenData } from "@rsc-utils/string-utils";
+import type { TokenData } from "../internal/tokenize.js";
 export declare function partitionDicePartTokens(tokens: TokenData[]): TokenData[][];

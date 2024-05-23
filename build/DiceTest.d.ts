@@ -1,4 +1,4 @@
-import type { TokenData, TokenParsers } from "@rsc-utils/string-utils";
+import type { TokenData, TokenParsers } from "./internal/tokenize.js";
 export declare enum DiceTestType {
     None = 0,
     Equal = 1,

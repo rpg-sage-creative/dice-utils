@@ -1,4 +1,4 @@
-import { TokenData } from "@rsc-utils/string-utils";
+import { type TokenData } from "../internal/tokenize.js";
 import { getDiceTokenParsers } from "../token/getDiceTokenParsers.js";
 import { partitionDicePartTokens } from "../token/partitionDicePartTokens.js";
 import { partitionDiceParts } from "../token/partitionDiceParts.js";
