@@ -1,6 +1,7 @@
 export * from "./dice/index.js";
 export * from "./manipulate/index.js";
 export * from "./markup/index.js";
+export * from "./random/index.js";
 export * from "./roll/index.js";
 export * from "./token/index.js";
 export * from "./types/index.js";

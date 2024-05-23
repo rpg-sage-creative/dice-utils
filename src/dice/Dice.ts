@@ -4,7 +4,7 @@ import { DieRollGrade, gradeRoll, gradeToEmoji } from "../grade.js";
 import { detick } from "../internal/detick.js";
 import { isBoolean } from "../internal/isBoolean.js";
 import { isDiceOutputType } from "../internal/isDiceOutputType.js";
-import { randomSnowflake } from "../internal/randomSnowflake.js";
+import { randomSnowflake } from "../random/randomSnowflake.js";
 import { mapDicePartToRollString } from "../mapDicePartToRollString.js";
 import { removeDesc } from "../removeDesc.js";
 import { sum } from "../sum.js";
