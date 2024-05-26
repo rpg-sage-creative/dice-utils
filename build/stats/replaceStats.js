@@ -39,7 +39,6 @@ export function replaceStats(diceString, args, stack = []) {
             }
             return `\`${match}\``;
         });
-        return doStatMath(replaced);
     }
-    return replaced;
+    return doStatMath(replaced);
 }
