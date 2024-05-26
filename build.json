@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/dice-utils",
-"version":"0.0.14",
-"branch":"main",
-"commit":"439ed02248ef67fb892c6b6c3e0aa5e7a67c2bfd",
-"commitSubject":"remove string-utils; add xregexp",
-"commitTs":1716499134000,
-"commitDate":"2024-05-23-1418",
-"buildTs":1716499184000,
-"buildDate":"2024-05-23-1419",
+"version":"0.0.15",
+"branch":"stat-math",
+"commit":"cbb9e906279b492315e66b0f6727303bba2b59ef",
+"commitSubject":"include new build replace stats",
+"commitTs":1716700477000,
+"commitDate":"2024-05-25-2214",
+"buildTs":1716700527000,
+"buildDate":"2024-05-25-2215",
 "author":"Randal"
 }
