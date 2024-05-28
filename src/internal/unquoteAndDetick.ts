@@ -1,4 +1,4 @@
-import XRegExp from "xregexp";
+import { unquote } from "./unquote.js";
 
 /**
  * @internal
@@ -6,25 +6,5 @@ import XRegExp from "xregexp";
  * Removes all backticks (`) from remaining value.
  */
 export function unquoteAndDetick(value: string): string {
-	const quoteRegex = XRegExp(`
-		^(
-			“[^”]*”
-			|
-			„[^“]*“
-			|
-			„[^”]*”
-			|
-			"[^"]*"
-			|
-			[“”"][^“”"]*[“”"]
-			|
-			'[^']*'
-			|
-			‘[^’]*’
-		)$
-	`, "xi");
-	if (quoteRegex.test(value)) {
-		value = value.slice(1, -1);
-	}
-	return value.replace(/`/g, "");
+	return unquote(value).replace(/`/g, "");
 }

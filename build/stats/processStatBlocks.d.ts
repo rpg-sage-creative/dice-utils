@@ -5,4 +5,4 @@ export type ProcessStatsArgs = {
     pcs: StatsCharacterManager;
     pc?: StatsCharacter | null;
 };
-export declare function processStats(diceString: string, args: ProcessStatsArgs): string;
+export declare function processStatBlocks(diceString: string, args: ProcessStatsArgs): string;

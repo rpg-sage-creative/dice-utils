@@ -1,24 +1,4 @@
-import XRegExp from "xregexp";
+import { unquote } from "./unquote.js";
 export function unquoteAndDetick(value) {
-    const quoteRegex = XRegExp(`
-		^(
-			“[^”]*”
-			|
-			„[^“]*“
-			|
-			„[^”]*”
-			|
-			"[^"]*"
-			|
-			[“”"][^“”"]*[“”"]
-			|
-			'[^']*'
-			|
-			‘[^’]*’
-		)$
-	`, "xi");
-    if (quoteRegex.test(value)) {
-        value = value.slice(1, -1);
-    }
-    return value.replace(/`/g, "");
+    return unquote(value).replace(/`/g, "");
 }

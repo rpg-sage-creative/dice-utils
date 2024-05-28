@@ -1,6 +1,6 @@
 import { debug, info, warn } from "@rsc-utils/console-utils";
 import { assert, runTests, startAsserting, stopAsserting } from "@rsc-utils/test-utils";
-import { processStats } from "../../build/index.js"
+import { processStatBlocks } from "../../build/index.js"
 
 class CharManager extends Array {
 	findByName(name) {
@@ -33,7 +33,7 @@ class Encounter extends Array {
 	}
 }
 
-runTests(async function test_processStats() {
+runTests(async function test_processStatBlocks() {
 	const encounters = new Encounter();
 	const npcs = new CharManager();
 	const testy = new Char("testy", { ac: "10", atkMod: "5" }, new Char("moldy", { ac: "15" }));
@@ -50,14 +50,17 @@ runTests(async function test_processStats() {
 	const pcs = new CharManager(testy, nesty, complex);
 	const args = { encounters, npcs, pcs, pc: testy };
 	const tests = [
+		["[(10)1d20]", "[(10)1d20]"],
 		["[1d20 + {testy::atkMod} ac {moldy::ac}]", "[1d20 + 5 ac 15]"],
+		[`[1d20 + {"testy"::atkMod} ac {moldy::ac}]`, "[1d20 + 5 ac 15]"],
+		["[(1)1d20 + {testy::atkMod} ac {moldy::ac}]", "[(1)1d20 + 5 ac 15]"],
 		["[1d20 {nesty::{nesty::nested_stat_id}}]", "[1d20 Nested!]"],
 		[
 			"[1d20 + {complex::{complex::default_weapon}.attack:0} {complex::name} strikes with their {complex::{complex::default_weapon}.name:weapon}!;{complex::{complex::default_weapon}.damage:0}]",
 			"[1d20 + 7 complex strikes with their Longsword!;1d8+4 slashing]"
-		]
+		],
 	];
 	tests.forEach(([input, expected]) => {
-		assert(String(expected), processStats, input, args);
+		assert(String(expected), processStatBlocks, input, args);
 	})
 }, true);

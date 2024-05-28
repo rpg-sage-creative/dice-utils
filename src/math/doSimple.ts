@@ -1,3 +1,4 @@
+import XRegExp from "xregexp";
 import { cleanSigns } from "./cleanSigns.js";
 
 /** Returns a regular expression that finds tests for only numbers and math symbols. */
@@ -18,15 +19,15 @@ export function isSimple(value: string): boolean {
 export function doSimple(value: string): string | null {
 	try {
 		if (getSimpleRegex().test(value)) {
-			// remove spaces
-			value = value.replace(/\s/g, "");
-			// clean signs
 			value = cleanSigns(value);
-			// add multiplication sign
-			value = value.replace(/(\d+)\(([^()]+)\)/g, "$1*($2)");
-			// change power symbol
-			value = value.replace(/\^/g, "**");
-
+			value = XRegExp.replaceEach(value, [
+				// remove spaces
+				[/\s/g, ""],
+				// add multiplication sign: 2(6+1) becomes 2*(6+1)
+				[/(\d+)\(([^()]+)\)/g, "$1*($2)"],
+				// change power symbol
+				[/\^/g, "**"]
+			]);
 			return String(eval(value));
 		}
 	} catch (ex) {

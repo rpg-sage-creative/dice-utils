@@ -1,4 +1,4 @@
 export * from "./doStatMath.js";
-export * from "./processStats.js";
-export * from "./replaceStats.js";
+export * from "./processStatBlocks.js";
+export * from "./StatBlock.js";
 export * from "./types.js";
