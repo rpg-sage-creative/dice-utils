@@ -27,7 +27,7 @@ export function processStatBlocks(diceString: string, args: ProcessStatsArgs, st
 			if (isPcType) {
 				char = args.pc ?? null;
 			}else if (isAltType) {
-				char = args.pc?.companions[0] ?? null;
+				char = args.pc?.companions?.[0] ?? null;
 			}else if (charName) {
 				char = args.pcs.findByName(charName)
 					?? args.pcs.findCompanion(charName)

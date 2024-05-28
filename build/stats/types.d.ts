@@ -1,5 +1,5 @@
 export type StatsCharacter = {
-    companions: StatsCharacterManager<StatsCharacter>;
+    companions: StatsCharacterManager<StatsCharacter> | undefined;
     name: string;
     getStat(key: string): string | null | undefined;
 };
