@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/dice-utils",
-"version":"0.0.15",
-"branch":"stat-math",
-"commit":"cbb9e906279b492315e66b0f6727303bba2b59ef",
-"commitSubject":"include new build replace stats",
-"commitTs":1716700477000,
-"commitDate":"2024-05-25-2214",
-"buildTs":1716700527000,
-"buildDate":"2024-05-25-2215",
+"version":"0.0.16",
+"branch":"main",
+"commit":"342f64a0b1a89eb4848ef9fa92846962e4314133",
+"commitSubject":"Merge pull request #2 from rpg-sage-creative/stat-math",
+"commitTs":1717569234000,
+"commitDate":"2024-06-04-2333",
+"buildTs":1717569352000,
+"buildDate":"2024-06-04-2335",
 "author":"Randal"
 }
