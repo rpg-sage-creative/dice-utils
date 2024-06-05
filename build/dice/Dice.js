@@ -39,7 +39,7 @@ export class Dice extends DiceBase {
         const description = this.children.map((roll, index) => mapDicePartToRollString(roll, index, { hideRolls, isRollem, noDice })).join(" ");
         if (isRollem) {
             const stripped = xxs.replace(/<\/?(b|em|i|strong)>/ig, "").trim();
-            const [_, emoji, total] = stripped.match(/^(?:(.*?)\s+)(\d+)$/) ?? ["", "", stripped];
+            const [_, emoji, total] = /^(?:(.*?)\s+)(\d+)$/.exec(stripped) ?? ["", "", stripped];
             const escapedTotal = `\` ${total} \``;
             const output = desc
                 ? `${emoji} '${unquoteAndDetick(desc)}', ${escapedTotal} ${UNICODE_LEFT_ARROW} ${removeDesc(description, desc)}`

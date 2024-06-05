@@ -2,9 +2,10 @@ import { DiceTest } from "../DiceTest.js";
 import { DiceDropKeep } from "../manipulate/DiceDropKeep.js";
 import { DiceExplode } from "../manipulate/DiceExplode.js";
 import { DiceThreshold } from "../manipulate/DiceThreshold.js";
+import { getDiceRegex } from "./getDiceRegex.js";
 export function getDiceTokenParsers() {
     return {
-        dice: /([-+*/])?(?:\s*\((\s*\d*(?:\s*,\s*\d+)*\s*)\))?(?:\s*(\d+)\s*|\b)d\s*(\d+)/i,
+        dice: getDiceRegex(),
         ...DiceDropKeep.getParsers(),
         ...DiceThreshold.getParsers(),
         ...DiceExplode.getParsers(),

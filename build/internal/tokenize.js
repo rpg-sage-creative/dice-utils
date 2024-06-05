@@ -1,3 +1,4 @@
+import XRegExp from "xregexp";
 export function tokenize(input, parsers, defaultKey = "unknown") {
     const tokens = [];
     let matchIndex, token;
@@ -5,7 +6,7 @@ export function tokenize(input, parsers, defaultKey = "unknown") {
         token = null;
         matchIndex = input.length;
         for (const key in parsers) {
-            const regExpMatchArray = parsers[key].exec(input);
+            const regExpMatchArray = XRegExp.exec(input, parsers[key]);
             if (regExpMatchArray?.index !== undefined && regExpMatchArray.index < matchIndex) {
                 token = {
                     key,

@@ -83,7 +83,7 @@ export class Dice<
 
 		if (isRollem) {
 			const stripped = xxs.replace(/<\/?(b|em|i|strong)>/ig, "").trim();
-			const [_, emoji, total] = stripped.match(/^(?:(.*?)\s+)(\d+)$/) ?? ["","",stripped];
+			const [_, emoji, total] = /^(?:(.*?)\s+)(\d+)$/.exec(stripped) ?? ["","",stripped];
 			const escapedTotal = `\` ${total} \``;
 
 			const output = desc
