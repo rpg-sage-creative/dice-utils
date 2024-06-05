@@ -1,4 +1,4 @@
-import { assert, runTests } from "@rsc-utils/test-utils";
+import { assert, runTests } from "@rsc-utils/core-utils";
 import { cleanSigns } from "../../build/index.js";
 
 runTests(async function test_cleanSigns() {

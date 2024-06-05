@@ -1,5 +1,5 @@
-import { debug, info, warn, error } from "@rsc-utils/console-utils";
-import { assert, runTests, startAsserting, stopAsserting } from "@rsc-utils/test-utils";
+import { debug, info, warn, error } from "@rsc-utils/core-utils";
+import { assert, runTests, startAsserting, stopAsserting } from "@rsc-utils/core-utils";
 import { DiceGroup, DiceThreshold } from "../../build/index.js";
 
 /** Roll fixed roll dice part with the given DiceExplode */
@@ -9,7 +9,7 @@ function rollAndReturn(rolls, tString = "") {
 	return [ dicePart, dicePart.sortedRollData, threshold ];
 }
 
-runTests(async function testDiceThreshold() {
+runTests(async function test_DiceThreshold() {
 
 	const [dpBT2, dataBT2, tBT2] = rollAndReturn([1,1,3,3,5,5], "bt2");
 	assert([2,2,3,3,5,5], () => dataBT2.byIndex.map(r => r.threshold??r.value));

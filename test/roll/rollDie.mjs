@@ -1,7 +1,7 @@
-import { assert, runTests, startAsserting } from "@rsc-utils/test-utils";
+import { assert, runTests, startAsserting } from "@rsc-utils/core-utils";
 import { rollDie } from "../../build/index.js";
 
-runTests(async function testRollDie() {
+runTests(async function test_rollDie() {
 	const dice = [2, 3, 4, 6, 8, 10, 12, 20, 30];
 	for (const sides of dice) {
 		const results = new Array(sides);

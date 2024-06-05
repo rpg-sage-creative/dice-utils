@@ -1,7 +1,7 @@
-import { assert, runTests } from "@rsc-utils/test-utils";
+import { assert, runTests } from "@rsc-utils/core-utils";
 import { rollDiceString } from "../../build/roll/rollDiceString.js";
 
-runTests(function testDiceRollString() {
+runTests(function test_rollDiceString() {
 	const testIterations = 10000;
 
 	[["0", 0], ["1", 1], ["25", 25], ["", null]].forEach(([input, output]) => {

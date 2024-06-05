@@ -1,5 +1,5 @@
-import { debug, info, warn } from "@rsc-utils/console-utils";
-import { assert, runTests, startAsserting, stopAsserting } from "@rsc-utils/test-utils";
+import { debug, info, warn } from "@rsc-utils/core-utils";
+import { assert, runTests, startAsserting, stopAsserting } from "@rsc-utils/core-utils";
 import { doMathFunctions } from "../../build/index.js"
 
 runTests(async function test_doMathFunctions() {

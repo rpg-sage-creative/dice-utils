@@ -1,8 +1,8 @@
-import { debug, info, warn } from "@rsc-utils/console-utils";
-import { assert, runTests, startAsserting, stopAsserting } from "@rsc-utils/test-utils";
+import { debug, info, warn } from "@rsc-utils/core-utils";
+import { assert, runTests, startAsserting, stopAsserting } from "@rsc-utils/core-utils";
 import { randomInt } from "../../build/index.js";
 
-runTests(function testRandomInt() {
+runTests(function test_randomInt() {
 	// 1000 iterations wasn't enough to always hit all 1s or all 4s in 5d4!!!!
 	const testIterations = 10000;
 

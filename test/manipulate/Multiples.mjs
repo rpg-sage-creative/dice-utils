@@ -1,5 +1,5 @@
-import { debug } from "@rsc-utils/console-utils";
-import { assert, runTests } from "@rsc-utils/test-utils";
+import { debug } from "@rsc-utils/core-utils";
+import { assert, runTests } from "@rsc-utils/core-utils";
 import { DiceGroup } from "../../build/index.js";
 
 /** Roll fixed roll dice part with the given DiceDropKeep */
@@ -14,7 +14,7 @@ function rollAndReturn(rolls, dkString = "", xString = "", tString = "") {
 function rollCount(sortedData) { return sortedData.count; }
 function rollSum(sortedData) { return sortedData.sum; }
 
-runTests(async function testDiceManipulation() {
+runTests(async function test_DiceManipulation() {
 
 	const [ data, dp, dk, x, t ] = rollAndReturn([1,2,3,4,5]);
 	assert(5, rollCount, data);

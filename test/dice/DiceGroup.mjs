@@ -1,10 +1,10 @@
-import { debug } from "@rsc-utils/console-utils";
-import { assert, runTests } from "@rsc-utils/test-utils";
+import { debug } from "@rsc-utils/core-utils";
+import { assert, runTests } from "@rsc-utils/core-utils";
 import { DiceGroup } from "../../build/index.js";
 
 function toDiceString(dg) { return dg.toDiceString(); }
 
-runTests(async function testDiceGroup() {
+runTests(async function test_DiceGroup() {
 
 	[
 		["1d20", "[1d20]"],

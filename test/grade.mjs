@@ -1,7 +1,7 @@
-import { assert, runTests, startAsserting } from "@rsc-utils/test-utils";
+import { assert, runTests, startAsserting } from "@rsc-utils/core-utils";
 import { Dice, DiceGroup, DiceTestType, DieRollGrade, decreaseGrade, gradeRoll, gradeToEmoji, increaseGrade, isGradeCritical, isGradeFailure, isGradeSuccess } from "../build/index.js";
 
-runTests(async function testGrade() {
+runTests(async function test_Grade() {
 	const cf = DieRollGrade.CriticalFailure;
 	const f = DieRollGrade.Failure;
 	const s = DieRollGrade.Success;

@@ -1,5 +1,5 @@
-import { debug } from "@rsc-utils/console-utils";
-import { assert, runTests } from "@rsc-utils/test-utils";
+import { debug } from "@rsc-utils/core-utils";
+import { assert, runTests } from "@rsc-utils/core-utils";
 import { DiceExplode, DiceGroup } from "../../build/index.js";
 
 /** Roll fixed roll dice part with the given DiceExplode */
@@ -9,7 +9,7 @@ function rollAndReturn(rolls, xString = "") {
 	return [ dicePart, dicePart.sortedRollData, explode ];
 }
 
-runTests(async function testDiceExplode() {
+runTests(async function test_DiceExplode() {
 
 	const [ dicePartNoExplode, dataNoExplode, explodeNoExplode ] = rollAndReturn([1,2,3,4,5,6]);
 	assert(dataNoExplode.count === dataNoExplode.initialCount, `oneSix exploded wrong: ${dataNoExplode.byIndex.slice(6).map(r => r.text)}`);

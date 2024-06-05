@@ -1,7 +1,7 @@
-import { assert, runTests } from "@rsc-utils/test-utils";
+import { assert, runTests } from "@rsc-utils/core-utils";
 import { rollDice, sum } from "../../build/index.js";
 
-runTests(async function testRollDice() {
+runTests(async function test_rollDice() {
 	const count = 3;
 	const sides = 6;
 	for (let i = 0; i < 10000; i++) {

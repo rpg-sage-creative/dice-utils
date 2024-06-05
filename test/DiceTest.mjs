@@ -1,4 +1,4 @@
-import { assert, runTests } from "@rsc-utils/test-utils";
+import { assert, runTests } from "@rsc-utils/core-utils";
 import { DiceTest } from "../build/index.js";
 
 function test(token, five, ten, fifteen) {
@@ -8,7 +8,7 @@ function test(token, five, ten, fifteen) {
 	assert(fifteen, () => dt.test(15));
 }
 
-runTests(async function testDiceTest() {
+runTests(async function test_DiceTest() {
 
 	[{ }].forEach(token => test(token));
 

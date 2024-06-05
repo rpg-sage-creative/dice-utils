@@ -1,4 +1,4 @@
-import { warn } from "@rsc-utils/console-utils";
+import { warn } from "@rsc-utils/core-utils";
 export var DiceTestType;
 (function (DiceTestType) {
     DiceTestType[DiceTestType["None"] = 0] = "None";
