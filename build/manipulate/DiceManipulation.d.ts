@@ -1,4 +1,4 @@
-import { RollData } from "../types/RollData.js";
+import type { RollData } from "../types/RollData.js";
 export declare abstract class DiceManipulation<DataType> {
     protected data?: DataType | undefined;
     constructor(data?: DataType | undefined);

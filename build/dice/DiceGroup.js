@@ -6,7 +6,9 @@ import { randomSnowflake } from "../random/randomSnowflake.js";
 import { getDiceTokenParsers } from "../token/getDiceTokenParsers.js";
 import { partitionDicePartTokens } from "../token/partitionDicePartTokens.js";
 import { partitionDiceParts } from "../token/partitionDiceParts.js";
+import { DiceCriticalMethodType } from "../types/DiceCriticalMethodType.js";
 import { DiceOutputType } from "../types/DiceOutputType.js";
+import { DiceSecretMethodType } from "../types/DiceSecretMethodType.js";
 import { Dice } from "./Dice.js";
 import { DiceBase } from "./DiceBase.js";
 export class DiceGroup extends DiceBase {

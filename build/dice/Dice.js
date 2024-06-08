@@ -1,5 +1,5 @@
 import { DiceTest } from "../DiceTest.js";
-import { gradeRoll, gradeToEmoji } from "../grade.js";
+import { DieRollGrade, gradeRoll, gradeToEmoji } from "../grade.js";
 import { cleanWhitespace } from "../internal/cleanWhitespace.js";
 import { isBoolean } from "../internal/isBoolean.js";
 import { isDiceOutputType } from "../internal/isDiceOutputType.js";
