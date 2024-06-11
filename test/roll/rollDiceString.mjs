@@ -4,7 +4,7 @@ import { rollDiceString } from "../../build/roll/rollDiceString.js";
 runTests(function test_rollDiceString() {
 	const testIterations = 10000;
 
-	[["0", 0], ["1", 1], ["25", 25], ["", null]].forEach(([input, output]) => {
+	[["0", 0], ["1", 1], ["25", 25], ["", undefined]].forEach(([input, output]) => {
 		assert(output, rollDiceString, input);
 	});
 
@@ -31,6 +31,6 @@ runTests(function test_rollDiceString() {
 	});
 	const invalidValues = [["0d1"], ["1d0"]];
 	invalidValues.forEach(([diceString]) => {
-		assert(rollDiceString(diceString) === null, `Expected a null result: ${diceString}`);
+		assert(rollDiceString(diceString) === undefined, `Expected a null result: ${diceString}`);
 	});
 }, true);

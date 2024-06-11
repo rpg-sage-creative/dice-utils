@@ -7,12 +7,12 @@ export function processStatBlocks(diceString, args, stack = []) {
     do {
         replaced = replaceStatBlocks(replaced, statBlock => {
             const { charName, isPcType, isAltType, stackValue, statKey, defaultValue } = statBlock;
-            let char = null;
+            let char;
             if (isPcType) {
-                char = args.pc ?? null;
+                char = args.pc ?? undefined;
             }
             else if (isAltType) {
-                char = args.pc?.companions?.[0] ?? null;
+                char = args.pc?.companions?.[0] ?? undefined;
             }
             else if (charName) {
                 char = args.pcs.findByName(charName)
@@ -20,17 +20,17 @@ export function processStatBlocks(diceString, args, stack = []) {
                     ?? args.npcs.findByName(charName)
                     ?? args.npcs.findCompanion(charName)
                     ?? args.encounters?.findActiveChar(charName)
-                    ?? null;
+                    ?? undefined;
             }
             else {
-                char = args.pc ?? null;
+                char = args.pc ?? undefined;
             }
             const statVal = char?.getStat(statKey);
             const statValue = statVal ?? defaultValue ?? "";
             if (statValue.length) {
                 return processStatBlocks(statValue, args, stack.concat([stackValue]));
             }
-            return null;
+            return undefined;
         }, stack);
     } while (hasStatBlock(replaced));
     return doStatMath(replaced);

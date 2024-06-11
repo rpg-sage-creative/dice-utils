@@ -1,3 +1,4 @@
+import type { Optional } from "@rsc-utils/core-utils";
 import type { TokenData, TokenParsers } from "../internal/tokenize.js";
 import type { RollData } from "../types/RollData.js";
 import { DiceManipulation } from "./DiceManipulation.js";
@@ -28,5 +29,5 @@ export declare class DiceDropKeep extends DiceManipulation<DiceDropKeepData> {
     /** The token key/regex used to generate DropKeepData */
     static getParsers(): TokenParsers;
     /** Parses the given TokenData into DropKeepData */
-    static parseData(token?: TokenData | null): DiceDropKeepData | undefined;
+    static parseData(token: Optional<TokenData>): DiceDropKeepData | undefined;
 }

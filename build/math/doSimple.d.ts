@@ -5,4 +5,4 @@ export declare function isSimple(value: string): boolean;
  * Valid math symbols: ^/*+- and spaces and numbers.
  * Returns null if the value isn't simple math or an error occurred during eval().
  */
-export declare function doSimple(value: string): string | null;
+export declare function doSimple(value: string): string | undefined;

@@ -1,3 +1,4 @@
+import type { Optional } from "@rsc-utils/core-utils";
 import type { TokenData, TokenParsers } from "../internal/tokenize.js";
 import type { RollData } from "../types/RollData.js";
 import { DiceManipulation } from "./DiceManipulation.js";
@@ -27,5 +28,5 @@ export declare class DiceThreshold extends DiceManipulation<DiceThresholdData> {
     /** The token key/regex used to generate ThresholdData */
     static getParsers(): TokenParsers;
     /** Parses the given TokenData into ThresholdData */
-    static parseData(token?: TokenData | null): DiceThresholdData | undefined;
+    static parseData(token: Optional<TokenData>): DiceThresholdData | undefined;
 }

@@ -3,6 +3,6 @@ export type ProcessStatsArgs = {
     encounters?: StatsEncounterManager;
     npcs: StatsCharacterManager;
     pcs: StatsCharacterManager;
-    pc?: StatsCharacter | null;
+    pc?: StatsCharacter;
 };
 export declare function processStatBlocks(diceString: string, args: ProcessStatsArgs): string;

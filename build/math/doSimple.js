@@ -20,5 +20,5 @@ export function doSimple(value) {
     }
     catch (ex) {
     }
-    return null;
+    return undefined;
 }

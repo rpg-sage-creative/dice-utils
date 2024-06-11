@@ -75,7 +75,7 @@ function parseStatBlock(value) {
 export function replaceStatBlocks(value, handler, stack) {
     return XRegExp.replace(value, getStatBlockRegex(), match => {
         const statBlock = parseStatBlock(match.toString());
-        let result = null;
+        let result;
         if (statBlock && !stack.includes(statBlock.stackValue)) {
             result = handler(statBlock);
         }

@@ -10,11 +10,10 @@
 		"test": "bash ./node_modules/@rsc-utils/core-utils/scripts/sh/test.sh"
 	},
 	"devDependencies": {
-		"@rsc-utils/core-utils": "github:rpg-sage-creative/core-utils",
 		"@types/node": "^18.18.7"
 	},
 	"dependencies": {
-		"discord.js": ">13.0.0",
+		"@rsc-utils/core-utils": "github:rpg-sage-creative/core-utils",
 		"xregexp": "^5.1.1"
 	}
 }
