@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/dice-utils",
-"version":"0.0.17",
+"version":"0.0.18",
 "branch":"main",
-"commit":"e5ee1a4ba13f8ad5f1bc728c85fab3454cbae434",
-"commitSubject":"update to core-utils",
-"commitTs":1717569767000,
-"commitDate":"2024-06-04-2342",
-"buildTs":1717569822000,
-"buildDate":"2024-06-04-2343",
+"commit":"1719c67007948aebfcbcbca58f3cebee86375746",
+"commitSubject":"use core-utils for randomSnowflake; use undefined over null",
+"commitTs":1718083956000,
+"commitDate":"2024-06-10-2232",
+"buildTs":1718083994000,
+"buildDate":"2024-06-10-2233",
 "author":"Randal"
 }
