@@ -10,7 +10,7 @@
 		"test": "bash ./node_modules/@rsc-utils/core-utils/scripts/sh/test.sh"
 	},
 	"devDependencies": {
-		"@types/node": "^18.18.7"
+		"@types/node": "^18.19.34"
 	},
 	"dependencies": {
 		"@rsc-utils/core-utils": "github:rpg-sage-creative/core-utils",
