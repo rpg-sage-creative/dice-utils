@@ -4,7 +4,7 @@ function getSimpleRegex() {
     return /^[\s\d.()^*/+-]+$/;
 }
 export function isSimple(value) {
-    return doSimple(value) !== null;
+    return doSimple(value) !== undefined;
 }
 export function doSimple(value) {
     try {
@@ -15,7 +15,15 @@ export function doSimple(value) {
                 [/(\d+)\(([^()]+)\)/g, "$1*($2)"],
                 [/\^/g, "**"]
             ]);
-            return String(eval(value));
+            const outValue = eval(value);
+            if (outValue === null || outValue === undefined || isNaN(outValue)) {
+                return undefined;
+            }
+            const outStringValue = String(outValue).trim();
+            const signRegex = /^[+-]/;
+            return signRegex.test(value.trim()) && !signRegex.test(outStringValue)
+                ? `+${outStringValue}`
+                : outStringValue;
         }
     }
     catch (ex) {

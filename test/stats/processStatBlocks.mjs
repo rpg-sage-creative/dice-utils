@@ -39,7 +39,19 @@ runTests(async function test_processStatBlocks() {
 			"[1d20 + {complex::{complex::default_weapon}.attack:0} {complex::name} strikes with their {complex::{complex::default_weapon}.name:weapon}!;{complex::{complex::default_weapon}.damage:0}]",
 			"[1d20 + 7 complex strikes with their Longsword!;1d8+4 slashing]"
 		],
-		["[1d30 {repeat::repeat}]", "[1d30 `{repeat::repeat}`]"]
+		["[1d30 {repeat::repeat}]", "[1d30 `{repeat::repeat}`]"],
+
+		// these tests specifically test the application of doSimple from doMathFunctions during doStatMath
+		["[1d6+3+4+1d8]", "[1d6+3+4+1d8]"],
+		["[1d20 ac {moldy::ac}; 1d6+3+4+1d8]", "[1d20 ac 15; 1d6+7+1d8]"],
+		["[1d20 ac {moldy::ac}; 1d6+3str+4fire+1d8]", "[1d20 ac 15; 1d6+3str+4fire+1d8]"],
+		["[1d20 ac {moldy::ac}; 1d6 +3 str +4 fire + 1d8]", "[1d20 ac 15; 1d6 +3 str +4 fire + 1d8]"],
+		["[1d20 ac {moldy::ac}; 1d6 + 3 +1d8 -4]", "[1d20 ac 15; 1d6+3+1d8 -4]"],
+		["[1d20 ac {moldy::ac}; 1d6 + 3 fire +1d8 -4 str]", "[1d20 ac 15; 1d6 + 3 fire +1d8 -4 str]"],
+		["[1d20 ac {moldy::ac}; 1d6+3+4-5+1d8]", "[1d20 ac 15; 1d6+2+1d8]"],
+		["[1d20 ac {moldy::ac}; 1d6-3+4-5+1d8]", "[1d20 ac 15; 1d6-4+1d8]"],
+		["[1d20 ac {moldy::ac}; 1d6-3+4+5+1d8]", "[1d20 ac 15; 1d6+6+1d8]"],
+		["[1d20 ac {moldy::ac}; 1d6+(floor(5/3))+1d8]", "[1d20 ac 15; 1d6+1+1d8]"],
 	];
 	tests.forEach(([input, expected]) => {
 		assert(String(expected), processStatBlocks, input, args);
