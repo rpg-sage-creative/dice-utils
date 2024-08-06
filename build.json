@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/dice-utils",
-"version":"0.0.18",
+"version":"0.0.19",
 "branch":"main",
-"commit":"1719c67007948aebfcbcbca58f3cebee86375746",
-"commitSubject":"use core-utils for randomSnowflake; use undefined over null",
-"commitTs":1718083956000,
-"commitDate":"2024-06-10-2232",
-"buildTs":1718083994000,
-"buildDate":"2024-06-10-2233",
+"commit":"7df35c4787e7033431447b41028a5120aab87c0d",
+"commitSubject":"improved testing for stat math; imrpoved doSimple logic",
+"commitTs":1722974547000,
+"commitDate":"2024-08-06-1302",
+"buildTs":1722974571000,
+"buildDate":"2024-08-06-1302",
 "author":"Randal"
 }
