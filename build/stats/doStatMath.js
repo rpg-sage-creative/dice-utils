@@ -9,7 +9,7 @@ export function doStatMath(value) {
     const processedTokens = tokens.map(({ token, key }) => key === "dice" ? token : doMathFunctions(token));
     const processed = processedTokens.join("");
     const simpleValue = doSimple(processed);
-    if (simpleValue) {
+    if (simpleValue !== undefined) {
         return hasPipes ? `||${simpleValue}||` : simpleValue;
     }
     if (processed !== unpiped) {
