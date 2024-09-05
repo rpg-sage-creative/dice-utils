@@ -1,23 +1,34 @@
+import {} from "@rsc-utils/core-utils";
 import XRegExp from "xregexp";
-import { cleanSigns } from "./cleanSigns.js";
-function getSimpleRegex() {
-    return /^[\s\d.()^*/+-]+$/;
+import { getNumberRegex } from "./getNumberRegex.js";
+export function getSimpleRegex(options) {
+    const numberRegex = getNumberRegex().source;
+    const signsRegex = `[-+\\s]*`;
+    const SIMPLE_REGEX = XRegExp(`
+		${options?.anchored ? "^" : ""}
+		${signsRegex}         # possible extra add/subtract signs
+		${numberRegex}        # pos/neg decimal number
+		(?:                   # open group for operands/numbers
+			\\s*              # optional whitespace
+			[-+/*%^]          # operator
+			${signsRegex}     # possible extra add/subtract signs
+			${numberRegex}    # pos/neg decimal number
+		)*                    # close group for operands/numbers
+		${options?.anchored ? "$" : ""}
+		`, "x");
+    return SIMPLE_REGEX;
 }
 export function isSimple(value) {
     return doSimple(value) !== undefined;
 }
 export function doSimple(value) {
     try {
-        if (getSimpleRegex().test(value)) {
-            value = cleanSigns(value);
-            value = XRegExp.replaceEach(value, [
-                [/\s/g, ""],
-                [/(\d+)\(([^()]+)\)/g, "$1*($2)"],
-                [/\^/g, "**"]
-            ]);
+        if (getSimpleRegex({ anchored: true }).test(value.trim())) {
+            value = value.replace(/(-|\+)+/g, s => s.split("").join(" "));
+            value = value.replace(/\^/g, "**");
             const outValue = eval(value);
             if (outValue === null || outValue === undefined || isNaN(outValue)) {
-                return undefined;
+                return null;
             }
             const outStringValue = String(outValue).trim();
             const signRegex = /^[+-]/;
@@ -27,6 +38,7 @@ export function doSimple(value) {
         }
     }
     catch (ex) {
+        return null;
     }
     return undefined;
 }
