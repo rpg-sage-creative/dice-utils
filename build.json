@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/dice-utils",
-"version":"0.0.19",
+"version":"0.0.20",
 "branch":"main",
-"commit":"7df35c4787e7033431447b41028a5120aab87c0d",
-"commitSubject":"improved testing for stat math; imrpoved doSimple logic",
-"commitTs":1722974547000,
-"commitDate":"2024-08-06-1302",
-"buildTs":1722974571000,
-"buildDate":"2024-08-06-1302",
+"commit":"d0d8e6c85f7936adafe333c9f8ed3fb21eeff659",
+"commitSubject":"improved math parsing and handling",
+"commitTs":1725511368000,
+"commitDate":"2024-09-04-2142",
+"buildTs":1725511471000,
+"buildDate":"2024-09-04-2144",
 "author":"Randal"
 }
