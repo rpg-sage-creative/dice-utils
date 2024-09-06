@@ -1,8 +1,10 @@
+import { processMath } from "../math/processMath.js";
 import { doStatMath } from "./doStatMath.js";
 import { hasStatBlock, replaceStatBlocks } from "./StatBlock.js";
 export function processStatBlocks(diceString, args, stack = []) {
-    if (!hasStatBlock(diceString))
-        return diceString;
+    if (!hasStatBlock(diceString)) {
+        return processMath(diceString);
+    }
     let replaced = diceString;
     do {
         replaced = replaceStatBlocks(replaced, statBlock => {

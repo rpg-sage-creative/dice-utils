@@ -8,9 +8,9 @@ type Options = {
  * ceil(number)
  * round(number)
  */
-export declare function getMathFunctionRegex(options?: Options): RegExp;
+export declare function getComplexRegex(options?: Options): RegExp;
 /** Convenience for getMathFunctionRegex().test(value) */
-export declare function hasMathFunctions(value: string): boolean;
+export declare function hasComplex(value: string): boolean;
 /** Checks the value for min/max/floor/ceil/round and replaces it with the result. */
-export declare function doMathFunctions(value: string): string;
+export declare function doComplex(input: string): string;
 export {};

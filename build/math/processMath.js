@@ -1,12 +1,11 @@
-import { doMathFunctions, hasMathFunctions } from "./doMathFunctions.js";
-import { doSimple, isSimple } from "./doSimple.js";
+import { doComplex, hasComplex } from "./doComplex.js";
+import { doSimple, hasSimple } from "./doSimple.js";
 export function hasMath(value) {
-    return hasMathFunctions(value)
-        || isSimple(value);
+    return hasComplex(value)
+        || hasSimple(value);
 }
 export function processMath(value) {
-    if (hasMathFunctions(value)) {
-        value = doMathFunctions(value);
-    }
-    return doSimple(value) ?? value;
+    value = doComplex(value);
+    value = doSimple(value);
+    return value;
 }
