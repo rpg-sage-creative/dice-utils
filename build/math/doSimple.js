@@ -24,7 +24,7 @@ export function isSimple(value) {
 export function doSimple(value) {
     try {
         if (getSimpleRegex({ anchored: true }).test(value.trim())) {
-            value = value.replace(/(-|\+)+/g, s => s.split("").join(" "));
+            value = value.replace(/-+|\++/g, s => s.split("").join(" "));
             value = value.replace(/\^/g, "**");
             const outValue = eval(value);
             if (outValue === null || outValue === undefined || isNaN(outValue)) {

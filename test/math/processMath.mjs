@@ -41,6 +41,9 @@ runTests(async function test_processMath() {
 		["5 * 6 ( 1 + 2 )",90],
 		["2^(2*2)",16],
 		["2 ^ ( 2* 2 )",16],
+		["(10)1d20", "(10)1d20"],
+		["(10)d20", "(10)d20"],
+		["1d20 ac (10-2)", "1d20 ac 8"],
 	];
 	tests.forEach(([input,expected]) => {
 		assert(String(expected), processMath, input);
