@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/dice-utils",
-"version":"0.0.20",
+"version":"0.0.21",
 "branch":"main",
-"commit":"d0d8e6c85f7936adafe333c9f8ed3fb21eeff659",
-"commitSubject":"improved math parsing and handling",
-"commitTs":1725511368000,
-"commitDate":"2024-09-04-2142",
-"buildTs":1725511471000,
-"buildDate":"2024-09-04-2144",
+"commit":"c8b729cc7c1d80ba01b68165d9430421f76033cc",
+"commitSubject":"avoid math attached to a XdY roll; ex: (10)1d20",
+"commitTs":1725640870000,
+"commitDate":"2024-09-06-0941",
+"buildTs":1725640899000,
+"buildDate":"2024-09-06-0941",
 "author":"Randal"
 }
