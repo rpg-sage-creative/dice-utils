@@ -7,10 +7,14 @@ export function xRegExp(regex: string, flags: string): RegExp {
 	if (DEBUG) {
 		return XRegExp(regex, flags);
 	}
-	const compact = regex
+
+	regex = regex
 		// remove comments
 		.replace(/\#.+\n/g, "")
 		// remove whitespace
 		.replace(/[\n\t\s]/g, "");
-	return new RegExp(compact, flags);
+
+	flags = flags.replace(/x/g, "");
+
+	return new RegExp(regex, flags);
 }

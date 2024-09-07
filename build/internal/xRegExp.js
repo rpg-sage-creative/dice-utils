@@ -4,8 +4,9 @@ export function xRegExp(regex, flags) {
     if (DEBUG) {
         return XRegExp(regex, flags);
     }
-    const compact = regex
+    regex = regex
         .replace(/\#.+\n/g, "")
         .replace(/[\n\t\s]/g, "");
-    return new RegExp(compact, flags);
+    flags = flags.replace(/x/g, "");
+    return new RegExp(regex, flags);
 }
