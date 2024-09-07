@@ -14,9 +14,33 @@ runTests(async function test_doSimple() {
 		["4%3","1"],
 		[" 5 %3"," 2"],
 		["4 % 2","0"],
-		["2+10/2-2*2", "3"]
+		["2+10/2-2*2", "3"],
 	];
+	const spoiledTests = [
+		["||2||","||2||"],
+		["1+||2||","||3||"],
+		[" 1 + ||2|| "," ||3|| "],
+		["||2||^2","||4||"],
+		[" 2^  ||2||"," ||4||"],
+		["||2||^3","||8||"],
+		["||2||^4","||16||"],
+		["||4||%3","||1||"],
+		[" 5 %||3||"," ||2||"],
+		["4 % ||2||","||0||"],
+		["2+10/||2||-2*2", "||3||"],
+	];
+
 	tests.forEach(([input,expected]) => {
 		assert(String(expected), doSimple, input);
-	})
+	});
+	tests.forEach(([input,expected]) => {
+		assert(String(expected), doSimple, input, { allowSpoilers:true });
+	});
+	spoiledTests.forEach(([input,expected]) => {
+		assert(input.split("||").map(s => doSimple(s)).join("||"), doSimple, input);
+	});
+	spoiledTests.forEach(([input,expected]) => {
+		assert(String(expected), doSimple, input, { allowSpoilers:true });
+	});
+
 }, true);

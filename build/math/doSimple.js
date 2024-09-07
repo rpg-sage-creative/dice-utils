@@ -1,12 +1,11 @@
 import { LogQueue } from "@rsc-utils/core-utils";
-import XRegExp from "xregexp";
+import { xRegExp } from "../internal/xRegExp.js";
 import { getNumberRegex } from "./getNumberRegex.js";
+import { unpipe } from "./unpipe.js";
 export function getSimpleRegex(options) {
     const flags = options?.globalFlag ? "xgi" : "xi";
-    const numberRegex = getNumberRegex().source;
-    return XRegExp(`
-		(?<!d\\d*)                # ignore the entire thing if preceded by dY or XdY
-
+    const numberRegex = getNumberRegex({ allowSpoilers: options?.allowSpoilers }).source;
+    const simpleRegex = `
 		(?:
 			${numberRegex}        # pos/neg decimal number
 			(?:                   # open group for operands/numbers
@@ -19,30 +18,41 @@ export function getSimpleRegex(options) {
 			(?:[-+]\\s*){2,}      # extra pos/neg signs
 			${numberRegex}        # pos/neg decimal number
 		)
-
+	`;
+    const spoilered = options?.allowSpoilers
+        ? `(?:${simpleRegex}|\\|\\|${simpleRegex}\\|\\|)`
+        : `(?:${simpleRegex})`;
+    return xRegExp(`
+		(?<!d\\d*)                # ignore the entire thing if preceded by dY or XdY
+		${spoilered}
 		(?!\\d*d\\d)              # ignore the entire thing if followed by dY or XdY
-		`, flags);
+	`, flags);
 }
-export function hasSimple(value) {
-    return getSimpleRegex().test(value);
+export function hasSimple(value, options) {
+    return getSimpleRegex(options).test(value);
 }
-export function doSimple(input) {
+export function doSimple(input, options) {
     const logQueue = new LogQueue("doSimple", input);
     let output = input;
-    const regex = getSimpleRegex({ globalFlag: true });
+    const regex = getSimpleRegex({ globalFlag: true, allowSpoilers: options?.allowSpoilers });
     while (regex.test(output)) {
         output = output.replace(regex, value => {
-            const retVal = (result) => { logQueue.add({ label: "retVal", value, result }); return result; };
+            const { hasPipes, unpiped } = unpipe(value);
+            const retVal = (result) => {
+                logQueue.add({ label: "retVal", value, result });
+                return hasPipes ? `||${result}||` : result;
+            };
             try {
-                value = value.replace(/-+|\++/g, s => s.split("").join(" "));
-                value = value.replace(/\^/g, "**");
-                const outValue = eval(value);
+                const prepped = unpiped
+                    .replace(/-+|\++/g, s => s.split("").join(" "))
+                    .replace(/\^/g, "**");
+                const outValue = eval(prepped);
                 if (outValue === null || outValue === undefined || isNaN(outValue)) {
                     return retVal(`(NaN)`);
                 }
-                const outStringValue = String(outValue).trim();
+                const outStringValue = String(outValue);
                 const signRegex = /^[+-]/;
-                const result = signRegex.test(value.trim()) && !signRegex.test(outStringValue)
+                const result = signRegex.test(prepped.trim()) && !signRegex.test(outStringValue)
                     ? `+${outStringValue}`
                     : outStringValue;
                 return retVal(result);

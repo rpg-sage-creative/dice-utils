@@ -25,6 +25,7 @@ runTests(async function test_processMath() {
 		["2*(1+3)^2",32],
 		["2(1+3)^2",32],
 		[`round( ( min( max( 2-1,2+0 ), 3 ) * floor( ( round(9-4.5) * 0.3 ) + 4 ) ) )`,10],
+		[`round( ( min( max( ||2-1||,2+0 ), 3 ) * floor( ( round(9-4.5) * 0.3 ) + 4 ) ) )`,"||10||"],
 		[`round( ( min( max( 1,2 ), 3 ) * floor( ( round(4.5) * 0.3 ) + 4 ) ) )`,10],
 		[`round( ( min( max( 1,2 ), 3 ) * floor( ( round(4.5) * 0.3 ) + 4 ) ) )`.replace(/\s/g, ""),10],
 		[`round( ( min(max(1,2),3) * floor((round(4.5)+0.3)+4) )+1.9 )`,20],
@@ -46,6 +47,6 @@ runTests(async function test_processMath() {
 		["1d20 ac (10-2)", "1d20 ac 8"],
 	];
 	tests.forEach(([input,expected]) => {
-		assert(String(expected), processMath, input);
+		assert(String(expected), processMath, input, { allowSpoilers:true });
 	})
 }, true);

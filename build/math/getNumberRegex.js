@@ -1,11 +1,14 @@
-import XRegExp from "xregexp";
+import { xRegExp } from "../internal/xRegExp.js";
 export function getNumberRegex(options) {
     const flags = options?.globalFlag ? "xg" : "x";
-    return XRegExp(`
-		(?:               # open non-capture group
-			[+-]?         # optional pos/neg sign
-			\\d+          # integer portion
-			(?:\\.\\d+)?  # optional decimal portion
-		)                 # close non-capture group
-	`, flags);
+    const numberRegex = `
+		[+-]?         # optional pos/neg sign
+		\\d+          # integer portion
+		(?:\\.\\d+)?  # optional decimal portion
+	`;
+    if (options?.allowSpoilers) {
+        const spoileredRegex = `\\|\\|${numberRegex}\\|\\|`;
+        return xRegExp(`(?:${numberRegex}|${spoileredRegex})`, flags);
+    }
+    return xRegExp(`(?:${numberRegex})`, flags);
 }

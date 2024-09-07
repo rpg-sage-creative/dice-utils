@@ -3,7 +3,7 @@ import { doStatMath } from "./doStatMath.js";
 import { hasStatBlock, replaceStatBlocks } from "./StatBlock.js";
 export function processStatBlocks(diceString, args, stack = []) {
     if (!hasStatBlock(diceString)) {
-        return processMath(diceString);
+        return processMath(diceString, { allowSpoilers: true });
     }
     let replaced = diceString;
     do {
