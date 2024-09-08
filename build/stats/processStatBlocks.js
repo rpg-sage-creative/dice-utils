@@ -1,12 +1,8 @@
-import { processMath } from "../math/processMath.js";
 import { doStatMath } from "./doStatMath.js";
 import { hasStatBlock, replaceStatBlocks } from "./StatBlock.js";
 export function processStatBlocks(diceString, args, stack = []) {
-    if (!hasStatBlock(diceString)) {
-        return processMath(diceString, { allowSpoilers: true });
-    }
     let replaced = diceString;
-    do {
+    while (hasStatBlock(replaced)) {
         replaced = replaceStatBlocks(replaced, statBlock => {
             const { charName, isPcType, isAltType, stackValue, statKey, defaultValue } = statBlock;
             let char;
@@ -34,6 +30,6 @@ export function processStatBlocks(diceString, args, stack = []) {
             }
             return undefined;
         }, stack);
-    } while (hasStatBlock(replaced));
+    }
     return doStatMath(replaced);
 }
