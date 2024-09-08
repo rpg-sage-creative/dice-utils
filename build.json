@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/dice-utils",
-"version":"0.0.22",
+"version":"0.0.23",
 "branch":"main",
-"commit":"19c11960b8951b39f25e56a380470953da1a23d3",
-"commitSubject":"fix regexp x flag",
-"commitTs":1725688055000,
-"commitDate":"2024-09-06-2247",
-"buildTs":1725689199000,
-"buildDate":"2024-09-06-2306",
+"commit":"aefee129636a222dbc33242c531b51e8ab0a79d6",
+"commitSubject":"comments, imrpove comments regex",
+"commitTs":1725768641000,
+"commitDate":"2024-09-07-2110",
+"buildTs":1725768701000,
+"buildDate":"2024-09-07-2111",
 "author":"Randal"
 }
