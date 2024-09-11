@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/dice-utils",
-"version":"0.0.23",
+"version":"0.0.24",
 "branch":"main",
-"commit":"aefee129636a222dbc33242c531b51e8ab0a79d6",
-"commitSubject":"comments, imrpove comments regex",
-"commitTs":1725768641000,
-"commitDate":"2024-09-07-2110",
-"buildTs":1725768701000,
-"buildDate":"2024-09-07-2111",
+"commit":"c7f17f323309818be67fad941ace4af3e34c118d",
+"commitSubject":"include anchored as a getNumberRegex option",
+"commitTs":1726083734000,
+"commitDate":"2024-09-11-1242",
+"buildTs":1726083760000,
+"buildDate":"2024-09-11-1242",
 "author":"Randal"
 }
