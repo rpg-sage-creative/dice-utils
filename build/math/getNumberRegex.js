@@ -1,5 +1,10 @@
 import { xRegExp } from "../internal/xRegExp.js";
 export function getNumberRegex(options) {
+    let capture = `?:`;
+    if (options?.capture) {
+        capture = options.capture === true ? `` : `?<${options.capture}>`;
+    }
+    const { leftAnchor = "", rightAnchor = "" } = options?.anchored ? { leftAnchor: "^", rightAnchor: "$" } : {};
     const flags = options?.globalFlag ? "xg" : "x";
     const numberRegex = `
 		[+-]?         # optional pos/neg sign
@@ -8,7 +13,7 @@ export function getNumberRegex(options) {
 	`;
     if (options?.allowSpoilers) {
         const spoileredRegex = `\\|\\|${numberRegex}\\|\\|`;
-        return xRegExp(`(?:${numberRegex}|${spoileredRegex})`, flags);
+        return xRegExp(`${leftAnchor}(${capture}${numberRegex}|${spoileredRegex})${rightAnchor}`, flags);
     }
-    return xRegExp(`(?:${numberRegex})`, flags);
+    return xRegExp(`${leftAnchor}(${capture}${numberRegex})${rightAnchor}`, flags);
 }
