@@ -1,19 +1,24 @@
-import { xRegExp } from "../internal/xRegExp.js";
-export function getNumberRegex(options) {
-    let capture = `?:`;
-    if (options?.capture) {
-        capture = options.capture === true ? `` : `?<${options.capture}>`;
-    }
-    const { leftAnchor = "", rightAnchor = "" } = options?.anchored ? { leftAnchor: "^", rightAnchor: "$" } : {};
-    const flags = options?.globalFlag ? "xg" : "x";
-    const numberRegex = `
-		[+-]?         # optional pos/neg sign
-		\\d+          # integer portion
-		(?:\\.\\d+)?  # optional decimal portion
+import { regex } from "regex";
+import { spoilerRegex } from "../internal/spoilerRegex.js";
+function createNumberRegex(options) {
+    const { anchored, capture, gFlag = "", iFlag = "" } = options ?? {};
+    const captureKey = capture ? `?<${capture}>` : ``;
+    const numberRegex = regex(iFlag) `
+		[\-+]?    # optional pos/neg sign
+		\d+       # integer portion
+		(\.\d+)?  # optional decimal portion
 	`;
-    if (options?.allowSpoilers) {
-        const spoileredRegex = `\\|\\|${numberRegex}\\|\\|`;
-        return xRegExp(`${leftAnchor}(${capture}${numberRegex}|${spoileredRegex})${rightAnchor}`, flags);
+    const spoileredRegex = spoilerRegex(numberRegex, options);
+    if (anchored) {
+        return regex(gFlag + iFlag) `^ (${captureKey} ${spoileredRegex}) $`;
     }
-    return xRegExp(`${leftAnchor}(${capture}${numberRegex})${rightAnchor}`, flags);
+    return regex(gFlag + iFlag) `(${captureKey} ${spoileredRegex})`;
+}
+const cache = {};
+function createCacheKey(options) {
+    return [options?.anchored ?? false, options?.capture ?? "", options?.gFlag ?? false, options?.iFlag ?? false, options?.spoilers ?? false].join("|");
+}
+export function getNumberRegex(options) {
+    const key = createCacheKey(options);
+    return cache[key] ?? (cache[key] = createNumberRegex(options));
 }

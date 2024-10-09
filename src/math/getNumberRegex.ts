@@ -1,38 +1,54 @@
-import { xRegExp } from "../internal/xRegExp.js";
+import { regex } from "regex";
+import { spoilerRegex } from "../internal/spoilerRegex.js";
 
 type Options = {
-	/** include a number wrapped in discord spoiler tags, ex: ||1|| */
-	allowSpoilers?: boolean;
 	/** require the value to be "anchored" to start/end of the string */
 	anchored?: boolean;
+
 	/** capture the number, optionally with a capture group */
-	capture?: boolean | string;
+	capture?: string;
+
 	/** include the global flag in the regex */
-	globalFlag?: boolean;
+	gFlag?: "g" | "";
+
+	/** include the case insensitive flag in the regex */
+	iFlag?: "i" | "";
+
+	/** are spoilers allowed or optional */
+	spoilers?: boolean | "optional";
 };
 
-/** A reusable way to get proper regex for a valid +/- integer or decimal. */
-export function getNumberRegex(options?: Options): RegExp {
-	// default capture: none
-	let capture = `?:`;
-	if (options?.capture) {
-		capture = options.capture === true ? `` : `?<${options.capture}>`;
-	}
+/** Creates a new instance of the number regex based on options. */
+function createNumberRegex(options?: Options): RegExp {
+	const { anchored, capture, gFlag = "", iFlag = "" } = options ?? {};
 
-	const { leftAnchor = "", rightAnchor = "" } = options?.anchored ? { leftAnchor:"^", rightAnchor:"$" } : { };
+	const captureKey = capture ? `?<${capture}>` : ``;
 
-	const flags = options?.globalFlag ? "xg" : "x";
-
-	const numberRegex = `
-		[+-]?         # optional pos/neg sign
-		\\d+          # integer portion
-		(?:\\.\\d+)?  # optional decimal portion
+	const numberRegex = regex(iFlag)`
+		[\-+]?    # optional pos/neg sign
+		\d+       # integer portion
+		(\.\d+)?  # optional decimal portion
 	`;
 
-	if (options?.allowSpoilers) {
-		const spoileredRegex = `\\|\\|${numberRegex}\\|\\|`;
-		return xRegExp(`${leftAnchor}(${capture}${numberRegex}|${spoileredRegex})${rightAnchor}`, flags);
+	const spoileredRegex = spoilerRegex(numberRegex, options);
+
+	if (anchored) {
+		return regex(gFlag + iFlag)`^ (${captureKey} ${spoileredRegex}) $`;
 	}
 
-	return xRegExp(`${leftAnchor}(${capture}${numberRegex})${rightAnchor}`, flags);
+	return regex(gFlag + iFlag)`(${captureKey} ${spoileredRegex})`;
+}
+
+/** Stores each unique instance to avoid duplicating regex when not needed. */
+const cache: { [key: string]: RegExp; } = { };
+
+/** Creates the unique key for each variant based on options. */
+function createCacheKey(options?: Options): string {
+	return [options?.anchored ?? false, options?.capture ?? "", options?.gFlag ?? false, options?.iFlag ?? false, options?.spoilers ?? false].join("|");
+}
+
+/** Returns a cached instance of the number regex. */
+export function getNumberRegex(options?: Options): RegExp {
+	const key = createCacheKey(options);
+	return cache[key] ?? (cache[key] = createNumberRegex(options));
 }

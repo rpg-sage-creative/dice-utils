@@ -24,6 +24,13 @@ runTests(async function test_getNumberRegex() {
 		assert(value, testNumberRegex, ` ${value} `);
 		assert(undefined, testNumberRegex, ` ${value} `, { anchored:true });
 		assert(value, testNumberRegex, ` ${value} `, { anchored:false });
+
+		assert(undefined, testNumberRegex, value, { spoilers:true });
+		assert(`||${value}||`, testNumberRegex, `||${value}||`, { spoilers:true });
+		assert(`||${value}||`, testNumberRegex, `||${value}||`, { spoilers:"optional" });
+
+		assert(undefined, testNumberRegex, ` ||${value}|| `, { anchored:true, spoilers:true });
+		assert(`||${value}||`, testNumberRegex, ` ||${value}|| `, { anchored:false, spoilers:true });
 	});
 
 }, true);
