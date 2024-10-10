@@ -15,10 +15,9 @@ function createNumberRegex(options) {
     return regex(gFlag + iFlag) `(${captureKey} ${spoileredRegex})`;
 }
 const cache = {};
-function createCacheKey(options) {
-    return [options?.anchored ?? false, options?.capture ?? "", options?.gFlag ?? false, options?.iFlag ?? false, options?.spoilers ?? false].join("|");
-}
 export function getNumberRegex(options) {
-    const key = createCacheKey(options);
+    if (options?.gFlag)
+        return createNumberRegex(options);
+    const key = [options?.anchored ?? "", options?.capture ?? "", options?.gFlag ?? "", options?.iFlag ?? "", options?.spoilers ?? ""].join("|");
     return cache[key] ?? (cache[key] = createNumberRegex(options));
 }

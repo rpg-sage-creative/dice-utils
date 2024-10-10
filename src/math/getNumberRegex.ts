@@ -42,13 +42,13 @@ function createNumberRegex(options?: Options): RegExp {
 /** Stores each unique instance to avoid duplicating regex when not needed. */
 const cache: { [key: string]: RegExp; } = { };
 
-/** Creates the unique key for each variant based on options. */
-function createCacheKey(options?: Options): string {
-	return [options?.anchored ?? false, options?.capture ?? "", options?.gFlag ?? false, options?.iFlag ?? false, options?.spoilers ?? false].join("|");
-}
-
-/** Returns a cached instance of the number regex. */
+/**
+ * Returns an instance of the number regexp.
+ * If gFlag is passed, a new regexp is created.
+ * If gFlag is not passed, a cached version of the regexp is used.
+ */
 export function getNumberRegex(options?: Options): RegExp {
-	const key = createCacheKey(options);
+	if (options?.gFlag) return createNumberRegex(options);
+	const key = [options?.anchored ?? "", options?.capture ?? "", options?.gFlag ?? "", options?.iFlag ?? "", options?.spoilers ?? ""].join("|");
 	return cache[key] ?? (cache[key] = createNumberRegex(options));
 }
