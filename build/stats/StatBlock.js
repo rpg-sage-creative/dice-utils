@@ -1,48 +1,31 @@
-import XRegExp from "xregexp";
+import { regex } from "regex";
 import { unquote } from "../internal/unquote.js";
 function createCharTypeRegex() {
-    return XRegExp(`
+    return regex("i") `
 		^
-		(pc|stat)?
-		(companion|hireling|alt|familiar)?
+		(?<pcOrStat> pc | stat )?
+		(?<alt> companion | hireling | alt | familiar )?
 		$
-	`, "xi");
+	`;
 }
 let charTypeRegex;
 function getCharTypeRegex() {
     return charTypeRegex ?? (charTypeRegex = createCharTypeRegex());
 }
 function createStatBlockRegex() {
-    return XRegExp(`
-		# no tick
-		(?<!\`)
-
-		\\{
-			# char name or quoted char name
-			(
-				[\\w ]+    # <-- should we drop this space?
-				|          # <-- in other places we allow alias (no spaces) or "quoted name with spaces"
-				"[\\w ]+"
-			)
-
-			# separator
+    return regex("i") `
+		(?<!${"`"}) # no tick
+		\{
+			(?<charName> [\w\s]+ | "[\w\s]+" )
 			:{2}
-
-			# stat key
+			(?<statKey> [^:\{\}]+ )
 			(
-				[^:{}]+
-			)
-
-			# default value
-			(?:
 				:
-				([^{}]+)
+				(?<defaultValue> [^\{\}]+ )
 			)?
-		\\}
-
-		# no tick
-		(?!\`)
-	`, `xi`);
+		\}
+		(?!${"`"}) # no tick
+	`;
 }
 let statBlockRegex;
 function getStatBlockRegex() {
@@ -52,7 +35,7 @@ export function hasStatBlock(value) {
     return getStatBlockRegex().test(value);
 }
 function parseStatBlock(value) {
-    const match = XRegExp.exec(value, getStatBlockRegex());
+    const match = getStatBlockRegex().exec(value);
     if (!match)
         return undefined;
     let [nameOrCharType, statKey, defaultValue] = match.slice(1);
@@ -60,7 +43,7 @@ function parseStatBlock(value) {
     statKey = statKey.trim();
     defaultValue = defaultValue?.trim();
     const stackValue = `${nameOrCharType}::${statKey}`.toLowerCase();
-    const [charType, isPcType, isAltType] = XRegExp.exec(nameOrCharType, getCharTypeRegex()) ?? [];
+    const [charType, isPcType, isAltType] = getCharTypeRegex().exec(nameOrCharType) ?? [];
     const charName = charType ? undefined : nameOrCharType;
     return {
         charName,
@@ -73,12 +56,12 @@ function parseStatBlock(value) {
     };
 }
 export function replaceStatBlocks(value, handler, stack) {
-    return XRegExp.replace(value, getStatBlockRegex(), match => {
+    return value.replace(getStatBlockRegex(), match => {
         const statBlock = parseStatBlock(match.toString());
         let result;
         if (statBlock && !stack.includes(statBlock.stackValue)) {
             result = handler(statBlock);
         }
         return result ?? `\`${match}\``;
-    }, "all");
+    });
 }

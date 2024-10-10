@@ -12,6 +12,6 @@ import { getDiceRegex } from "../token/getDiceRegex.js";
 export function doStatMath(value: string): string {
 	// process other math functions on non-dice parts of the value
 	const tokens = tokenize(value, { dice:getDiceRegex() });
-	const processed = tokens.map(({ token, key }) => key === "dice" ? token : processMath(token, { allowSpoilers:true }));
+	const processed = tokens.map(({ token, key }) => key === "dice" ? token : processMath(token, {spoilers:"optional" }));
 	return processed.join("");
 }

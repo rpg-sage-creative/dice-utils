@@ -1,11 +1,11 @@
-import XRegExp from "xregexp";
+import { regex } from "regex";
 
 /**
  * @internal
  * Removes quotes from around the value.
  */
 export function unquote(value: string): string {
-	const quoteRegex = XRegExp(`
+	const quoteRegex = regex`
 		^(
 			“[^”]*”
 			|
@@ -21,7 +21,7 @@ export function unquote(value: string): string {
 			|
 			‘[^’]*’
 		)$
-	`, "xi");
+	`;
 	return quoteRegex.test(value)
 		? value.slice(1, -1)
 		: value;

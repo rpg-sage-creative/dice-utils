@@ -1,16 +1,20 @@
 type Options = {
-    allowSpoilers?: boolean;
-    globalFlag?: boolean;
+    /** include the global flag in the regex */
+    gFlag?: "g" | "";
+    /** include the case insensitive flag in the regex */
+    iFlag?: "i" | "";
+    /** are spoilers allowed or optional */
+    spoilers?: boolean | "optional";
 };
-/** Returns a regular expression that finds tests for only simple math operations. */
+/** Returns a cached instance of the simple math regex. */
 export declare function getSimpleRegex(options?: Options): RegExp;
-/** Attempts to do the math and returns true if the result was not null. */
-export declare function hasSimple(value: string, options?: Omit<Options, "globalFlag">): boolean;
+/** Tests the value against a simple math regex using the given options. */
+export declare function hasSimple(value: string, options?: Omit<Options, "gFlag">): boolean;
 /**
- * Ensures the value has only mathematical characters before performing an eval to get the math results.
+ * Replaces all instances of simple math with the resulting calculated value.
  * Valid math symbols: [-+/*%^] and spaces and numbers.
- * Returns undefined if the value isn't simple math.
- * Returns null if an error occurred during eval().
+ * Any math resulting in null, undefined, or NaN will have "(NaN)" instead of a numeric result.
+ * Any math that throws an error wille have "(ERR)" instead of a numeric result.
  */
-export declare function doSimple(input: string, options?: Omit<Options, "globalFlag">): string;
+export declare function doSimple(input: string, options?: Omit<Options, "gFlag">): string;
 export {};

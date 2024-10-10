@@ -29,11 +29,15 @@ runTests(async function test_processMath() {
 		[`round( ( min( max( 1,2 ), 3 ) * floor( ( round(4.5) * 0.3 ) + 4 ) ) )`,10],
 		[`round( ( min( max( 1,2 ), 3 ) * floor( ( round(4.5) * 0.3 ) + 4 ) ) )`.replace(/\s/g, ""),10],
 		[`round( ( min(max(1,2),3) * floor((round(4.5)+0.3)+4) )+1.9 )`,20],
+		["round(||-4||/2)","||-2||"],
+		["||round(-4/2)||","||-2||"],
+		["||round(-4/||2||)||","||-2||"],
 		["round(-4/2)",-2],
 		["round(4/-2)",-2],
 		["round(-2-2.5)",-4],
 		["3^2^2", 81],
 		["3(2-1)",3],
+		["3 (2-1)",3],
 		[" 3 ( 2 - 1 )"," 3"],
 		[" 3 ( 2 -- 1 )"," 9"],
 		[" 3 ( 2 - - - 1 )"," 3"],
@@ -47,6 +51,6 @@ runTests(async function test_processMath() {
 		["1d20 ac (10-2)", "1d20 ac 8"],
 	];
 	tests.forEach(([input,expected]) => {
-		assert(String(expected), processMath, input, { allowSpoilers:true });
+		assert(String(expected), processMath, input, { spoilers:"optional" });
 	})
 }, true);

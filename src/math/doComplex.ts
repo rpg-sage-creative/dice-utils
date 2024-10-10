@@ -1,12 +1,18 @@
 import { LogQueue } from "@rsc-utils/core-utils";
-import { xRegExp } from "../internal/xRegExp.js";
+import { regex } from "regex";
+import { cleanPipes, unpipe } from "../internal/pipes.js";
 import { doSimple, getSimpleRegex } from "./doSimple.js";
 import { getNumberRegex } from "./getNumberRegex.js";
-import { unpipe } from "./unpipe.js";
 
 type Options = {
-	allowSpoilers?: boolean;
-	globalFlag?: boolean;
+	/** include the global flag in the regex */
+	gFlag?: "g" | "";
+
+	/** include the case insensitive flag in the regex */
+	iFlag?: "i" | "";
+
+	/** are spoilers allowed or optional */
+	spoilers?: boolean | "optional";
 };
 
 /** Returns a regular expression that finds:
@@ -16,75 +22,116 @@ type Options = {
  * ceil(number)
  * round(number)
  */
-export function getComplexRegex(options?: Options): RegExp {
-	const flags = options?.globalFlag ? "xgi" : "xi";
-	const numberRegex = getNumberRegex({ allowSpoilers:options?.allowSpoilers }).source;
-	const simpleRegex = getSimpleRegex({ allowSpoilers:options?.allowSpoilers }).source;
-	const numberOrSimple = `(?:${numberRegex}|${simpleRegex})`;
-	return xRegExp(`
-		(?<!\\d*d\\d+)                  # ignore the entire thing if preceded by dY or XdY
+function createComplexRegex(options: Options = {}): RegExp {
+	const { gFlag = "", iFlag = "", spoilers } = options ?? {};
 
-		(?:                             # open non-capture group for multiplier/function
-			(${numberRegex})\\s*        # capture a multiplier, ex: 3(4-2) <-- 3 is the multiplier
-			|
-			(min|max|floor|ceil|round)  # capture a math function
-		)?                              # close non-capture group for multiplier/function; make it optional
+	const numberRegex = getNumberRegex({ iFlag, spoilers });
 
-		\\(\\s*                         # open parentheses, optional spaces
-		(                               # open capture group
+	const simpleRegex = getSimpleRegex({ iFlag, spoilers })
+
+	const numberOrSimple = regex(iFlag)`( ${numberRegex} | ${simpleRegex} )`;
+
+	// try atomic group: (?> ${numberOrSimple} \s* ,? )+
+	const functionRegex = regex(iFlag)`
+		(?<functionName> min | max | floor | ceil | round )
+		\s*\(\s*
+		(?<functionArgs>
 			${numberOrSimple}           # first number/simple match
-			(?:                         # open non-capture group
-				\\s*,\\s*               # comma, optional spaces
+			(                           # open non-capture group
+				\s*,\s*                 # comma, optional spaces
 				${numberOrSimple}       # additional number/simple matches
 			)*                          # close non-capture group, allow any number of them
-		)                               # close capture group
-		\\s*\\)                         # close parentheses, optional spaces
+		)
+		\s*\)
+	`;
 
-		(?!\\d*d\\d)                    # ignore the entire thing if followed by dY or XdY
-	`, flags);
+	const multiplierRegex = regex(iFlag)`
+		(?<multiplier> ${numberRegex} \s* )?
+		\(\s*
+		(?<simpleMath> ${numberOrSimple} )
+		\s*\)
+	`;
+
+	const complexRegex = regex(iFlag)`( ${functionRegex} | ${multiplierRegex} )`;
+
+	// const spoileredRegex = spoilerRegex(complexRegex, options);
+
+	return regex(gFlag + iFlag)`
+		(?<!\d*d\d+)         # ignore the entire thing if preceded by d or dY
+		${complexRegex}
+		(?!\d*d\d)        # ignore the entire thing if followed by dY or XdY
+	`;
 }
 
-/** Convenience for getMathFunctionRegex().test(value) */
-export function hasComplex(value: string, options?: Omit<Options, "globalFlag">): boolean {
-	return getComplexRegex(options).test(value);
+/** Stores each unique instance to avoid duplicating regex when not needed. */
+const cache: { [key: string]: RegExp; } = { };
+
+/** Creates the unique key for each variant based on options. */
+function createCacheKey(options?: Options): string {
+	return [options?.gFlag ?? false, options?.iFlag ?? false, options?.spoilers ?? false].join("|");
 }
 
-/** Checks the value for min/max/floor/ceil/round and replaces it with the result. */
-export function doComplex(input: string, options?: Omit<Options, "globalFlag">): string {
+/** Returns a cached instance of the complex regex. */
+export function getComplexRegex(options?: Options): RegExp {
+	const key = createCacheKey(options);
+	return cache[key] ?? (cache[key] = createComplexRegex(options));
+}
+
+/** Tests the value against a complex regex using the given options. */
+export function hasComplex(value: string, options?: Omit<Options, "gFlag">): boolean {
+	return getComplexRegex({ iFlag:options?.iFlag, spoilers:options?.spoilers }).test(value);
+}
+
+/** Replaces all instances of min/max/floor/ceil/round with the resulting calculated value. */
+export function doComplex(input: string, options?: Omit<Options, "gFlag">): string {
 	const logQueue = new LogQueue("doComplex", input);
+
 	let output = input;
-	const regex = getComplexRegex({ globalFlag:true, ...options });
-	while (regex.test(output)) {
-		output = output.replace(regex, (_, _multiplier: string | undefined, _functionName: string | undefined, _args: string) => {
-			const { hasPipes, unpiped } = unpipe(_args);
+	const spoilers = options?.spoilers;
+
+	const complexRegex = getComplexRegex({ gFlag:"g", iFlag:options?.iFlag, spoilers });
+	while (complexRegex.test(output)) {
+		output = output.replace(complexRegex, (_, _functionName: string | undefined, _functionArgs: string, _multiplier: string | undefined, _simpleMath: string) => {
+			if (!spoilers && unpipe(_).hasPipes) return _;
+
+			let hasPipes = false;
 
 			const retVal = (result: string | number) => {
 				logQueue.add({label:"retVal",_,result});
 				return hasPipes ? `||${result}||` : String(result);
 			};
 
-			// split on space,space and convert to numbers
-			const args = unpiped.split(/\s*,\s*/).map(s => +doSimple(s)!);
-
 			// handle a math function
 			if (_functionName !== undefined) {
 				// lower case and cast type
 				const functionName = _functionName?.toLowerCase() as "min";
+				// check function args for pipes
+				const functionArgsPipeInfo = unpipe(_functionArgs);
+				// update hasPips for the retVal
+				hasPipes = functionArgsPipeInfo.hasPipes;
+				// split on space,space and convert to numbers
+				const functionArgs = functionArgsPipeInfo.unpiped.split(/\s*,\s*/).map(s => +doSimple(s)!);
 				// do the math
-				const result = Math[functionName](...args);
+				const result = Math[functionName](...functionArgs);
 				// return a string
 				return retVal(result);
 			}
 
+			const simpleMathPipeInfo = unpipe(_simpleMath);
+
+			hasPipes = simpleMathPipeInfo.hasPipes;
+
 			if (_multiplier !== undefined) {
 				// return the new math so that it can be reprocessed
-				return retVal(`${_multiplier}*${args[0]}`);
+				return retVal(`${_multiplier}*${doSimple(simpleMathPipeInfo.unpiped)}`);
 			}
 
-			return retVal(`${args[0]}`);
+			return retVal(`${doSimple(simpleMathPipeInfo.unpiped)}`);
 		});
 		logQueue.add({label:"while",input,output});
 	}
+
 	// logQueue.logDiff(output);
-	return output;
+
+	return spoilers ? cleanPipes(output) : output;
 }

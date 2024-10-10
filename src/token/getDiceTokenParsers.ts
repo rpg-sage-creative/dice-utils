@@ -13,7 +13,7 @@ export function getDiceTokenParsers(): TokenParsers {
 		...DiceThreshold.getParsers(),
 		...DiceExplode.getParsers(),
 		noSort: /(ns)/i,
-		mod: /([-+*/])\s*(\d+)(?!d\d)/i,
+		mod: /([\-+\/*])\s*(\d+)(?!d\d)/i,
 		quotes: /`[^`]+`|“[^”]+”|„[^“]+“|„[^”]+”|"[^"]+"/,
 		...DiceTest.getParsers()
 	};

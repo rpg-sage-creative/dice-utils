@@ -1,59 +1,82 @@
-import { LogQueue } from "@rsc-utils/core-utils";
-import { xRegExp } from "../internal/xRegExp.js";
+import { error, LogQueue } from "@rsc-utils/core-utils";
+import { regex } from "regex";
+import { unpipe } from "../internal/pipes.js";
+import { spoilerRegex } from "../internal/spoilerRegex.js";
 import { getNumberRegex } from "./getNumberRegex.js";
-import { unpipe } from "./unpipe.js";
 
 type Options = {
-	allowSpoilers?: boolean;
-	globalFlag?: boolean;
+	/** include the global flag in the regex */
+	gFlag?: "g" | "";
+
+	/** include the case insensitive flag in the regex */
+	iFlag?: "i" | "";
+
+	/** are spoilers allowed or optional */
+	spoilers?: boolean | "optional";
 };
 
-/** Returns a regular expression that finds tests for only simple math operations. */
-export function getSimpleRegex(options?: Options): RegExp {
-	const flags = options?.globalFlag ? "xgi" : "xi";
-	const numberRegex = getNumberRegex({ allowSpoilers:options?.allowSpoilers }).source;
-	const simpleRegex = `
-		(?:
-			${numberRegex}        # pos/neg decimal number
-			(?:                   # open group for operands/numbers
-				\\s*              # optional whitespace
-				[-+/*%^]          # operator
-				[-+\\s]*          # possible extra pos/neg signs
-				${numberRegex}    # pos/neg decimal number
-			)+                    # close group for operands/numbers
+/** Creates a new instance of the simple math regex based on options. */
+function createSimpleRegex(options?: Options): RegExp {
+	const { gFlag = "", iFlag = "", spoilers } = options ?? {};
+
+	const numberRegex = getNumberRegex({ iFlag, spoilers });
+
+	const simpleRegex = regex(iFlag)`
+		(
+			${numberRegex}      # pos/neg decimal number
+			(                   # open group for operands/numbers
+				\s*             # optional whitespace
+				[\-+\/*%^]      # operator
+				[\-+\s]*        # possible extra pos/neg signs
+				${numberRegex}  # pos/neg decimal number
+			)+                  # close group for operands/numbers
 			|
-			(?:[-+]\\s*){2,}      # extra pos/neg signs
-			${numberRegex}        # pos/neg decimal number
+			([\-+]\s*){2,}      # extra pos/neg signs
+			${numberRegex}      # pos/neg decimal number
 		)
 	`;
-	const spoilered = options?.allowSpoilers
-		? `(?:${simpleRegex}|\\|\\|${simpleRegex}\\|\\|)`
-		: `(?:${simpleRegex})`;
 
-	return xRegExp(`
-		(?<!d\\d*)                # ignore the entire thing if preceded by dY or XdY
-		${spoilered}
-		(?!\\d*d\\d)              # ignore the entire thing if followed by dY or XdY
-	`, flags);
+	const spoileredRegex = spoilerRegex(simpleRegex, options);
+
+	/** @todo WHY ISN'T THE FIRST ONE THE SAME AS THE SECOND ONE? SEE COMPLEX ... */
+	return regex(gFlag + iFlag)`
+		(?<!d\d*)         # ignore the entire thing if preceded by d or dY
+		${spoileredRegex}
+		(?!\d*d\d)        # ignore the entire thing if followed by dY or XdY
+	`;
 }
 
-/** Attempts to do the math and returns true if the result was not null. */
-export function hasSimple(value: string, options?: Omit<Options, "globalFlag">): boolean {
-	return getSimpleRegex(options).test(value);
+/** Stores each unique instance to avoid duplicating regex when not needed. */
+const cache: { [key: string]: RegExp; } = { };
+
+/** Creates the unique key for each variant based on options. */
+function createCacheKey(options?: Options): string {
+	return [options?.gFlag ?? false, options?.iFlag ?? false, options?.spoilers ?? false].join("|");
+}
+
+/** Returns a cached instance of the simple math regex. */
+export function getSimpleRegex(options?: Options): RegExp {
+	const key = createCacheKey(options);
+	return cache[key] ?? (cache[key] = createSimpleRegex(options));
+}
+
+/** Tests the value against a simple math regex using the given options. */
+export function hasSimple(value: string, options?: Omit<Options, "gFlag">): boolean {
+	return getSimpleRegex({ iFlag:options?.iFlag, spoilers:options?.spoilers }).test(value);
 }
 
 /**
- * Ensures the value has only mathematical characters before performing an eval to get the math results.
+ * Replaces all instances of simple math with the resulting calculated value.
  * Valid math symbols: [-+/*%^] and spaces and numbers.
- * Returns undefined if the value isn't simple math.
- * Returns null if an error occurred during eval().
+ * Any math resulting in null, undefined, or NaN will have "(NaN)" instead of a numeric result.
+ * Any math that throws an error wille have "(ERR)" instead of a numeric result.
  */
-export function doSimple(input: string, options?: Omit<Options, "globalFlag">): string {
+export function doSimple(input: string, options?: Omit<Options, "gFlag">): string {
 	const logQueue = new LogQueue("doSimple", input);
 	let output = input;
-	const regex = getSimpleRegex({ globalFlag:true, allowSpoilers:options?.allowSpoilers });
-	while (regex.test(output)) {
-		output = output.replace(regex, value => {
+	const simpleRegex = getSimpleRegex({ gFlag:"g", iFlag:options?.iFlag, spoilers:options?.spoilers });
+	while (simpleRegex.test(output)) {
+		output = output.replace(simpleRegex, value => {
 			const { hasPipes, unpiped } = unpipe(value);
 
 			const retVal = (result: string) => {
@@ -61,15 +84,16 @@ export function doSimple(input: string, options?: Omit<Options, "globalFlag">): 
 				return hasPipes ? `||${result}||` : result;
 			};
 
+			const prepped = unpiped
+
+				// by spacing the -- or ++ characters, the eval can properly process them
+				.replace(/\-+|\++/g, s => s.split("").join(" "))
+
+				// replace the caret (math exponent) with ** (code exponent)
+				.replace(/\^/g, "**");
+
 			try {
 
-				const prepped = unpiped
-
-					// by spacing the -- or ++ characters, the eval can properly process them
-					.replace(/-+|\++/g, s => s.split("").join(" "))
-
-					// replace the caret (math exponent) with ** (code exponent)
-					.replace(/\^/g, "**");
 
 				// do the math
 				const outValue = eval(prepped);
@@ -81,8 +105,8 @@ export function doSimple(input: string, options?: Omit<Options, "globalFlag">): 
 
 				// if the evaluated number is a negative, it will start with -, allowing math/parsing to continue
 				// therefore, we should leave a + if a sign was present before the eval() call and the result is positive
-				const outStringValue = String(outValue);//.trim();
-				const signRegex = /^[+-]/;
+				const outStringValue = String(outValue);
+				const signRegex = /^[\-+]/;
 				const result = signRegex.test(prepped.trim()) && !signRegex.test(outStringValue)
 					? `+${outStringValue}`
 					: outStringValue;
@@ -90,6 +114,7 @@ export function doSimple(input: string, options?: Omit<Options, "globalFlag">): 
 				return retVal(result);
 
 			}catch(ex) {
+				error(prepped)
 				return retVal(`(ERR)`);
 			}
 		});
