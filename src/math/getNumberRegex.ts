@@ -22,8 +22,6 @@ type Options = {
 function createNumberRegex(options?: Options): RegExp {
 	const { anchored, capture, gFlag = "", iFlag = "" } = options ?? {};
 
-	const captureKey = capture ? `?<${capture}>` : ``;
-
 	const numberRegex = regex(iFlag)`
 		[\-+]?    # optional pos/neg sign
 		\d+       # integer portion
@@ -33,10 +31,16 @@ function createNumberRegex(options?: Options): RegExp {
 	const spoileredRegex = spoilerRegex(numberRegex, options);
 
 	if (anchored) {
-		return regex(gFlag + iFlag)`^ (${captureKey} ${spoileredRegex}) $`;
+		if (capture) {
+			return regex(gFlag + iFlag)`^ (?<${capture}> ${spoileredRegex}) $`;
+		}
+		return regex(gFlag + iFlag)`^ ${spoileredRegex} $`;
 	}
 
-	return regex(gFlag + iFlag)`(${captureKey} ${spoileredRegex})`;
+	if (capture) {
+		return regex(gFlag + iFlag)`(?<${capture}> ${spoileredRegex})`;
+	}
+	return regex(gFlag + iFlag)`${spoileredRegex}`;
 }
 
 /** Stores each unique instance to avoid duplicating regex when not needed. */

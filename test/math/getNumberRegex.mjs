@@ -31,6 +31,11 @@ runTests(async function test_getNumberRegex() {
 
 		assert(undefined, testNumberRegex, ` ||${value}|| `, { anchored:true, spoilers:true });
 		assert(`||${value}||`, testNumberRegex, ` ||${value}|| `, { anchored:false, spoilers:true });
+
+		const regexp = getNumberRegex({ capture:"num" });
+		const match = regexp.exec(value);
+		const matchedValue = match?.groups?.num;
+		assert(value === matchedValue, `${JSON.stringify(value)} !== ${JSON.stringify(matchedValue)}`);
 	});
 
 }, true);

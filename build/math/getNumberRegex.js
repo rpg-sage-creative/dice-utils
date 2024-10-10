@@ -2,7 +2,6 @@ import { regex } from "regex";
 import { spoilerRegex } from "../internal/spoilerRegex.js";
 function createNumberRegex(options) {
     const { anchored, capture, gFlag = "", iFlag = "" } = options ?? {};
-    const captureKey = capture ? `?<${capture}>` : ``;
     const numberRegex = regex(iFlag) `
 		[\-+]?    # optional pos/neg sign
 		\d+       # integer portion
@@ -10,9 +9,15 @@ function createNumberRegex(options) {
 	`;
     const spoileredRegex = spoilerRegex(numberRegex, options);
     if (anchored) {
-        return regex(gFlag + iFlag) `^ (${captureKey} ${spoileredRegex}) $`;
+        if (capture) {
+            return regex(gFlag + iFlag) `^ (?<${capture}> ${spoileredRegex}) $`;
+        }
+        return regex(gFlag + iFlag) `^ ${spoileredRegex} $`;
     }
-    return regex(gFlag + iFlag) `(${captureKey} ${spoileredRegex})`;
+    if (capture) {
+        return regex(gFlag + iFlag) `(?<${capture}> ${spoileredRegex})`;
+    }
+    return regex(gFlag + iFlag) `${spoileredRegex}`;
 }
 const cache = {};
 export function getNumberRegex(options) {
