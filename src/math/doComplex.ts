@@ -87,10 +87,13 @@ export function doComplex(input: string, options?: Omit<Options, "gFlag">): stri
 	const logQueue = new LogQueue("doComplex", input);
 
 	let output = input;
+	const spoilers = options?.spoilers;
 
-	const complexRegex = getComplexRegex({ gFlag:"g", iFlag:options?.iFlag, spoilers:options?.spoilers });
+	const complexRegex = getComplexRegex({ gFlag:"g", iFlag:options?.iFlag, spoilers });
 	while (complexRegex.test(output)) {
 		output = output.replace(complexRegex, (_, _functionName: string | undefined, _functionArgs: string, _multiplier: string | undefined, _simpleMath: string) => {
+			if (!spoilers && unpipe(_).hasPipes) return _;
+
 			let hasPipes = false;
 
 			const retVal = (result: string | number) => {
@@ -130,5 +133,5 @@ export function doComplex(input: string, options?: Omit<Options, "gFlag">): stri
 
 	// logQueue.logDiff(output);
 
-	return cleanPipes(output);
+	return spoilers ? cleanPipes(output) : output;
 }

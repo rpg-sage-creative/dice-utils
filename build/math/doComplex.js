@@ -47,9 +47,12 @@ export function hasComplex(value, options) {
 export function doComplex(input, options) {
     const logQueue = new LogQueue("doComplex", input);
     let output = input;
-    const complexRegex = getComplexRegex({ gFlag: "g", iFlag: options?.iFlag, spoilers: options?.spoilers });
+    const spoilers = options?.spoilers;
+    const complexRegex = getComplexRegex({ gFlag: "g", iFlag: options?.iFlag, spoilers });
     while (complexRegex.test(output)) {
         output = output.replace(complexRegex, (_, _functionName, _functionArgs, _multiplier, _simpleMath) => {
+            if (!spoilers && unpipe(_).hasPipes)
+                return _;
             let hasPipes = false;
             const retVal = (result) => {
                 logQueue.add({ label: "retVal", _, result });
@@ -72,5 +75,5 @@ export function doComplex(input, options) {
         });
         logQueue.add({ label: "while", input, output });
     }
-    return cleanPipes(output);
+    return spoilers ? cleanPipes(output) : output;
 }
