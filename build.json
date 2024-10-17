@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/dice-utils",
-"version":"0.0.24",
+"version":"0.0.25",
 "branch":"main",
-"commit":"c7f17f323309818be67fad941ace4af3e34c118d",
-"commitSubject":"include anchored as a getNumberRegex option",
-"commitTs":1726083734000,
-"commitDate":"2024-09-11-1242",
-"buildTs":1726083760000,
-"buildDate":"2024-09-11-1242",
+"commit":"08a4b5e9d38c8d0deafbc4b3615b8f977274c71f",
+"commitSubject":"core-utils updates",
+"commitTs":1729204382000,
+"commitDate":"2024-10-17-1533",
+"buildTs":1729204408000,
+"buildDate":"2024-10-17-1533",
 "author":"Randal"
 }
