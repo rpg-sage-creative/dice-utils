@@ -1,5 +1,5 @@
 import { assert, runTests } from "@rsc-utils/core-utils";
-import { doComplex } from "../../build/index.js";
+import { doComplex } from "../../build/math/internal/doComplex.js";
 
 runTests(async function test_doComplex() {
 	const tests = [

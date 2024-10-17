@@ -5,7 +5,7 @@
 			"label": "run-test",
 			"type": "shell",
 			"command": "npm",
-			"args": ["run", "test"],
+			"args": ["run", "test", "${file}"],
 			"group": {
 				"kind": "test",
 				"isDefault": true

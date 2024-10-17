@@ -1,33 +1,26 @@
-import { LogQueue } from "@rsc-utils/core-utils";
+import { getNumberRegex, LogQueue, type RegExpCreateOptions, type RegExpGetOptions, type RegExpSpoilerOptions } from "@rsc-utils/core-utils";
 import { regex } from "regex";
-import { cleanPipes, unpipe } from "../internal/pipes.js";
+import { cleanPipes, unpipe } from "../../internal/pipes.js";
 import { doSimple, getSimpleRegex } from "./doSimple.js";
-import { getNumberRegex } from "./getNumberRegex.js";
 
-type Options = {
-	/** include the global flag in the regex */
-	gFlag?: "g" | "";
+type CreateOptions = RegExpCreateOptions & RegExpSpoilerOptions;
 
-	/** include the case insensitive flag in the regex */
-	iFlag?: "i" | "";
+type GetOptions = RegExpGetOptions & RegExpSpoilerOptions;
 
-	/** are spoilers allowed or optional */
-	spoilers?: boolean | "optional";
-};
-
-/** Returns a regular expression that finds:
+/**
+ * Returns a regular expression that finds:
  * min(...number[])
  * max(...number[])
  * floor(number)
  * ceil(number)
  * round(number)
  */
-function createComplexRegex(options: Options = {}): RegExp {
-	const { gFlag = "", iFlag = "", spoilers } = options ?? {};
+function createComplexRegex(options: CreateOptions = {}): RegExp {
+	const { gFlag = "", iFlag = "", spoilers } = options;
 
 	const numberRegex = getNumberRegex({ iFlag, spoilers });
 
-	const simpleRegex = getSimpleRegex({ iFlag, spoilers })
+	const simpleRegex = getSimpleRegex({ iFlag, spoilers });
 
 	const numberOrSimple = regex(iFlag)`( ${numberRegex} | ${simpleRegex} )`;
 
@@ -57,7 +50,7 @@ function createComplexRegex(options: Options = {}): RegExp {
 	// const spoileredRegex = spoilerRegex(complexRegex, options);
 
 	return regex(gFlag + iFlag)`
-		(?<!\d*d\d+)         # ignore the entire thing if preceded by d or dY
+		(?<!\d*d\d+)      # ignore the entire thing if preceded by d or dY
 		${complexRegex}
 		(?!\d*d\d)        # ignore the entire thing if followed by dY or XdY
 	`;
@@ -66,30 +59,21 @@ function createComplexRegex(options: Options = {}): RegExp {
 /** Stores each unique instance to avoid duplicating regex when not needed. */
 const cache: { [key: string]: RegExp; } = { };
 
-/** Creates the unique key for each variant based on options. */
-function createCacheKey(options?: Options): string {
-	return [options?.gFlag ?? false, options?.iFlag ?? false, options?.spoilers ?? false].join("|");
-}
-
-/** Returns a cached instance of the complex regex. */
-export function getComplexRegex(options?: Options): RegExp {
-	const key = createCacheKey(options);
-	return cache[key] ?? (cache[key] = createComplexRegex(options));
-}
-
 /** Tests the value against a complex regex using the given options. */
-export function hasComplex(value: string, options?: Omit<Options, "gFlag">): boolean {
-	return getComplexRegex({ iFlag:options?.iFlag, spoilers:options?.spoilers }).test(value);
+export function hasComplex(value: string, options?: GetOptions): boolean {
+	const key = [options?.iFlag ?? "", options?.spoilers ?? ""].join("|");
+	const regexp = cache[key] ?? (cache[key] = createComplexRegex(options));
+	return regexp.test(value);
 }
 
 /** Replaces all instances of min/max/floor/ceil/round with the resulting calculated value. */
-export function doComplex(input: string, options?: Omit<Options, "gFlag">): string {
+export function doComplex(input: string, options?: GetOptions): string {
 	const logQueue = new LogQueue("doComplex", input);
 
 	let output = input;
 	const spoilers = options?.spoilers;
 
-	const complexRegex = getComplexRegex({ gFlag:"g", iFlag:options?.iFlag, spoilers });
+	const complexRegex = createComplexRegex({ gFlag:"g", iFlag:options?.iFlag, spoilers });
 	while (complexRegex.test(output)) {
 		output = output.replace(complexRegex, (_, _functionName: string | undefined, _functionArgs: string, _multiplier: string | undefined, _simpleMath: string) => {
 			if (!spoilers && unpipe(_).hasPipes) return _;

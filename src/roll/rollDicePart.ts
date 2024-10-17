@@ -1,8 +1,8 @@
+import { sum } from "@rsc-utils/core-utils";
 import type { TDicePart } from "../dice/DicePart.js";
 import { rollDataMapper } from "../internal/rollDataMapper.js";
 import { rollDataSorter } from "../internal/rollDataSorter.js";
 import { markRollData } from "../markup/markRollData.js";
-import { sum } from "../sum.js";
 import type { SortedRollData } from "../types/SortedDataRoll.js";
 import { rollDice } from "./rollDice.js";
 

@@ -1,4 +1,4 @@
-import { sum } from "./sum.js";
+import { sum } from "@rsc-utils/core-utils";
 export function sumDiceParts(diceParts) {
     const mathParts = [];
     diceParts.forEach(dp => {

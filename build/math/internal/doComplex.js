@@ -1,10 +1,9 @@
-import { LogQueue } from "@rsc-utils/core-utils";
+import { getNumberRegex, LogQueue } from "@rsc-utils/core-utils";
 import { regex } from "regex";
-import { cleanPipes, unpipe } from "../internal/pipes.js";
+import { cleanPipes, unpipe } from "../../internal/pipes.js";
 import { doSimple, getSimpleRegex } from "./doSimple.js";
-import { getNumberRegex } from "./getNumberRegex.js";
 function createComplexRegex(options = {}) {
-    const { gFlag = "", iFlag = "", spoilers } = options ?? {};
+    const { gFlag = "", iFlag = "", spoilers } = options;
     const numberRegex = getNumberRegex({ iFlag, spoilers });
     const simpleRegex = getSimpleRegex({ iFlag, spoilers });
     const numberOrSimple = regex(iFlag) `( ${numberRegex} | ${simpleRegex} )`;
@@ -28,27 +27,22 @@ function createComplexRegex(options = {}) {
 	`;
     const complexRegex = regex(iFlag) `( ${functionRegex} | ${multiplierRegex} )`;
     return regex(gFlag + iFlag) `
-		(?<!\d*d\d+)         # ignore the entire thing if preceded by d or dY
+		(?<!\d*d\d+)      # ignore the entire thing if preceded by d or dY
 		${complexRegex}
 		(?!\d*d\d)        # ignore the entire thing if followed by dY or XdY
 	`;
 }
 const cache = {};
-function createCacheKey(options) {
-    return [options?.gFlag ?? false, options?.iFlag ?? false, options?.spoilers ?? false].join("|");
-}
-export function getComplexRegex(options) {
-    const key = createCacheKey(options);
-    return cache[key] ?? (cache[key] = createComplexRegex(options));
-}
 export function hasComplex(value, options) {
-    return getComplexRegex({ iFlag: options?.iFlag, spoilers: options?.spoilers }).test(value);
+    const key = [options?.iFlag ?? "", options?.spoilers ?? ""].join("|");
+    const regexp = cache[key] ?? (cache[key] = createComplexRegex(options));
+    return regexp.test(value);
 }
 export function doComplex(input, options) {
     const logQueue = new LogQueue("doComplex", input);
     let output = input;
     const spoilers = options?.spoilers;
-    const complexRegex = getComplexRegex({ gFlag: "g", iFlag: options?.iFlag, spoilers });
+    const complexRegex = createComplexRegex({ gFlag: "g", iFlag: options?.iFlag, spoilers });
     while (complexRegex.test(output)) {
         output = output.replace(complexRegex, (_, _functionName, _functionArgs, _multiplier, _simpleMath) => {
             if (!spoilers && unpipe(_).hasPipes)

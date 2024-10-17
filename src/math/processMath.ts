@@ -1,5 +1,5 @@
-import { doComplex, hasComplex } from "./doComplex.js";
-import { doSimple, hasSimple } from "./doSimple.js";
+import { doComplex, hasComplex } from "./internal/doComplex.js";
+import { doSimple, hasSimple } from "./internal/doSimple.js";
 
 type Options = {
 	/** include the case insensitive flag in the regex */

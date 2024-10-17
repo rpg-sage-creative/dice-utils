@@ -1,7 +1,7 @@
+import { sum } from "@rsc-utils/core-utils";
 import { rollDataMapper } from "../internal/rollDataMapper.js";
 import { rollDataSorter } from "../internal/rollDataSorter.js";
 import { markRollData } from "../markup/markRollData.js";
-import { sum } from "../sum.js";
 import { rollDice } from "./rollDice.js";
 export function rollDicePart(dicePart) {
     const { fixedRolls, count, sides } = dicePart;

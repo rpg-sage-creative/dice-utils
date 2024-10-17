@@ -1,5 +1,5 @@
-import { assert, runTests } from "@rsc-utils/core-utils";
-import { rollDice, sum } from "../../build/index.js";
+import { assert, runTests, sum } from "@rsc-utils/core-utils";
+import { rollDice } from "../../build/index.js";
 
 runTests(async function test_rollDice() {
 	const count = 3;

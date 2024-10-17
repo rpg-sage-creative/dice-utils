@@ -1,2 +1,2 @@
-/** This strips a trailing colon (,) or semicolon (;) */
+/** This strips a trailing comma (,) or semicolon (;) */
 export declare function cleanDicePartDescription(description?: string): string;

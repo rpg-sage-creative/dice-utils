@@ -1,13 +1,11 @@
-import { randomSnowflake } from "@rsc-utils/core-utils";
+import { isBoolean, randomSnowflake, sum } from "@rsc-utils/core-utils";
 import { DiceTest } from "../DiceTest.js";
 import { DieRollGrade, gradeRoll, gradeToEmoji } from "../grade.js";
 import { cleanWhitespace } from "../internal/cleanWhitespace.js";
-import { isBoolean } from "../internal/isBoolean.js";
 import { isDiceOutputType } from "../internal/isDiceOutputType.js";
 import { unquoteAndDetick } from "../internal/unquoteAndDetick.js";
 import { mapDicePartToRollString } from "../mapDicePartToRollString.js";
 import { removeDesc } from "../removeDesc.js";
-import { sum } from "../sum.js";
 import { sumDiceParts } from "../sumDiceParts.js";
 import { DiceOutputType } from "../types/DiceOutputType.js";
 import { UNICODE_LEFT_ARROW } from "../types/consts.js";

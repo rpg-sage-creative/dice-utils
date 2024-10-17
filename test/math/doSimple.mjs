@@ -1,5 +1,5 @@
 import { assert, runTests } from "@rsc-utils/core-utils";
-import { doSimple } from "../../build/index.js";
+import { doSimple } from "../../build/math/internal/doSimple.js";
 
 runTests(async function test_doSimple() {
 	// PEMDAS

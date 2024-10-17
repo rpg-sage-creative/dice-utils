@@ -1,8 +1,6 @@
-import { error, LogQueue } from "@rsc-utils/core-utils";
+import { error, getNumberRegex, spoilerRegex } from "@rsc-utils/core-utils";
 import { regex } from "regex";
-import { unpipe } from "../internal/pipes.js";
-import { spoilerRegex } from "../internal/spoilerRegex.js";
-import { getNumberRegex } from "./getNumberRegex.js";
+import { unpipe } from "../../internal/pipes.js";
 function createSimpleRegex(options) {
     const { gFlag = "", iFlag = "", spoilers } = options ?? {};
     const numberRegex = getNumberRegex({ iFlag, spoilers });
@@ -20,7 +18,9 @@ function createSimpleRegex(options) {
 			${numberRegex}      # pos/neg decimal number
 		)
 	`;
-    const spoileredRegex = spoilerRegex(simpleRegex, options);
+    const spoileredRegex = spoilers
+        ? spoilerRegex(simpleRegex, spoilers)
+        : simpleRegex;
     return regex(gFlag + iFlag) `
 		(?<!d\d*)         # ignore the entire thing if preceded by d or dY
 		${spoileredRegex}
@@ -28,25 +28,21 @@ function createSimpleRegex(options) {
 	`;
 }
 const cache = {};
-function createCacheKey(options) {
-    return [options?.gFlag ?? false, options?.iFlag ?? false, options?.spoilers ?? false].join("|");
-}
 export function getSimpleRegex(options) {
-    const key = createCacheKey(options);
+    const key = [options?.iFlag ?? "", options?.spoilers ?? ""].join("|");
     return cache[key] ?? (cache[key] = createSimpleRegex(options));
 }
 export function hasSimple(value, options) {
-    return getSimpleRegex({ iFlag: options?.iFlag, spoilers: options?.spoilers }).test(value);
+    return getSimpleRegex(options).test(value);
 }
 export function doSimple(input, options) {
-    const logQueue = new LogQueue("doSimple", input);
     let output = input;
-    const simpleRegex = getSimpleRegex({ gFlag: "g", iFlag: options?.iFlag, spoilers: options?.spoilers });
-    while (simpleRegex.test(output)) {
-        output = output.replace(simpleRegex, value => {
+    const tester = getSimpleRegex(options);
+    while (tester.test(output)) {
+        const replacer = createSimpleRegex({ gFlag: "g", iFlag: options?.iFlag, spoilers: options?.spoilers });
+        output = output.replace(replacer, value => {
             const { hasPipes, unpiped } = unpipe(value);
             const retVal = (result) => {
-                logQueue.add({ label: "retVal", value, result });
                 return hasPipes ? `||${result}||` : result;
             };
             const prepped = unpiped
@@ -69,7 +65,6 @@ export function doSimple(input, options) {
                 return retVal(`(ERR)`);
             }
         });
-        logQueue.add({ label: "while", input, output });
     }
     return output;
 }

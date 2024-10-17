@@ -1,22 +1,13 @@
-import { error, LogQueue } from "@rsc-utils/core-utils";
+import { error, getNumberRegex, spoilerRegex, type RegExpCreateOptions, type RegExpGetOptions, type RegExpSpoilerOptions } from "@rsc-utils/core-utils";
 import { regex } from "regex";
-import { unpipe } from "../internal/pipes.js";
-import { spoilerRegex } from "../internal/spoilerRegex.js";
-import { getNumberRegex } from "./getNumberRegex.js";
+import { unpipe } from "../../internal/pipes.js";
 
-type Options = {
-	/** include the global flag in the regex */
-	gFlag?: "g" | "";
+type CreateOptions = RegExpCreateOptions & RegExpSpoilerOptions;
 
-	/** include the case insensitive flag in the regex */
-	iFlag?: "i" | "";
-
-	/** are spoilers allowed or optional */
-	spoilers?: boolean | "optional";
-};
+type GetOptions = RegExpGetOptions & RegExpSpoilerOptions;
 
 /** Creates a new instance of the simple math regex based on options. */
-function createSimpleRegex(options?: Options): RegExp {
+function createSimpleRegex(options?: CreateOptions): RegExp {
 	const { gFlag = "", iFlag = "", spoilers } = options ?? {};
 
 	const numberRegex = getNumberRegex({ iFlag, spoilers });
@@ -36,7 +27,9 @@ function createSimpleRegex(options?: Options): RegExp {
 		)
 	`;
 
-	const spoileredRegex = spoilerRegex(simpleRegex, options);
+	const spoileredRegex = spoilers
+		? spoilerRegex(simpleRegex, spoilers)
+		: simpleRegex;
 
 	/** @todo WHY ISN'T THE FIRST ONE THE SAME AS THE SECOND ONE? SEE COMPLEX ... */
 	return regex(gFlag + iFlag)`
@@ -49,38 +42,49 @@ function createSimpleRegex(options?: Options): RegExp {
 /** Stores each unique instance to avoid duplicating regex when not needed. */
 const cache: { [key: string]: RegExp; } = { };
 
-/** Creates the unique key for each variant based on options. */
-function createCacheKey(options?: Options): string {
-	return [options?.gFlag ?? false, options?.iFlag ?? false, options?.spoilers ?? false].join("|");
-}
-
-/** Returns a cached instance of the simple math regex. */
-export function getSimpleRegex(options?: Options): RegExp {
-	const key = createCacheKey(options);
+/**
+ * @internal
+ * Returns a cached instance of the simple math regex.
+ */
+export function getSimpleRegex(options?: GetOptions): RegExp {
+	const key = [options?.iFlag ?? "", options?.spoilers ?? ""].join("|");
 	return cache[key] ?? (cache[key] = createSimpleRegex(options));
 }
 
-/** Tests the value against a simple math regex using the given options. */
-export function hasSimple(value: string, options?: Omit<Options, "gFlag">): boolean {
-	return getSimpleRegex({ iFlag:options?.iFlag, spoilers:options?.spoilers }).test(value);
+/**
+ * @internal
+ * Tests the value against a simple math regex using the given options.
+ */
+export function hasSimple(value: string, options?: GetOptions): boolean {
+	return getSimpleRegex(options).test(value);
 }
 
 /**
+ * @internal
  * Replaces all instances of simple math with the resulting calculated value.
  * Valid math symbols: [-+/*%^] and spaces and numbers.
  * Any math resulting in null, undefined, or NaN will have "(NaN)" instead of a numeric result.
  * Any math that throws an error wille have "(ERR)" instead of a numeric result.
  */
-export function doSimple(input: string, options?: Omit<Options, "gFlag">): string {
-	const logQueue = new LogQueue("doSimple", input);
+export function doSimple(input: string, options?: GetOptions): string {
+	// const logQueue = new LogQueue("doSimple", input);
 	let output = input;
-	const simpleRegex = getSimpleRegex({ gFlag:"g", iFlag:options?.iFlag, spoilers:options?.spoilers });
-	while (simpleRegex.test(output)) {
-		output = output.replace(simpleRegex, value => {
+
+	// get a cached instance of the regexp for testing
+	const tester = getSimpleRegex(options);
+
+	// iterate while we have matches
+	while (tester.test(output)) {
+		// create a new regex to ensure we have our own lastIndex
+		const replacer = createSimpleRegex({ gFlag:"g", iFlag:options?.iFlag, spoilers:options?.spoilers });
+
+		// replace all matches
+		output = output.replace(replacer, value => {
 			const { hasPipes, unpiped } = unpipe(value);
 
+			// create a return value formatter to ensure consistent output
 			const retVal = (result: string) => {
-				logQueue.add({label:"retVal",value,result});
+				// logQueue.add({label:"retVal",value,result});
 				return hasPipes ? `||${result}||` : result;
 			};
 
@@ -118,7 +122,7 @@ export function doSimple(input: string, options?: Omit<Options, "gFlag">): strin
 				return retVal(`(ERR)`);
 			}
 		});
-		logQueue.add({label:"while",input,output});
+		// logQueue.add({label:"while",input,output});
 	}
 	// logQueue.logDiff(output);
 	return output;
