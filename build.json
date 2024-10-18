@@ -1,12 +1,12 @@
 {
 "name":"@rsc-utils/dice-utils",
-"version":"0.0.25",
+"version":"0.0.26",
 "branch":"main",
-"commit":"08a4b5e9d38c8d0deafbc4b3615b8f977274c71f",
-"commitSubject":"core-utils updates",
-"commitTs":1729204382000,
-"commitDate":"2024-10-17-1533",
-"buildTs":1729204408000,
-"buildDate":"2024-10-17-1533",
+"commit":"da961bdcc359602effd40d2013f5cbb128c10018",
+"commitSubject":"only process complex math in doStatMath",
+"commitTs":1729294891000,
+"commitDate":"2024-10-18-1641",
+"buildTs":1729294916000,
+"buildDate":"2024-10-18-1641",
 "author":"Randal"
 }
