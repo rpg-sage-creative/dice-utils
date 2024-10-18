@@ -65,6 +65,8 @@ runTests(async function test_processStatBlocks() {
 		["[1d20 ac {moldy::ac}; 1d6+(floor(5/3))+1d8]", "[1d20 ac 15; 1d6+1+1d8]"],
 
 		["[1d20 (deadly d8) ac {moldy::ac}; 1d6]", "[1d20 (deadly d8) ac 15; 1d6]"],
+		["[2d20kh1+18]", "[2d20kh1+18]"],
+		["[2d20kh1+18dc20]", "[2d20kh1+18dc20]"],
 	];
 	tests.forEach(([input, expected]) => {
 		assert(String(expected), processStatBlocks, input, args);

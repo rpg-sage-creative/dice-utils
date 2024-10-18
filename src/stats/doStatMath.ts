@@ -1,6 +1,6 @@
 import { tokenize } from "../internal/tokenize.js";
+import { getComplexRegex } from "../math/internal/doComplex.js";
 import { processMath } from "../math/processMath.js";
-import { getDiceRegex } from "../token/getDiceRegex.js";
 
 /**
  * Checks the stat value for math.
@@ -10,8 +10,8 @@ import { getDiceRegex } from "../token/getDiceRegex.js";
  * (Primarily for hiding values, such as AC.)
  */
 export function doStatMath(value: string): string {
-	// process other math functions on non-dice parts of the value
-	const tokens = tokenize(value, { dice:getDiceRegex() });
-	const processed = tokens.map(({ token, key }) => key === "dice" ? token : processMath(token, {spoilers:"optional" }));
+	// process only complex regex matches
+	const tokens = tokenize(value, { complex:getComplexRegex({ spoilers:"optional" }) });
+	const processed = tokens.map(({ token, key }) => key === "complex" ? processMath(token, { spoilers:"optional" }) : token);
 	return processed.join("");
 }

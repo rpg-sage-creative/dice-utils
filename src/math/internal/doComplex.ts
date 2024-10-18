@@ -59,11 +59,15 @@ function createComplexRegex(options: CreateOptions = {}): RegExp {
 /** Stores each unique instance to avoid duplicating regex when not needed. */
 const cache: { [key: string]: RegExp; } = { };
 
+/** @internal Returns a cached instance of the complex math regex. */
+export function getComplexRegex(options?: GetOptions): RegExp {
+	const key = [options?.iFlag ?? "", options?.spoilers ?? ""].join("|");
+	return cache[key] ?? (cache[key] = createComplexRegex(options));
+}
+
 /** @internal Tests the value against a complex regex using the given options. */
 export function hasComplex(value: string, options?: GetOptions): boolean {
-	const key = [options?.iFlag ?? "", options?.spoilers ?? ""].join("|");
-	const regexp = cache[key] ?? (cache[key] = createComplexRegex(options));
-	return regexp.test(value);
+	return getComplexRegex(options).test(value);
 }
 
 /** @internal Replaces all instances of min/max/floor/ceil/round with the resulting calculated value. */
@@ -105,11 +109,13 @@ export function doComplex(input: string, options?: GetOptions): string {
 
 			hasPipes = simpleMathPipeInfo.hasPipes;
 
+			// handle a multiplier
 			if (_multiplier !== undefined) {
 				// return the new math so that it can be reprocessed
 				return retVal(`${_multiplier}*${doSimple(simpleMathPipeInfo.unpiped)}`);
 			}
 
+			// handle parentheses
 			return retVal(`${doSimple(simpleMathPipeInfo.unpiped)}`);
 		});
 		logQueue.add({label:"while",input,output});

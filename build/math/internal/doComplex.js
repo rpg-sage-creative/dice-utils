@@ -33,10 +33,12 @@ function createComplexRegex(options = {}) {
 	`;
 }
 const cache = {};
-export function hasComplex(value, options) {
+export function getComplexRegex(options) {
     const key = [options?.iFlag ?? "", options?.spoilers ?? ""].join("|");
-    const regexp = cache[key] ?? (cache[key] = createComplexRegex(options));
-    return regexp.test(value);
+    return cache[key] ?? (cache[key] = createComplexRegex(options));
+}
+export function hasComplex(value, options) {
+    return getComplexRegex(options).test(value);
 }
 export function doComplex(input, options) {
     const logQueue = new LogQueue("doComplex", input);

@@ -49,6 +49,7 @@ runTests(async function test_processMath() {
 		["(10)1d20", "(10)1d20"],
 		["(10)d20", "(10)d20"],
 		["1d20 ac (10-2)", "1d20 ac 8"],
+		["2d20kh1+18", "2d20kh1+18"],
 	];
 	tests.forEach(([input,expected]) => {
 		assert(String(expected), processMath, input, { spoilers:"optional" });

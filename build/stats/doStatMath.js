@@ -1,8 +1,8 @@
 import { tokenize } from "../internal/tokenize.js";
+import { getComplexRegex } from "../math/internal/doComplex.js";
 import { processMath } from "../math/processMath.js";
-import { getDiceRegex } from "../token/getDiceRegex.js";
 export function doStatMath(value) {
-    const tokens = tokenize(value, { dice: getDiceRegex() });
-    const processed = tokens.map(({ token, key }) => key === "dice" ? token : processMath(token, { spoilers: "optional" }));
+    const tokens = tokenize(value, { complex: getComplexRegex({ spoilers: "optional" }) });
+    const processed = tokens.map(({ token, key }) => key === "complex" ? processMath(token, { spoilers: "optional" }) : token);
     return processed.join("");
 }
