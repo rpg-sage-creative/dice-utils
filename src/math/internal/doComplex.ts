@@ -59,14 +59,14 @@ function createComplexRegex(options: CreateOptions = {}): RegExp {
 /** Stores each unique instance to avoid duplicating regex when not needed. */
 const cache: { [key: string]: RegExp; } = { };
 
-/** Tests the value against a complex regex using the given options. */
+/** @internal Tests the value against a complex regex using the given options. */
 export function hasComplex(value: string, options?: GetOptions): boolean {
 	const key = [options?.iFlag ?? "", options?.spoilers ?? ""].join("|");
 	const regexp = cache[key] ?? (cache[key] = createComplexRegex(options));
 	return regexp.test(value);
 }
 
-/** Replaces all instances of min/max/floor/ceil/round with the resulting calculated value. */
+/** @internal Replaces all instances of min/max/floor/ceil/round with the resulting calculated value. */
 export function doComplex(input: string, options?: GetOptions): string {
 	const logQueue = new LogQueue("doComplex", input);
 
